@@ -6,7 +6,6 @@ interface UserProfile {
   objective?: string;
   services?: string[];
   workType?: string;
-  onboardingCompleted?: boolean;
 }
 
 interface User {
@@ -23,7 +22,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
-  updateProfile: (profile: Partial<UserProfile>) => Promise<void>;
+  updateProfile: (profile: Partial<UserProfile>, onboardingCompleted?: boolean) => Promise<void>;
   isAuthenticated: boolean;
 }
 
@@ -67,11 +66,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error(response.error);
     }
     if (response.data) {
+      const onboardingDone = localStorage.getItem('onboardingCompleted') === 'true';
       setUser({
         id: response.data.id,
         name: response.data.name || '',
         email: response.data.email,
-        onboardingCompleted: localStorage.getItem('onboardingCompleted') === 'true',
+        onboardingCompleted: onboardingDone,
         profile: {}
       });
     }
@@ -98,13 +98,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   };
 
-  const updateProfile = async (profile: Partial<UserProfile>) => {
+  const updateProfile = async (profile: Partial<UserProfile>, onboardingCompleted?: boolean) => {
     if (!user) return;
     
     try {
       const response = await api.put<UserData>('/user/profile', profile);
       if (response.data) {
-        const onboardingDone = profile.onboardingCompleted === true;
+        const onboardingDone = onboardingCompleted === true;
         if (onboardingDone) {
           localStorage.setItem('onboardingCompleted', 'true');
         }
