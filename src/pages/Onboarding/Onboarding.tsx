@@ -186,6 +186,7 @@ export function Onboarding() {
       setCurrentStep(currentStep + 1);
     } else {
       updateProfile({}, true);
+      localStorage.setItem('onboardingCompleted', 'true');
       setIsCompleted(true);
     }
   };
