@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             id: response.data.id,
             name: response.data.name || '',
             email: response.data.email,
-            onboardingCompleted: false,
+            onboardingCompleted: localStorage.getItem('onboardingCompleted') === 'true',
             profile: {}
           });
         }
@@ -70,7 +70,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         id: response.data.id,
         name: response.data.name || '',
         email: response.data.email,
-        onboardingCompleted: false,
+        onboardingCompleted: localStorage.getItem('onboardingCompleted') === 'true',
         profile: {}
       });
     }
@@ -103,13 +103,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const response = await api.put<UserData>('/user/profile', profile);
       if (response.data) {
+        const onboardingDone = profile.onboardingCompleted === true;
+        if (onboardingDone) {
+          localStorage.setItem('onboardingCompleted', 'true');
+        }
         setUser({
           ...user,
           profile: {
             ...user.profile,
             ...profile
           } as UserProfile,
-          onboardingCompleted: true
+          onboardingCompleted: onboardingDone || user.onboardingCompleted
         });
       }
     } catch (error) {
