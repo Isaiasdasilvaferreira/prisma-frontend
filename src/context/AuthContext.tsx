@@ -32,6 +32,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const getOnboardingState = () => {
+    return localStorage.getItem('onboardingCompleted') === 'true';
+  };
+
   useEffect(() => {
     if (window.location.pathname === '/login' || window.location.pathname === '/register') {
       setLoading(false);
@@ -46,7 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             id: response.data.id,
             name: response.data.name || '',
             email: response.data.email,
-            onboardingCompleted: localStorage.getItem('onboardingCompleted') === 'true',
+            onboardingCompleted: getOnboardingState(),
             profile: {}
           });
         }
@@ -66,12 +70,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error(response.error);
     }
     if (response.data) {
-      const onboardingDone = localStorage.getItem('onboardingCompleted') === 'true';
       setUser({
         id: response.data.id,
         name: response.data.name || '',
         email: response.data.email,
-        onboardingCompleted: onboardingDone,
+        onboardingCompleted: getOnboardingState(),
         profile: {}
       });
     }
@@ -114,7 +117,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             ...user.profile,
             ...profile
           } as UserProfile,
-          onboardingCompleted: onboardingDone || user.onboardingCompleted
+          onboardingCompleted: onboardingDone || user.onboardingCompleted || getOnboardingState()
         });
       }
     } catch (error) {
