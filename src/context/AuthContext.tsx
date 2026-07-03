@@ -105,21 +105,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!user) return;
     
     try {
-      const response = await api.put<UserData>('/user/profile', profile);
-      if (response.data) {
-        const onboardingDone = onboardingCompleted === true;
-        if (onboardingDone) {
-          localStorage.setItem('onboardingCompleted', 'true');
-        }
-        setUser({
-          ...user,
+      const onboardingDone = onboardingCompleted === true;
+      if (onboardingDone) {
+        localStorage.setItem('onboardingCompleted', 'true');
+      }
+
+      setUser(prev => {
+        if (!prev) return null;
+        return {
+          ...prev,
           profile: {
-            ...user.profile,
+            ...prev.profile,
             ...profile
           } as UserProfile,
-          onboardingCompleted: onboardingDone || user.onboardingCompleted || getOnboardingState()
-        });
-      }
+          onboardingCompleted: onboardingDone || prev.onboardingCompleted
+        };
+      });
+
+      await api.put<UserData>('/user/profile', profile);
     } catch (error) {
       console.error('Erro ao atualizar perfil:', error);
       throw error;
