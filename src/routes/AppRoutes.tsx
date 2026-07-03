@@ -11,17 +11,17 @@ import { Plans } from '../pages/Plans/Plans';
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
-  
+
   if (loading) return null;
-  
+
   if (!user) {
     return <Navigate to="/login" replace />;
   }
-  
+
   if (!user.onboardingCompleted) {
     return <Navigate to="/onboarding" replace />;
   }
-  
+
   return <>{children}</>;
 }
 
@@ -29,15 +29,10 @@ export function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Página inicial pública */}
         <Route path="/" element={<Landing />} />
-        
-        {/* Rotas públicas */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/onboarding" element={<Onboarding />} />
-
-        {/* Rotas privadas */}
         <Route
           path="/dashboard"
           element={
@@ -62,8 +57,6 @@ export function AppRoutes() {
             </PrivateRoute>
           }
         />
-
-        {/* Fallback para rotas não encontradas */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
