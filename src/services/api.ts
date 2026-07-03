@@ -33,6 +33,9 @@ class Api {
       (response: AxiosResponse) => response,
       (error: AxiosError) => {
         if (error.response?.status === 401) {
+          if (window.location.pathname === '/') {
+            return Promise.reject(error);
+          }
           if (!window.location.pathname.includes('/login') && 
               !window.location.pathname.includes('/register')) {
             window.location.href = '/login';
