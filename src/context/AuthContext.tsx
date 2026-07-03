@@ -6,6 +6,7 @@ interface UserProfile {
   objective?: string;
   services?: string[];
   workType?: string;
+  onboardingCompleted?: boolean;
 }
 
 interface User {
