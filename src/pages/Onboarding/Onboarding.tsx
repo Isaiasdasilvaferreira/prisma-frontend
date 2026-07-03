@@ -185,7 +185,7 @@ export function Onboarding() {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      updateProfile({ onboardingCompleted: true } as any);
+      updateProfile({}, true);
       setIsCompleted(true);
     }
   };
