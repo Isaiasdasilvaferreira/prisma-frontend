@@ -32,7 +32,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Verificar autenticação ao carregar
   useEffect(() => {
     const checkAuth = async () => {
       try {
