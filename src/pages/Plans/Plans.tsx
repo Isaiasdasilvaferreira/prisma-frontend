@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Sidebar } from '../../components/Sidebar/Sidebar';
 import { Header } from '../../components/Header/Header';
 import { Button } from '../../components/Button/Button';
@@ -13,6 +13,7 @@ import './Plans.css';
 
 const plans = [
   {
+    id: 'starter',
     name: 'Starter',
     subtitle: 'Para começar a explorar',
     price: 'Grátis',
@@ -33,9 +34,11 @@ const plans = [
       { text: 'Filtros avançados', included: false },
     ],
     cta: 'Começar grátis',
-    variant: 'outline' as const
+    variant: 'outline' as const,
+    redirect: '/dashboard'
   },
   {
+    id: 'professional',
     name: 'Professional',
     subtitle: 'Para designers ativos',
     price: 'R$97',
@@ -56,9 +59,11 @@ const plans = [
       { text: 'Filtros avançados', included: true },
     ],
     cta: 'Assinar Professional',
-    variant: 'primary' as const
+    variant: 'primary' as const,
+    redirect: '/payment/professional'
   },
   {
+    id: 'enterprise',
     name: 'Enterprise',
     subtitle: 'Para times e agências',
     price: 'R$247',
@@ -79,7 +84,8 @@ const plans = [
       { text: 'Treinamento da equipe', included: true },
     ],
     cta: 'Em breve',
-    variant: 'outline' as const
+    variant: 'outline' as const,
+    redirect: '#'
   }
 ];
 
@@ -105,6 +111,7 @@ const comparisons = [
 ];
 
 export function Plans() {
+  const navigate = useNavigate();
   const [isAnnual, setIsAnnual] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
@@ -123,6 +130,11 @@ export function Plans() {
     const monthly = parseInt(plan.price.replace('R$', ''));
     const annual = Math.floor(monthly * 12 * 0.8);
     return `R$${annual}/ano`;
+  };
+
+  const handlePlanClick = (plan: typeof plans[0]) => {
+    if (plan.disabled) return;
+    navigate(plan.redirect);
   };
 
   return (
@@ -232,7 +244,11 @@ export function Plans() {
                     ))}
                   </ul>
 
-                  <Link to={plan.disabled ? '#' : '/register'} className={`plans-card-cta ${plan.disabled ? 'disabled' : ''}`}>
+                  <button 
+                    className={`plans-card-cta ${plan.disabled ? 'disabled' : ''}`}
+                    onClick={() => handlePlanClick(plan)}
+                    disabled={plan.disabled}
+                  >
                     <Button 
                       variant={plan.popular ? 'primary' : 'outline'} 
                       fullWidth 
@@ -242,7 +258,7 @@ export function Plans() {
                     >
                       {plan.cta}
                     </Button>
-                  </Link>
+                  </button>
                 </Card>
               );
             })}
