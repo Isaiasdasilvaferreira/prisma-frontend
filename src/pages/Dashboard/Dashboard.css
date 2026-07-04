@@ -9,6 +9,7 @@
   margin-left: 250px;
   display: flex;
   flex-direction: column;
+  transition: margin-left 0.3s ease;
 }
 
 .dashboard-content {
@@ -231,6 +232,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .dashboard-section-header-left {
@@ -261,10 +264,46 @@
 
 .dashboard-section-header-right {
   display: flex;
-  gap: 4px;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
-.dashboard-opportunities-list {
+.dashboard-search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dashboard-search-icon {
+  position: absolute;
+  left: 12px;
+  color: #555;
+}
+
+.dashboard-search-input {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 8px 12px 8px 40px;
+  color: #fff;
+  font-size: 13px;
+  width: 220px;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.dashboard-search-input::placeholder {
+  color: #555;
+}
+
+.dashboard-search-input:focus {
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  width: 260px;
+}
+
+.dashboard-opportunities-container {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -443,6 +482,24 @@
   border-radius: 8px;
 }
 
+.dashboard-no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #555;
+  gap: 12px;
+}
+
+.dashboard-no-results-icon {
+  color: #333;
+}
+
+.dashboard-no-results p {
+  font-size: 14px;
+}
+
 .dashboard-sidebar {
   display: flex;
   flex-direction: column;
@@ -547,166 +604,9 @@
   color: #999;
 }
 
-.dashboard-widget-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: #999;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 14px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.dashboard-widget-title svg {
-  color: #666;
-}
-
-.dashboard-top-companies {
-  padding: 20px;
-}
-
-.dashboard-top-companies-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.dashboard-top-company-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.dashboard-top-company-item:hover {
-  background: rgba(255, 255, 255, 0.04);
-}
-
-.dashboard-top-company-logo {
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #1e1e1e, #2a2a2a);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 700;
-  color: #fff;
-  flex-shrink: 0;
-}
-
-.dashboard-top-company-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-
-.dashboard-top-company-name {
-  font-size: 13px;
-  color: #ccc;
-  font-weight: 500;
-}
-
-.dashboard-top-company-count {
-  font-size: 11px;
-  color: #555;
-}
-
-.dashboard-top-company-arrow {
-  color: #333;
-  transition: color 0.2s ease;
-}
-
-.dashboard-top-company-item:hover .dashboard-top-company-arrow {
-  color: #666;
-}
-
-.dashboard-activity-widget {
-  padding: 20px;
-}
-
-.dashboard-activity-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.dashboard-activity-item {
-  display: flex;
-  gap: 10px;
-  padding: 8px 0;
-}
-
-.dashboard-activity-item-icon {
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 7px;
-  flex-shrink: 0;
-}
-
-.dashboard-activity-item-content {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.dashboard-activity-item-text {
-  font-size: 12px;
-  color: #bbb;
-  line-height: 1.5;
-}
-
-.dashboard-activity-item-text strong {
-  color: #fff;
-  font-weight: 600;
-}
-
-.dashboard-activity-item-time {
-  font-size: 10px;
-  color: #444;
-}
-
-.dashboard-upgrade-widget {
-  background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
-  border-color: rgba(255, 255, 255, 0.08);
-  padding: 22px;
-}
-
-.dashboard-upgrade-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 10px;
-}
-
-.dashboard-upgrade-icon {
-  color: #f59e0b;
-  margin-bottom: 2px;
-}
-
-.dashboard-upgrade-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: #fff;
-}
-
-.dashboard-upgrade-text {
-  font-size: 12px;
-  color: #777;
-  line-height: 1.5;
-  margin-bottom: 4px;
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
 }
 
 @media (max-width: 1400px) {
@@ -726,6 +626,10 @@
 }
 
 @media (max-width: 768px) {
+  .dashboard-main {
+    margin-left: 0;
+  }
+
   .dashboard-stats-grid {
     grid-template-columns: 1fr;
   }
@@ -740,6 +644,21 @@
     align-items: flex-start;
   }
   
+  .dashboard-opportunity-card {
+    flex-direction: column;
+    padding: 16px;
+  }
+  
+  .dashboard-opportunity-card-left {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .dashboard-opportunity-card-badges {
+    flex-direction: row;
+  }
+  
   .dashboard-opportunity-card-footer {
     flex-direction: column;
     gap: 10px;
@@ -749,5 +668,23 @@
   .dashboard-opportunity-card-actions {
     width: 100%;
     justify-content: space-between;
+  }
+
+  .dashboard-section-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .dashboard-section-header-right {
+    justify-content: space-between;
+  }
+
+  .dashboard-search-input {
+    width: 100%;
+  }
+
+  .dashboard-search-input:focus {
+    width: 100%;
   }
 }
