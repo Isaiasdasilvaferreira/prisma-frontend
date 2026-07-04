@@ -1,441 +1,352 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Sidebar } from '../../components/Sidebar/Sidebar';
+import { Header } from '../../components/Header/Header';
+import { Button } from '../../components/Button/Button';
+import { Card } from '../../components/Card/Card';
 import { 
-  ArrowLeft, Copy, CheckCircle, Clock, 
-  CreditCard, Download, FileCheck, Loader2,
-  QrCode, Sparkles, ChevronRight, Crown,
-  AlertCircle, Mail, User, Calendar, DollarSign,
-  Building2, Zap, Shield, Star, Send
+  Check, Star, Zap, Sparkles, Crown, Shield, ArrowRight,
+  Gift, ChevronDown, ChevronUp, HelpCircle, TrendingUp,
+  Lock, Headphones, MessageSquare, Building2, Clock
 } from 'lucide-react';
-import './PaymentPage.css';
+import './Plans.css';
 
-interface Plan {
-  id: string;
-  name: string;
-  price: number;
-  description: string;
-  features: string[];
-  popular?: boolean;
-}
-
-interface Order {
-  id: string;
-  planId: string;
-  planName: string;
-  amount: number;
-  status: 'pending' | 'paid' | 'approved' | 'active';
-  createdAt: Date;
-  pixCode: string;
-  qrCode: string;
-  paymentProof?: string;
-}
-
-const planMap: Record<string, Plan> = {
-  professional: {
-    id: 'professional',
-    name: 'Plano Professional',
-    price: 97.90,
-    description: 'Acesso completo a todos os recursos premium',
+const plans = [
+  {
+    name: 'Starter',
+    subtitle: 'Para começar a explorar',
+    price: 'Grátis',
+    period: '',
+    icon: Zap,
+    color: '#888',
+    gradientClass: 'plan-gradient-starter',
+    popular: false,
+    disabled: false,
     features: [
-      'Oportunidades ilimitadas',
-      'Busca avançada com IA',
-      'Gerador de propostas',
-      'Gerador de mensagens',
-      'Filtros avançados',
-      'Suporte prioritário 24/7'
+      { text: '10 oportunidades por mês', included: true },
+      { text: 'Busca básica', included: true },
+      { text: 'Perfil profissional', included: true },
+      { text: 'Suporte por email', included: true },
+      { text: 'Dashboard básico', included: true },
+      { text: 'Gerador de propostas', included: false },
+      { text: 'Gerador de mensagens', included: false },
+      { text: 'Filtros avançados', included: false },
     ],
-    popular: true
+    cta: 'Começar grátis',
+    variant: 'outline' as const
   },
-  starter: {
-    id: 'starter',
-    name: 'Plano Starter',
-    price: 0,
-    description: 'Para começar sua jornada',
+  {
+    name: 'Professional',
+    subtitle: 'Para designers ativos',
+    price: 'R$97',
+    period: '/mês',
+    icon: Star,
+    color: '#f59e0b',
+    gradientClass: 'plan-gradient-pro',
+    popular: true,
+    disabled: false,
     features: [
-      '10 oportunidades por mês',
-      'Busca básica',
-      'Perfil profissional',
-      'Suporte por email',
-      'Dashboard básico'
+      { text: 'Oportunidades ilimitadas', included: true, highlight: true },
+      { text: 'Busca avançada com IA', included: true, highlight: true },
+      { text: 'Perfil profissional', included: true },
+      { text: 'Suporte prioritário 24/7', included: true },
+      { text: 'Dashboard avançado', included: true },
+      { text: 'Gerador de propostas', included: true, highlight: true },
+      { text: 'Gerador de mensagens', included: true, highlight: true },
+      { text: 'Filtros avançados', included: true },
     ],
-    popular: false
+    cta: 'Assinar Professional',
+    variant: 'primary' as const
+  },
+  {
+    name: 'Enterprise',
+    subtitle: 'Para times e agências',
+    price: 'R$247',
+    period: '/mês',
+    icon: Building2,
+    color: '#a855f7',
+    gradientClass: 'plan-gradient-enterprise',
+    popular: false,
+    disabled: true,
+    features: [
+      { text: 'Tudo do Professional', included: true },
+      { text: 'Até 10 usuários', included: true, highlight: true },
+      { text: 'Dashboard colaborativo', included: true, highlight: true },
+      { text: 'Suporte dedicado 24/7', included: true },
+      { text: 'Relatórios avançados', included: true },
+      { text: 'API de integração', included: true, highlight: true },
+      { text: 'Gerente de conta exclusivo', included: true, highlight: true },
+      { text: 'Treinamento da equipe', included: true },
+    ],
+    cta: 'Em breve',
+    variant: 'outline' as const
   }
-};
+];
 
-export function PaymentPage() {
-  const { planId } = useParams<{ planId: string }>();
-  const navigate = useNavigate();
+const faqItems = [
+  { q: 'Posso mudar de plano a qualquer momento?', a: 'Sim! Você pode fazer upgrade ou downgrade quando quiser. A diferença é calculada automaticamente no pró-rata.' },
+  { q: 'Como funciona o período de teste?', a: 'Oferecemos 7 dias de teste grátis no plano Professional. Cancele antes do fim e não será cobrado.' },
+  { q: 'Quais formas de pagamento são aceitas?', a: 'Aceitamos cartão de crédito, PIX e boleto bancário. Todo o processo é seguro com criptografia SSL.' },
+  { q: 'Posso cancelar a qualquer momento?', a: 'Sim, cancele quando quiser diretamente pelo dashboard. Não há multas ou taxas de cancelamento.' },
+  { q: 'Meus dados estão seguros?', a: 'Seus dados são criptografados de ponta a ponta e armazenados em servidores certificados. Nunca compartilhamos informações com terceiros.' },
+  { q: 'O plano Enterprise tem suporte para equipes?', a: 'Sim! O plano Enterprise é feito para times. Até 10 usuários com dashboard colaborativo, relatórios em tempo real e gerente de conta dedicado.' },
+];
 
-  const [selectedPlan] = useState<Plan>(() => {
-    if (planId && planId in planMap) {
-      return planMap[planId as keyof typeof planMap];
+const comparisons = [
+  { feature: 'Oportunidades', starter: '10/mês', professional: 'Ilimitadas', enterprise: 'Ilimitadas' },
+  { feature: 'Busca com IA', starter: 'Básica', professional: 'Avançada', enterprise: 'Avançada' },
+  { feature: 'Gerador de propostas', starter: '—', professional: '✓', enterprise: '✓' },
+  { feature: 'Gerador de mensagens', starter: '—', professional: '✓', enterprise: '✓' },
+  { feature: 'Usuários', starter: '1', professional: '1', enterprise: 'Até 10' },
+  { feature: 'Suporte', starter: 'Email', professional: 'Prioritário 24/7', enterprise: 'Dedicado 24/7' },
+  { feature: 'Relatórios', starter: '—', professional: 'Semanais', enterprise: 'Avançados' },
+  { feature: 'API', starter: '—', professional: '—', enterprise: '✓' },
+  { feature: 'Gerente de conta', starter: '—', professional: '—', enterprise: '✓' },
+];
+
+export function Plans() {
+  const [isAnnual, setIsAnnual] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  const getPrice = (plan: typeof plans[0]) => {
+    if (plan.price === 'Grátis') return 'Grátis';
+    if (isAnnual) {
+      const monthly = parseInt(plan.price.replace('R$', ''));
+      const annual = Math.floor(monthly * 12 * 0.8);
+      return `R$${Math.floor(annual / 12)}`;
     }
-    return planMap.professional;
-  });
-
-  const [order, setOrder] = useState<Order | null>(null);
-  const [showConfirmation, setShowConfirmation] = useState(false);
-  const [proofFile, setProofFile] = useState<File | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [paymentStatus, setPaymentStatus] = useState<'pending' | 'paid' | 'approved' | 'active'>('pending');
-  const [copied, setCopied] = useState(false);
-
-  useEffect(() => {
-    generateOrder();
-  }, []);
-
-  const generateOrder = () => {
-    const orderId = `#${String(Math.floor(Math.random() * 10000)).padStart(4, '0')}`;
-    const newOrder: Order = {
-      id: orderId,
-      planId: selectedPlan.id,
-      planName: selectedPlan.name,
-      amount: selectedPlan.price,
-      status: 'pending',
-      createdAt: new Date(),
-      pixCode: '00020126360014BR.GOV.BCB.PIX0114+552199999999952040000530398654091.005802BR5908Empresa6009Sao Paulo62070503***6304B14E',
-      qrCode: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAAAXNSR0IArs4c6QAABARJREFUeJztnUuPFEUQx6tnZmf2AWtAEQWPihFBMHjhwBfgwQMHv4CJJz9h4slP4MGDBxM/geGP8MDLRUQFxAcKiIoKggKC+5h9dFcz1ZldPdM93c/sL+XSmZ3qzHaqfvu/r6qqZ2MAgD+wAexVwU5zMwgB4ABaAADYby3zAE60FgJAC1rLMXAWrQ1aCwKgQWuD1oLcaUWWqVhWYlnpOFZiWak4VmJZ6ThWYlmpOFZiWak4VmJZ6ThWYlmpOFZiWak4VmJZ6ThWYlmpOJZz7cDca5M4jQPDdu45jmMl5jiOlZjjOFZiGTiHsmMnTzCcmsBwSh7XlNl6F+n2x2xfg+sR0wZfX+5rcdrpmAbXJ6YNvr7c12K+w3imxXWJ6fDRRJt6zw9OOx3T4LrEdPhoos2OBcenoxswOjYFJiHcmcAcx3Gaf5b7WrjtFurcL/XjWp51Rja4rMUGZHHdZnpcf3tly7H9LrAeA4X3ZcLxTXSsmcIghRuOmUzWuWlY1LBXKreEuwUAIQtigyeWcSPjOLYVJ5jE+ZJYd7Ld4LMWrU4A0r++P8Sg5UBrRlcS0dCQrB1jQ1FvmS1ItjXaEednJQAAAFCeswAANI+cqU5qmsaxu3C2pamz+UqQcY6HZb/rcfD3d+57os3G/P3T1NNPpuwP+V4b7U4p3JP3ygaRG0esu6P2HDPN5q9oPUL2iB1Xtl7ndyHyxTKyTgAAnK3uzw05W92Z3/eEbl2QrlL9gvF4P57ou1/m2eG2W8laIe/fLY9NZ95qD9a2cwztzGgF2XJ7DqNrO3bp6lyMthK0A9eZ1zh3IgC6vT8BQK/XR7fbw2AwGJ3HnNGBQLS1a7fba3p9AqC1zs6bHst9Laxt52rXtrIdR4ajQ2Lt6XGeBAmMS/uwyD5FmJkHwm5+J9hQ3VaI9l67qJfR7uR+J5jbyqyMbu/k6Gz6xM4qo7SzxPte9irZYyWyd0VlbyLxfjMbXfu6a9VqBVHw5Px8pCukTlVkC1IerUSU7Yr+1/rkt+77eFYhsjUzlrJtx4/8LT9Vp4jyct97IWsLQazK1hJjWZbB5rrLfS1GO54pK1E1W7qufwnWaUGGS7Luf7bG3Zx92cnIfXfGsc7bGkM7oUJOCFcHUn+fE+9vtuH+vaKPFJl9cj6oMrX6r62jK/OkH4GofxTq77N6lRnLmTWvMvPXphG/awX5C66N1XcNWn5Lf8J6hMi/4/yU+1qMduIUoP79MfP9/8K62zWWHdRnvTRXj4/N8cyAfebfw7IlDmeWmI3UsTIfQDrbA6yPIB0LtY1AnZOBF4Z1DfbtSx1nIVeHqUq0teh0HsC4OQkP0DmO0Vg7rCg0MM7PImOZDRprh5FDRKtUHKdRj7KtcXXY1jEUSj8YF9E1nAtkHIf2qLJtx8nUl+hUOJ04bdsGm/gm6/0/3cpoxmYFxgUAAAAASUVORK5CYII='
-    };
-    setOrder(newOrder);
+    return plan.price;
   };
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setProofFile(e.target.files[0]);
-    }
-  };
-
-  const copyPixCode = () => {
-    if (order?.pixCode) {
-      navigator.clipboard.writeText(order.pixCode);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
-
-  const handlePaymentConfirmation = async () => {
-    if (!proofFile) {
-      alert('Por favor, anexe o comprovante de pagamento');
-      return;
-    }
-
-    setLoading(true);
-    
-    setTimeout(() => {
-      setPaymentStatus('paid');
-      setShowConfirmation(true);
-      setLoading(false);
-      
-      console.log('📧 Email enviado para equipe Prisma');
-      console.log('Pedido:', order?.id);
-      console.log('Plano:', order?.planName);
-      console.log('Valor:', order?.amount);
-      console.log('Comprovante:', proofFile.name);
-    }, 2000);
-  };
-
-  const handleApprovePayment = () => {
-    setPaymentStatus('approved');
-    setTimeout(() => {
-      setPaymentStatus('active');
-    }, 1500);
-  };
-
-  const handleBack = () => {
-    navigate('/plans');
+  const getAnnualPrice = (plan: typeof plans[0]) => {
+    if (plan.price === 'Grátis') return '';
+    const monthly = parseInt(plan.price.replace('R$', ''));
+    const annual = Math.floor(monthly * 12 * 0.8);
+    return `R$${annual}/ano`;
   };
 
   return (
-    <div className="payment-page">
-      <div className="payment-container">
-        <div className="payment-header">
-          <button className="payment-back-btn" onClick={handleBack}>
-            <ArrowLeft size={18} />
-            Voltar
-          </button>
-          <div className="payment-header-content">
-            <div className="payment-header-icon">
-              <Sparkles size={24} />
+    <div className="plans-page">
+      <Sidebar />
+      <div className="plans-main">
+        <Header />
+        <div className="plans-content">
+          <div className="plans-hero">
+            <div className="plans-hero-bg">
+              <div className="plans-hero-grid" />
+              <div className="plans-hero-orb plans-hero-orb-1" />
+              <div className="plans-hero-orb plans-hero-orb-2" />
             </div>
-            <div>
-              <h1>Finalizar Pagamento</h1>
-              <p>Complete sua assinatura e tenha acesso imediato</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="payment-order-card">
-          <div className="payment-order-header">
-            <div className="payment-order-title">
-              <FileCheck size={18} />
-              <span>Resumo do Pedido</span>
-            </div>
-            <span className={`payment-order-status status-${paymentStatus}`}>
-              {paymentStatus === 'pending' && 'Aguardando Pagamento'}
-              {paymentStatus === 'paid' && 'Pagamento Confirmado'}
-              {paymentStatus === 'approved' && 'Em Análise'}
-              {paymentStatus === 'active' && 'Ativo'}
-            </span>
-          </div>
-
-          <div className="payment-order-details">
-            <div className="payment-order-row">
-              <span>Pedido</span>
-              <strong>{order?.id}</strong>
-            </div>
-            <div className="payment-order-row">
-              <span>Plano</span>
-              <div className="payment-order-plan">
-                <Crown size={14} className="payment-order-crown" />
-                <strong>{order?.planName}</strong>
-                {selectedPlan.popular && (
-                  <span className="payment-order-popular">Popular</span>
-                )}
+            <div className="plans-hero-content">
+              <div className="plans-hero-badge">
+                <Sparkles size={14} />
+                <span>Planos e preços</span>
+              </div>
+              <h1 className="plans-hero-title">Escolha o plano ideal para você</h1>
+              <p className="plans-hero-subtitle">
+                Comece grátis e escale conforme sua necessidade. Cancele quando quiser.
+              </p>
+              
+              <div className="plans-toggle-wrapper">
+                <span className={`plans-toggle-label ${!isAnnual ? 'active' : ''}`}>Mensal</span>
+                <button 
+                  className={`plans-toggle ${isAnnual ? 'annual' : ''}`}
+                  onClick={() => setIsAnnual(!isAnnual)}
+                  aria-label="Alternar entre mensal e anual"
+                >
+                  <div className="plans-toggle-thumb" />
+                </button>
+                <span className={`plans-toggle-label ${isAnnual ? 'active' : ''}`}>
+                  Anual
+                  <span className="plans-toggle-save">-20%</span>
+                </span>
               </div>
             </div>
-            <div className="payment-order-row">
-              <span>Data</span>
-              <span>{order?.createdAt.toLocaleDateString('pt-BR')}</span>
+          </div>
+
+          <div className="plans-cards-grid">
+            {plans.map((plan) => {
+              const PlanIcon = plan.icon;
+              const price = getPrice(plan);
+              const annualPrice = getAnnualPrice(plan);
+              
+              return (
+                <Card 
+                  key={plan.name} 
+                  className={`plans-card ${plan.gradientClass} ${plan.popular ? 'plans-card-popular' : ''} ${plan.disabled ? 'plans-card-disabled' : ''}`}
+                  glow={plan.popular}
+                >
+                  {plan.popular && (
+                    <div className="plans-card-badge">
+                      <Star size={12} fill="#050505" />
+                      Mais popular
+                    </div>
+                  )}
+                  
+                  {plan.disabled && (
+                    <div className="plans-card-overlay">
+                      <Clock size={20} />
+                      <span>Em breve</span>
+                    </div>
+                  )}
+                  
+                  <div className="plans-card-top">
+                    <div className="plans-card-icon" style={{ background: `${plan.color}15` }}>
+                      <PlanIcon size={24} style={{ color: plan.color }} />
+                    </div>
+                    <div className="plans-card-header">
+                      <h3 className="plans-card-name">{plan.name}</h3>
+                      <p className="plans-card-subtitle">{plan.subtitle}</p>
+                    </div>
+                  </div>
+
+                  <div className="plans-card-price-row">
+                    <div className="plans-card-price">
+                      <span className="plans-card-amount">{price}</span>
+                      {plan.period && <span className="plans-card-period">{plan.period}</span>}
+                    </div>
+                    {isAnnual && annualPrice && (
+                      <div className="plans-card-annual">
+                        <Gift size={12} />
+                        {annualPrice}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="plans-card-divider" />
+
+                  <ul className="plans-card-features">
+                    {plan.features.map((feature, i) => (
+                      <li 
+                        key={i} 
+                        className={`plans-card-feature ${!feature.included ? 'disabled' : ''} ${feature.highlight ? 'highlight' : ''}`}
+                      >
+                        {feature.included ? (
+                          <Check size={14} className="plans-card-feature-check" />
+                        ) : (
+                          <span className="plans-card-feature-x">×</span>
+                        )}
+                        <span>{feature.text}</span>
+                        {feature.highlight && <Sparkles size={10} className="plans-card-feature-sparkle" />}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Link to={plan.disabled ? '#' : '/register'} className={`plans-card-cta ${plan.disabled ? 'disabled' : ''}`}>
+                    <Button 
+                      variant={plan.popular ? 'primary' : 'outline'} 
+                      fullWidth 
+                      size="lg"
+                      icon={!plan.disabled && plan.popular ? <ArrowRight size={16} /> : undefined}
+                      disabled={plan.disabled}
+                    >
+                      {plan.cta}
+                    </Button>
+                  </Link>
+                </Card>
+              );
+            })}
+          </div>
+
+          <div className="plans-comparison">
+            <div className="plans-comparison-header">
+              <h2 className="plans-comparison-title">Tabela comparativa</h2>
+              <p className="plans-comparison-subtitle">Compare todos os recursos detalhadamente</p>
             </div>
-            <div className="payment-order-row total">
-              <span>Total</span>
-              <strong className="payment-order-price">
-                R$ {order?.amount.toFixed(2)}
-              </strong>
+            
+            <div className="plans-comparison-table-wrapper">
+              <table className="plans-comparison-table">
+                <thead>
+                  <tr>
+                    <th>Recurso</th>
+                    <th><Zap size={13} /> Starter</th>
+                    <th className="col-pro"><Star size={13} /> Professional</th>
+                    <th><Building2 size={13} /> Enterprise</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {comparisons.map((row, i) => (
+                    <tr key={i}>
+                      <td className="col-feature">{row.feature}</td>
+                      <td>{row.starter}</td>
+                      <td className="col-pro">{row.professional}</td>
+                      <td>{row.enterprise}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
 
-          <div className="payment-plan-features">
-            <div className="payment-features-title">
-              <CheckCircle size={14} />
-              <span>Benefícios do plano</span>
+          <div className="plans-trust">
+            <div className="plans-trust-item">
+              <Shield size={20} />
+              <div>
+                <h4>Segurança garantida</h4>
+                <p>Dados criptografados</p>
+              </div>
             </div>
-            <div className="payment-features-list">
-              {selectedPlan.features.map((feature, index) => (
-                <div key={index} className="payment-feature-item">
-                  <Star size={12} />
-                  <span>{feature}</span>
+            <div className="plans-trust-item">
+              <Lock size={20} />
+              <div>
+                <h4>Pagamento seguro</h4>
+                <p>Certificado SSL</p>
+              </div>
+            </div>
+            <div className="plans-trust-item">
+              <TrendingUp size={20} />
+              <div>
+                <h4>Sem fidelidade</h4>
+                <p>Cancele quando quiser</p>
+              </div>
+            </div>
+            <div className="plans-trust-item">
+              <Headphones size={20} />
+              <div>
+                <h4>Suporte humano</h4>
+                <p>Resposta em minutos</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="plans-faq">
+            <div className="plans-faq-header">
+              <h2 className="plans-faq-title">Dúvidas frequentes</h2>
+              <p className="plans-faq-subtitle">Respostas para as perguntas mais comuns</p>
+            </div>
+            
+            <div className="plans-faq-list">
+              {faqItems.map((item, i) => (
+                <div 
+                  key={i} 
+                  className={`plans-faq-item ${openFaq === i ? 'open' : ''}`}
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                >
+                  <div className="plans-faq-item-header">
+                    <HelpCircle size={16} className="plans-faq-item-icon" />
+                    <span className="plans-faq-item-question">{item.q}</span>
+                    {openFaq === i ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                  </div>
+                  <div className="plans-faq-item-answer">
+                    <p>{item.a}</p>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
-        </div>
 
-        {paymentStatus === 'pending' && (
-          <div className="payment-pix-card">
-            <div className="payment-pix-header">
-              <div className="payment-pix-title">
-                <QrCode size={18} />
-                <h2>Pagamento via Pix</h2>
-              </div>
-              <span className="payment-pix-badge">Instantâneo</span>
-            </div>
-
-            <p className="payment-pix-instruction">
-              Escaneie o QR Code ou copie o código Pix para realizar o pagamento
-            </p>
-
-            <div className="payment-pix-content">
-              <div className="payment-qr-container">
-                <div className="payment-qr-wrapper">
-                  <img 
-                    src={order?.qrCode} 
-                    alt="QR Code Pix" 
-                    className="payment-qr-code"
-                  />
-                  <div className="payment-qr-overlay">
-                    <QrCode size={32} />
-                  </div>
-                </div>
-                <button 
-                  className="payment-copy-btn primary" 
-                  onClick={copyPixCode}
-                >
-                  {copied ? (
-                    <>
-                      <CheckCircle size={16} />
-                      Copiado!
-                    </>
-                  ) : (
-                    <>
-                      <Copy size={16} />
-                      Copiar Código Pix
-                    </>
-                  )}
-                </button>
-              </div>
-
-              <div className="payment-pix-code-container">
-                <div className="payment-pix-code-label">
-                  <span>Código Pix para Copia e Cola</span>
-                </div>
-                <div className="payment-pix-code-box">
-                  <p>{order?.pixCode}</p>
-                </div>
-                <button 
-                  className="payment-copy-btn secondary" 
-                  onClick={copyPixCode}
-                >
-                  {copied ? (
-                    <>
-                      <CheckCircle size={16} />
-                      Copiado!
-                    </>
-                  ) : (
-                    <>
-                      <Copy size={16} />
-                      Copiar Código
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-
-            <div className="payment-proof-section">
-              <div className="payment-proof-header">
-                <div className="payment-proof-title">
-                  <Send size={18} />
-                  <h3>Já realizou o pagamento?</h3>
-                </div>
-                <span className="payment-proof-badge">Obrigatório</span>
-              </div>
-
-              <p className="payment-proof-instruction">
-                Envie o comprovante para agilizar a ativação do seu plano
+          <div className="plans-cta-bottom">
+            <div className="plans-cta-bottom-content">
+              <div className="plans-cta-bottom-glow" />
+              <MessageSquare size={24} className="plans-cta-bottom-icon" />
+              <h2 className="plans-cta-bottom-title">Ainda tem dúvidas?</h2>
+              <p className="plans-cta-bottom-text">
+                Fale com nossa equipe de suporte. Respondemos em até 5 minutos.
               </p>
-              
-              <div className="payment-upload-area">
-                <input
-                  type="file"
-                  id="proof-upload"
-                  accept="image/*,.pdf"
-                  onChange={handleFileUpload}
-                  className="payment-file-input"
-                />
-                <label htmlFor="proof-upload" className="payment-upload-label">
-                  {proofFile ? (
-                    <div className="payment-upload-success">
-                      <FileCheck size={20} />
-                      <span>{proofFile.name}</span>
-                      <span className="payment-upload-size">
-                        {(proofFile.size / 1024).toFixed(1)} KB
-                      </span>
-                    </div>
-                  ) : (
-                    <div className="payment-upload-placeholder">
-                      <Download size={24} />
-                      <span>Clique para anexar comprovante</span>
-                      <span className="payment-upload-hint">PNG, JPG ou PDF até 5MB</span>
-                    </div>
-                  )}
-                </label>
-              </div>
-
-              <button 
-                className={`payment-confirm-btn ${!proofFile ? 'disabled' : ''}`}
-                onClick={handlePaymentConfirmation}
-                disabled={loading || !proofFile}
-              >
-                {loading ? (
-                  <>
-                    <Loader2 size={18} className="payment-spinner" />
-                    Enviando...
-                  </>
-                ) : (
-                  <>
-                    <CheckCircle size={18} />
-                    Já paguei
-                  </>
-                )}
-              </button>
+              <Button variant="outline" size="lg" icon={<ArrowRight size={16} />}>
+                Falar com suporte
+              </Button>
             </div>
-          </div>
-        )}
-
-        {showConfirmation && paymentStatus === 'paid' && (
-          <div className="payment-confirmation-card">
-            <div className="payment-confirmation-icon">
-              <CheckCircle size={48} />
-            </div>
-            <h2>Pagamento Confirmado!</h2>
-            <p>Seu comprovante foi enviado para nossa equipe.</p>
-            
-            <div className="payment-confirmation-details">
-              <div className="payment-confirmation-item">
-                <span>Pedido</span>
-                <strong>{order?.id}</strong>
-              </div>
-              <div className="payment-confirmation-item">
-                <span>Valor</span>
-                <strong>R$ {order?.amount.toFixed(2)}</strong>
-              </div>
-              <div className="payment-confirmation-item">
-                <span>Status</span>
-                <span className="payment-confirmation-status">Aguardando aprovação</span>
-              </div>
-            </div>
-
-            <div className="payment-confirmation-actions">
-              <button 
-                className="payment-approve-btn"
-                onClick={handleApprovePayment}
-              >
-                <Crown size={16} />
-                Aprovar (Simulação)
-              </button>
-              <p className="payment-approve-note">
-                <AlertCircle size={12} />
-                Na versão real, apenas a equipe Prisma pode aprovar
-              </p>
-            </div>
-          </div>
-        )}
-
-        {paymentStatus === 'active' && (
-          <div className="payment-active-card">
-            <div className="payment-active-icon">
-              <Sparkles size={48} />
-            </div>
-            <h2>Plano Ativado! 🎉</h2>
-            <p>Seu plano {order?.planName} está ativo e disponível.</p>
-            
-            <div className="payment-active-details">
-              <div className="payment-active-item">
-                <Mail size={16} />
-                <span>Email de confirmação enviado</span>
-              </div>
-              <div className="payment-active-item">
-                <User size={16} />
-                <span>Acesso liberado imediatamente</span>
-              </div>
-              <div className="payment-active-item">
-                <Shield size={16} />
-                <span>Garantia de 7 dias</span>
-              </div>
-            </div>
-
-            <button 
-              className="payment-start-btn"
-              onClick={() => navigate('/dashboard')}
-            >
-              Acessar Agora
-              <ChevronRight size={18} />
-            </button>
-          </div>
-        )}
-
-        <div className="payment-footer">
-          <div className="payment-footer-item">
-            <Shield size={14} />
-            <span>Pagamento seguro via Pix</span>
-          </div>
-          <div className="payment-footer-item">
-            <Clock size={14} />
-            <span>Ativação em até 24h úteis</span>
-          </div>
-          <div className="payment-footer-item">
-            <Mail size={14} />
-            <span>Dúvidas? suporte@prisma.com</span>
           </div>
         </div>
       </div>
