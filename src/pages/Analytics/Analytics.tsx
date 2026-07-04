@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Sidebar } from '../../components/Sidebar/Sidebar';
 import { Header } from '../../components/Header/Header';
 import { Card } from '../../components/Card/Card';
 import { 
-  Briefcase, TrendingUp, Users, Globe, 
-  ArrowUpRight, Target, Building2, Star, BarChart3
+  Briefcase, TrendingUp, Target, Globe, 
+  ArrowUpRight, Building2, Star, BarChart3
 } from 'lucide-react';
 import {
   ComposableMap,
@@ -81,98 +81,82 @@ const colorScale = (value: number) => {
 const geoUrl = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json';
 
 export function Analytics() {
-  const [position, setPosition] = useState({ coordinates: [0, 20], zoom: 1.4 });
+  const [position, setPosition] = useState({ coordinates: [0, 20], zoom: 1.2 });
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
 
-  const stats = {
-    totalJobs: 1424,
-    avgMatch: 87.6,
-    activeCompanies: 324,
-    countriesReached: 22,
-    newThisWeek: 47,
-    topService: 'UI Design'
-  };
+  const stats = [
+    { 
+      icon: Briefcase, 
+      value: '1.424', 
+      label: 'Vagas ativas', 
+      change: '+12% este mês',
+      color: '#3b82f6'
+    },
+    { 
+      icon: Target, 
+      value: '87,6%', 
+      label: 'Match médio', 
+      change: '+2,1% esta semana',
+      color: '#22c55e'
+    },
+    { 
+      icon: Building2, 
+      value: '324', 
+      label: 'Empresas ativas', 
+      change: '+8 esta semana',
+      color: '#a855f7'
+    },
+    { 
+      icon: Globe, 
+      value: '22', 
+      label: 'Países alcançados', 
+      change: '+3 novos',
+      color: '#f59e0b'
+    },
+  ];
 
   return (
     <div className="dashboard-page">
       <Sidebar />
-      
       <div className="dashboard-main">
         <Header />
-        
         <div className="dashboard-content analytics-content">
           <div className="analytics-header">
-            <h1 className="analytics-title">Análises de Mercado</h1>
-            <p className="analytics-subtitle">
-              Dados em tempo real sobre o mercado de design e oportunidades
-            </p>
+            <div>
+              <h1 className="analytics-title">Análises</h1>
+              <p className="analytics-subtitle">Visão geral do mercado de design e oportunidades.</p>
+            </div>
+            <div className="analytics-header-actions">
+              <span className="analytics-badge">Atualizado há 2 min</span>
+            </div>
           </div>
 
           <div className="analytics-stats-grid">
-            <Card className="analytics-stat-card" hover glow>
-              <div className="analytics-stat-icon" style={{ background: 'rgba(59, 130, 246, 0.12)' }}>
-                <Briefcase size={20} color="#3b82f6" />
-              </div>
-              <div className="analytics-stat-content">
-                <span className="analytics-stat-value">{stats.totalJobs}</span>
-                <span className="analytics-stat-label">Total de vagas</span>
-                <span className="analytics-stat-change up">
-                  <ArrowUpRight size={14} /> +12% este mês
-                </span>
-              </div>
-            </Card>
-
-            <Card className="analytics-stat-card" hover glow>
-              <div className="analytics-stat-icon" style={{ background: 'rgba(34, 197, 94, 0.12)' }}>
-                <Target size={20} color="#22c55e" />
-              </div>
-              <div className="analytics-stat-content">
-                <span className="analytics-stat-value">{stats.avgMatch}%</span>
-                <span className="analytics-stat-label">Match médio</span>
-                <span className="analytics-stat-change up">
-                  <ArrowUpRight size={14} /> +2.1% esta semana
-                </span>
-              </div>
-            </Card>
-
-            <Card className="analytics-stat-card" hover glow>
-              <div className="analytics-stat-icon" style={{ background: 'rgba(168, 85, 247, 0.12)' }}>
-                <Building2 size={20} color="#a855f7" />
-              </div>
-              <div className="analytics-stat-content">
-                <span className="analytics-stat-value">{stats.activeCompanies}</span>
-                <span className="analytics-stat-label">Empresas ativas</span>
-                <span className="analytics-stat-change up">
-                  <ArrowUpRight size={14} /> +8 novas esta semana
-                </span>
-              </div>
-            </Card>
-
-            <Card className="analytics-stat-card" hover glow>
-              <div className="analytics-stat-icon" style={{ background: 'rgba(245, 158, 11, 0.12)' }}>
-                <Globe size={20} color="#f59e0b" />
-              </div>
-              <div className="analytics-stat-content">
-                <span className="analytics-stat-value">{stats.countriesReached}</span>
-                <span className="analytics-stat-label">Países alcançados</span>
-                <span className="analytics-stat-change up">
-                  <ArrowUpRight size={14} /> +3 novos
-                </span>
-              </div>
-            </Card>
+            {stats.map((stat, index) => (
+              <Card key={index} className="analytics-stat-card">
+                <div className="analytics-stat-top">
+                  <div className="analytics-stat-icon" style={{ color: stat.color }}>
+                    <stat.icon size={18} />
+                  </div>
+                  <span className="analytics-stat-change">{stat.change}</span>
+                </div>
+                <div className="analytics-stat-value">{stat.value}</div>
+                <div className="analytics-stat-label">{stat.label}</div>
+              </Card>
+            ))}
           </div>
 
           <div className="analytics-grid">
-            <Card className="analytics-map-card" glow>
+            <Card className="analytics-map-card">
               <div className="analytics-card-header">
                 <div className="analytics-card-title">
-                  <Globe size={18} />
-                  Distribuição global de vagas
+                  <Globe size={16} />
+                  Distribuição global
                 </div>
-                <div className="analytics-card-legend">
+                <div className="analytics-card-actions">
                   {selectedCountry && (
-                    <span className="analytics-selected-country">
-                      {mapData.find(d => d.country === selectedCountry)?.name || selectedCountry}
+                    <span className="analytics-tag">
+                      {mapData.find(d => d.country === selectedCountry)?.name}
                     </span>
                   )}
                 </div>
@@ -181,7 +165,6 @@ export function Analytics() {
                 <ComposableMap
                   projection="geoMercator"
                   projectionConfig={{ scale: 110 }}
-                  style={{ width: '100%', height: '100%' }}
                 >
                   <ZoomableGroup
                     center={position.coordinates as [number, number]}
@@ -200,16 +183,16 @@ export function Analytics() {
                               key={geo.rsmKey}
                               geography={geo}
                               fill={colorScale(value)}
-                              stroke="#1a1a1e"
-                              strokeWidth={0.8}
+                              stroke="#0a0a0a"
+                              strokeWidth={0.5}
                               style={{
                                 default: { outline: 'none' },
                                 hover: { fill: '#82e7c4', outline: 'none', cursor: 'pointer' },
                                 pressed: { outline: 'none' },
                               }}
                               onClick={() => {
-                                const countryCode = geo.properties.iso_a3 || geo.properties.iso_a2;
-                                setSelectedCountry(countryCode || null);
+                                const code = geo.properties.iso_a3 || geo.properties.iso_a2;
+                                setSelectedCountry(code || null);
                               }}
                             />
                           );
@@ -222,53 +205,45 @@ export function Analytics() {
               <div className="analytics-map-footer">
                 <span className="analytics-map-note">
                   {selectedCountry 
-                    ? `📍 ${mapData.find(d => d.country === selectedCountry)?.name || 'Selecionado'} — ${mapData.find(d => d.country === selectedCountry)?.value || 0} vagas`
+                    ? `${mapData.find(d => d.country === selectedCountry)?.name} — ${mapData.find(d => d.country === selectedCountry)?.value} vagas`
                     : 'Clique em um país para ver detalhes'
                   }
                 </span>
-                <div className="analytics-map-legend">
-                  <div className="legend-item"><span className="legend-color" style={{ background: '#1a6b48' }} />200+</div>
-                  <div className="legend-item"><span className="legend-color" style={{ background: '#2d8f5e' }} />150+</div>
-                  <div className="legend-item"><span className="legend-color" style={{ background: '#40b374' }} />100+</div>
-                  <div className="legend-item"><span className="legend-color" style={{ background: '#5ed49b' }} />50+</div>
-                  <div className="legend-item"><span className="legend-color" style={{ background: '#82e7c4' }} />20+</div>
-                  <div className="legend-item"><span className="legend-color" style={{ background: '#2a2a2a' }} />0</div>
+                <div className="analytics-legend">
+                  <div className="analytics-legend-item"><span style={{ background: '#1a6b48' }} />200+</div>
+                  <div className="analytics-legend-item"><span style={{ background: '#40b374' }} />100+</div>
+                  <div className="analytics-legend-item"><span style={{ background: '#82e7c4' }} />20+</div>
+                  <div className="analytics-legend-item"><span style={{ background: '#2a2a2a' }} />0</div>
                 </div>
               </div>
             </Card>
 
-            <Card className="analytics-chart-card" glow>
+            <Card className="analytics-chart-card">
               <div className="analytics-card-header">
                 <div className="analytics-card-title">
-                  <BarChart3 size={18} />
-                  Vagas por área de atuação
+                  <BarChart3 size={16} />
+                  Vagas por área
                 </div>
-                <span className="analytics-card-badge">
-                  {stats.topService} em alta
-                </span>
               </div>
               <div className="analytics-chart-container">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={barData} layout="vertical" margin={{ left: 80, right: 20, top: 10, bottom: 10 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-                    <XAxis type="number" stroke="#666" tick={{ fill: '#666', fontSize: 12 }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#222" />
+                    <XAxis type="number" stroke="#444" tick={{ fill: '#444', fontSize: 11 }} />
                     <YAxis 
                       type="category" 
                       dataKey="name" 
-                      stroke="#666" 
-                      tick={{ fill: '#999', fontSize: 12 }}
+                      stroke="#444" 
+                      tick={{ fill: '#666', fontSize: 11 }}
                       width={90}
                     />
                     <Tooltip 
-                      contentStyle={{ background: '#1a1a1a', border: '1px solid #333', borderRadius: 8 }}
-                      itemStyle={{ color: '#fff' }}
+                      contentStyle={{ background: '#0a0a0a', border: '1px solid #1a1a1a', borderRadius: 6 }}
+                      itemStyle={{ color: '#fff', fontSize: 12 }}
                     />
-                    <Bar dataKey="value" radius={[0, 8, 8, 0]}>
-                      {barData.map((entry, index) => (
-                        <Cell 
-                          key={`cell-${index}`} 
-                          fill={['#3b82f6', '#22c55e', '#a855f7', '#f59e0b', '#ec4899', '#14b8a6', '#f97316', '#8b5cf6'][index % 8]} 
-                        />
+                    <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={18}>
+                      {barData.map((_, index) => (
+                        <Cell key={`cell-${index}`} fill={['#3b82f6', '#22c55e', '#a855f7', '#f59e0b', '#ec4899', '#14b8a6', '#f97316', '#8b5cf6'][index % 8]} />
                       ))}
                     </Bar>
                   </BarChart>
@@ -277,15 +252,12 @@ export function Analytics() {
             </Card>
           </div>
 
-          <Card className="analytics-table-card" glow>
+          <Card className="analytics-table-card">
             <div className="analytics-card-header">
               <div className="analytics-card-title">
-                <Star size={18} />
-                Melhores empresas
+                <Star size={16} />
+                Empresas com maior compatibilidade
               </div>
-              <span className="analytics-card-badge">
-                Baseado em compatibilidade
-              </span>
             </div>
             <div className="analytics-table-container">
               <table className="analytics-table">
@@ -293,7 +265,7 @@ export function Analytics() {
                   <tr>
                     <th>Empresa</th>
                     <th>Vagas</th>
-                    <th>Match médio</th>
+                    <th>Match</th>
                     <th>Status</th>
                   </tr>
                 </thead>
@@ -301,28 +273,21 @@ export function Analytics() {
                   {topCompanies.map((company, index) => (
                     <tr key={index}>
                       <td>
-                        <div className="analytics-company-name">
-                          <div className="analytics-company-rank">#{index + 1}</div>
+                        <div className="analytics-company">
+                          <span className="analytics-rank">#{index + 1}</span>
                           {company.name}
                         </div>
                       </td>
                       <td>{company.jobs}</td>
                       <td>
-                        <div className="analytics-match-badge" style={{ 
-                          background: company.match >= 90 ? 'rgba(34, 197, 94, 0.12)' : 
-                                     company.match >= 85 ? 'rgba(245, 158, 11, 0.12)' : 
-                                     'rgba(59, 130, 246, 0.12)',
-                          color: company.match >= 90 ? '#22c55e' : 
-                                 company.match >= 85 ? '#f59e0b' : '#3b82f6'
+                        <span className="analytics-match" style={{ 
+                          color: company.match >= 90 ? '#22c55e' : company.match >= 85 ? '#f59e0b' : '#3b82f6'
                         }}>
-                          {company.match}% match
-                        </div>
+                          {company.match}%
+                        </span>
                       </td>
                       <td>
-                        <span className="analytics-status-badge active">
-                          <div className="analytics-status-dot" />
-                          Ativa
-                        </span>
+                        <span className="analytics-status">Ativa</span>
                       </td>
                     </tr>
                   ))}
