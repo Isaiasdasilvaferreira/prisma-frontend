@@ -12,7 +12,8 @@ import {
   MapPin, Briefcase, Calendar, MoreHorizontal, Bell,
   CheckCircle2, RefreshCw, FileText, BarChart3,
   ArrowUpRight, Bookmark, DollarSign, Globe, Building2,
-  AlertCircle, ChevronRight, TrendingDown, Activity
+  AlertCircle, ChevronRight, TrendingDown, Activity,
+  LayoutDashboard, PieChart, Send, GraduationCap, Settings
 } from 'lucide-react';
 import './Dashboard.css';
 
@@ -134,10 +135,10 @@ const opportunities = [
 ];
 
 const quickActions = [
-  { icon: Search, label: 'Buscar oportunidades', path: '/tools/find-opportunities', color: '#3b82f6' },
-  { icon: FileText, label: 'Nova proposta', path: '/tools/proposal-generator', color: '#22c55e' },
-  { icon: MessageSquare, label: 'Nova mensagem', path: '/tools/message-generator', color: '#a855f7' },
-  { icon: User, label: 'Editar perfil', path: '/tools/profile', color: '#f59e0b' },
+  { icon: PieChart, label: 'Análises', path: '/analytics', color: '#a855f7' },
+  { icon: Send, label: 'Enviar Mensagem', path: '/messages', color: '#22c55e' },
+  { icon: GraduationCap, label: 'Tutorial', path: '/tutorial', color: '#f59e0b' },
+  { icon: Settings, label: 'Configurações', path: '/settings', color: '#ec4899' },
 ];
 
 export function Dashboard() {
