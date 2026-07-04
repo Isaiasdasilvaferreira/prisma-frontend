@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { BarChart3 } from 'lucide-react';
 import { Sidebar } from '../../components/Sidebar/Sidebar';
 import { Header } from '../../components/Header/Header';
 import { Card } from '../../components/Card/Card';
 import { 
   Briefcase, TrendingUp, Users, Globe, 
-  ArrowUpRight, Target, Building2, Star
+  ArrowUpRight, Target, Building2, Star, BarChart3
 } from 'lucide-react';
 import {
   ComposableMap,
@@ -25,7 +24,6 @@ import {
 } from 'recharts';
 import './Analytics.css';
 
-// Dados simulados para o mapa (vagas por país)
 const mapData = [
   { country: 'USA', name: 'Estados Unidos', value: 324 },
   { country: 'BRA', name: 'Brasil', value: 187 },
@@ -52,7 +50,6 @@ const mapData = [
   { country: 'EGY', name: 'Egito', value: 22 },
 ];
 
-// Dados para o gráfico de barras (vagas por área)
 const barData = [
   { name: 'UI Design', value: 142 },
   { name: 'UX Design', value: 128 },
@@ -64,7 +61,6 @@ const barData = [
   { name: 'Carrosséis', value: 53 },
 ];
 
-// Dados das melhores empresas
 const topCompanies = [
   { name: 'TechCorp Brasil', jobs: 24, match: 96 },
   { name: 'Creative Studio SP', jobs: 18, match: 92 },
@@ -73,7 +69,6 @@ const topCompanies = [
   { name: 'E-commerce Top', jobs: 10, match: 82 },
 ];
 
-// Cores para o mapa (baseado na imagem)
 const colorScale = (value: number) => {
   if (value > 200) return '#1a6b48';
   if (value > 150) return '#2d8f5e';
@@ -83,14 +78,12 @@ const colorScale = (value: number) => {
   return '#2a2a2a';
 };
 
-// GeoJSON do mundo (URL pública do repositório de mapas)
 const geoUrl = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json';
 
 export function Analytics() {
   const [position, setPosition] = useState({ coordinates: [0, 20], zoom: 1.4 });
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
 
-  // Dados estatísticos
   const stats = {
     totalJobs: 1424,
     avgMatch: 87.6,
@@ -115,7 +108,6 @@ export function Analytics() {
             </p>
           </div>
 
-          {/* Cards de estatísticas */}
           <div className="analytics-stats-grid">
             <Card className="analytics-stat-card" hover glow>
               <div className="analytics-stat-icon" style={{ background: 'rgba(59, 130, 246, 0.12)' }}>
@@ -171,7 +163,6 @@ export function Analytics() {
           </div>
 
           <div className="analytics-grid">
-            {/* Mapa-múndi interativo */}
             <Card className="analytics-map-card" glow>
               <div className="analytics-card-header">
                 <div className="analytics-card-title">
@@ -195,11 +186,11 @@ export function Analytics() {
                   <ZoomableGroup
                     center={position.coordinates as [number, number]}
                     zoom={position.zoom}
-                    onMoveEnd={(pos) => setPosition(pos)}
+                    onMoveEnd={(pos: any) => setPosition(pos)}
                   >
                     <Geographies geography={geoUrl}>
-                      {({ geographies }) =>
-                        geographies.map((geo) => {
+                      {({ geographies }: any) =>
+                        geographies.map((geo: any) => {
                           const countryData = mapData.find(
                             (d) => d.country === geo.properties.iso_a3 || d.country === geo.properties.iso_a2
                           );
@@ -246,7 +237,6 @@ export function Analytics() {
               </div>
             </Card>
 
-            {/* Gráfico de barras - Vagas por área */}
             <Card className="analytics-chart-card" glow>
               <div className="analytics-card-header">
                 <div className="analytics-card-title">
@@ -287,7 +277,6 @@ export function Analytics() {
             </Card>
           </div>
 
-          {/* Tabela de melhores empresas */}
           <Card className="analytics-table-card" glow>
             <div className="analytics-card-header">
               <div className="analytics-card-title">
