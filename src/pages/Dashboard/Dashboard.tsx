@@ -133,14 +133,6 @@ const opportunities = [
   }
 ];
 
-const recentActivity = [
-  { icon: CheckCircle2, text: 'Proposta enviada para <strong>TechCorp Brasil</strong>', time: 'Há 30 minutos', color: '#22c55e' },
-  { icon: RefreshCw, text: '<strong>12 novas oportunidades</strong> encontradas pela IA', time: 'Há 2 horas', color: '#3b82f6' },
-  { icon: MessageSquare, text: 'Mensagem gerada para <strong>Creative Studio</strong>', time: 'Há 4 horas', color: '#a855f7' },
-  { icon: Eye, text: 'Visualizou detalhes da vaga na <strong>StartupXYZ</strong>', time: 'Há 6 horas', color: '#f59e0b' },
-  { icon: FileText, text: 'Proposta criada para <strong>Agência Nova</strong>', time: 'Ontem às 14:30', color: '#22c55e' },
-];
-
 const quickActions = [
   { icon: Search, label: 'Buscar oportunidades', path: '/tools/find-opportunities', color: '#3b82f6' },
   { icon: FileText, label: 'Nova proposta', path: '/tools/proposal-generator', color: '#22c55e' },
@@ -148,17 +140,11 @@ const quickActions = [
   { icon: User, label: 'Editar perfil', path: '/tools/profile', color: '#f59e0b' },
 ];
 
-const topCompanies = [
-  { name: 'TechCorp Brasil', opportunities: 12, logo: 'TC' },
-  { name: 'Creative Studio', opportunities: 8, logo: 'CS' },
-  { name: 'StartupXYZ', opportunities: 6, logo: 'SX' },
-  { name: 'Agência Nova', opportunities: 5, logo: 'AN' },
-];
-
 export function Dashboard() {
   const { user } = useAuth();
   const [greeting, setGreeting] = useState('');
   const [savedOpps, setSavedOpps] = useState<string[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const hour = new Date().getHours();
@@ -170,6 +156,12 @@ export function Dashboard() {
   const toggleSave = (id: string) => {
     setSavedOpps(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
   };
+
+  const filteredOpportunities = opportunities.filter(opp =>
+    opp.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    opp.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    opp.service.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="dashboard-page">
@@ -249,80 +241,94 @@ export function Dashboard() {
             <div className="dashboard-main-content">
               <div className="dashboard-section-header">
                 <div className="dashboard-section-header-left">
-                  <h2 className="dashboard-section-title">Oportunidades recentes</h2>
-                  <span className="dashboard-section-badge pulse">5 novas</span>
+                  <h2 className="dashboard-section-title">Oportunidades</h2>
+                  <span className="dashboard-section-badge pulse">{filteredOpportunities.length} disponíveis</span>
                 </div>
                 <div className="dashboard-section-header-right">
+                  <div className="dashboard-search-wrapper">
+                    <Search size={16} className="dashboard-search-icon" />
+                    <input
+                      type="text"
+                      placeholder="Buscar oportunidades..."
+                      className="dashboard-search-input"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </div>
                   <Button variant="ghost" size="sm" icon={<Filter size={14} />}>Filtrar</Button>
-                  <Link to="/tools/find-opportunities">
-                    <Button variant="ghost" size="sm">Ver todas <ArrowRight size={14} /></Button>
-                  </Link>
                 </div>
               </div>
               
-              <div className="dashboard-opportunities-list">
-                {opportunities.map((opportunity) => (
-                  <div key={opportunity.id} className={`dashboard-opportunity-card ${opportunity.isNew ? 'card-new' : ''}`}>
-                    <div className="dashboard-opportunity-card-left">
-                      <div className="dashboard-opportunity-company-logo">
-                        {opportunity.logo}
-                      </div>
-                      <div className="dashboard-opportunity-card-badges">
-                        {opportunity.isNew && <span className="badge badge-new">Novo</span>}
-                        {opportunity.isUrgent && <span className="badge badge-urgent">Urgente</span>}
-                      </div>
-                    </div>
-                    
-                    <div className="dashboard-opportunity-card-body">
-                      <div className="dashboard-opportunity-card-header">
-                        <div>
-                          <h3 className="dashboard-opportunity-card-title">{opportunity.title}</h3>
-                          <p className="dashboard-opportunity-card-company">
-                            <Building2 size={12} />
-                            {opportunity.company}
-                          </p>
+              <div className="dashboard-opportunities-container">
+                {filteredOpportunities.length > 0 ? (
+                  filteredOpportunities.map((opportunity) => (
+                    <div key={opportunity.id} className={`dashboard-opportunity-card ${opportunity.isNew ? 'card-new' : ''}`}>
+                      <div className="dashboard-opportunity-card-left">
+                        <div className="dashboard-opportunity-company-logo">
+                          {opportunity.logo}
                         </div>
-                        <button 
-                          className={`dashboard-opportunity-save ${savedOpps.includes(opportunity.id) ? 'saved' : ''}`}
-                          onClick={() => toggleSave(opportunity.id)}
-                        >
-                          <Bookmark size={16} fill={savedOpps.includes(opportunity.id) ? '#fff' : 'none'} />
-                        </button>
+                        <div className="dashboard-opportunity-card-badges">
+                          {opportunity.isNew && <span className="badge badge-new">Novo</span>}
+                          {opportunity.isUrgent && <span className="badge badge-urgent">Urgente</span>}
+                        </div>
                       </div>
                       
-                      <div className="dashboard-opportunity-card-meta">
-                        <span><Briefcase size={12} />{opportunity.service}</span>
-                        <span><MapPin size={12} />{opportunity.location}</span>
-                        <span><Clock size={12} />{opportunity.postedAt}</span>
-                        <span className="meta-type">{opportunity.type}</span>
-                      </div>
-                      
-                      <div className="dashboard-opportunity-card-footer">
-                        <div className="dashboard-opportunity-budget">
-                          <DollarSign size={14} />
-                          <span>{opportunity.budget}</span>
-                        </div>
-                        <div className="dashboard-opportunity-card-actions">
-                          <div 
-                            className="dashboard-opportunity-match"
-                            style={{ 
-                              color: opportunity.compatibility >= 90 ? '#22c55e' : 
-                                     opportunity.compatibility >= 80 ? '#f59e0b' : '#888',
-                              background: opportunity.compatibility >= 90 ? 'rgba(34, 197, 94, 0.1)' : 
-                                          opportunity.compatibility >= 80 ? 'rgba(245, 158, 11, 0.1)' : 'rgba(255,255,255,0.04)'
-                            }}
-                          >
-                            <TrendingUp size={13} />
-                            {opportunity.compatibility}% match
+                      <div className="dashboard-opportunity-card-body">
+                        <div className="dashboard-opportunity-card-header">
+                          <div>
+                            <h3 className="dashboard-opportunity-card-title">{opportunity.title}</h3>
+                            <p className="dashboard-opportunity-card-company">
+                              <Building2 size={12} />
+                              {opportunity.company}
+                            </p>
                           </div>
-                          <Button variant="outline" size="sm" icon={<ArrowUpRight size={14} />}>
-                            Ver detalhes
-                          </Button>
+                          <button 
+                            className={`dashboard-opportunity-save ${savedOpps.includes(opportunity.id) ? 'saved' : ''}`}
+                            onClick={() => toggleSave(opportunity.id)}
+                          >
+                            <Bookmark size={16} fill={savedOpps.includes(opportunity.id) ? '#fff' : 'none'} />
+                          </button>
+                        </div>
+                        
+                        <div className="dashboard-opportunity-card-meta">
+                          <span><Briefcase size={12} />{opportunity.service}</span>
+                          <span><MapPin size={12} />{opportunity.location}</span>
+                          <span><Clock size={12} />{opportunity.postedAt}</span>
+                          <span className="meta-type">{opportunity.type}</span>
+                        </div>
+                        
+                        <div className="dashboard-opportunity-card-footer">
+                          <div className="dashboard-opportunity-budget">
+                            <DollarSign size={14} />
+                            <span>{opportunity.budget}</span>
+                          </div>
+                          <div className="dashboard-opportunity-card-actions">
+                            <div 
+                              className="dashboard-opportunity-match"
+                              style={{ 
+                                color: opportunity.compatibility >= 90 ? '#22c55e' : 
+                                       opportunity.compatibility >= 80 ? '#f59e0b' : '#888',
+                                background: opportunity.compatibility >= 90 ? 'rgba(34, 197, 94, 0.1)' : 
+                                            opportunity.compatibility >= 80 ? 'rgba(245, 158, 11, 0.1)' : 'rgba(255,255,255,0.04)'
+                              }}
+                            >
+                              <TrendingUp size={13} />
+                              {opportunity.compatibility}% match
+                            </div>
+                            <Button variant="outline" size="sm" icon={<ArrowUpRight size={14} />}>
+                              Ver detalhes
+                            </Button>
+                          </div>
                         </div>
                       </div>
                     </div>
+                  ))
+                ) : (
+                  <div className="dashboard-no-results">
+                    <Search size={32} className="dashboard-no-results-icon" />
+                    <p>Nenhuma oportunidade encontrada com os termos da busca.</p>
                   </div>
-                ))}
+                )}
               </div>
             </div>
 
@@ -366,62 +372,6 @@ export function Dashboard() {
                   <span>UX Design</span>
                   <span>Branding</span>
                   <span>Motion</span>
-                </div>
-              </Card>
-
-              <Card className="dashboard-top-companies" glow>
-                <h3 className="dashboard-widget-title">
-                  <Building2 size={16} />
-                  Empresas com mais vagas
-                </h3>
-                <div className="dashboard-top-companies-list">
-                  {topCompanies.map((company, index) => (
-                    <div key={index} className="dashboard-top-company-item">
-                      <div className="dashboard-top-company-logo">{company.logo}</div>
-                      <div className="dashboard-top-company-info">
-                        <span className="dashboard-top-company-name">{company.name}</span>
-                        <span className="dashboard-top-company-count">{company.opportunities} vagas</span>
-                      </div>
-                      <ChevronRight size={14} className="dashboard-top-company-arrow" />
-                    </div>
-                  ))}
-                </div>
-              </Card>
-
-              <Card className="dashboard-activity-widget" glow>
-                <h3 className="dashboard-widget-title">
-                  <Activity size={16} />
-                  Atividade recente
-                </h3>
-                <div className="dashboard-activity-list">
-                  {recentActivity.map((activity, index) => (
-                    <div key={index} className="dashboard-activity-item">
-                      <div className="dashboard-activity-item-icon" style={{ background: `${activity.color}15` }}>
-                        <activity.icon size={13} style={{ color: activity.color }} />
-                      </div>
-                      <div className="dashboard-activity-item-content">
-                        <p className="dashboard-activity-item-text" dangerouslySetInnerHTML={{ __html: activity.text }} />
-                        <span className="dashboard-activity-item-time">{activity.time}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </Card>
-
-              <Card className="dashboard-upgrade-widget">
-                <div className="dashboard-upgrade-content">
-                  <div className="dashboard-upgrade-icon">
-                    <Crown size={28} />
-                  </div>
-                  <h3 className="dashboard-upgrade-title">Upgrade para Pro</h3>
-                  <p className="dashboard-upgrade-text">
-                    Oportunidades ilimitadas, propostas automáticas e IA avançada.
-                  </p>
-                  <Link to="/plans">
-                    <Button fullWidth size="md" icon={<ArrowRight size={16} />}>
-                      Ver planos
-                    </Button>
-                  </Link>
                 </div>
               </Card>
             </div>
