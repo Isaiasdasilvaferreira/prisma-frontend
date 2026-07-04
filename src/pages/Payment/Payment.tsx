@@ -6,7 +6,7 @@ import {
   AlertCircle, Mail, User, Calendar, DollarSign,
   Building2, Zap, Shield, Star, Send
 } from 'lucide-react';
-import './PaymentPage.css';
+import './Payment.css';
 
 interface Plan {
   id: string;
