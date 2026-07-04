@@ -14,7 +14,7 @@ import {
   ArrowUpRight, Bookmark, DollarSign, Globe, Building2,
   AlertCircle, ChevronRight, TrendingDown, Activity,
   LayoutDashboard, PieChart, Send, GraduationCap, Settings,
-  Sliders, ListFilter, Lock
+  Sliders, ListFilter, Lock, Sparkle
 } from 'lucide-react';
 import './Dashboard.css';
 
@@ -309,42 +309,6 @@ export function Dashboard() {
                 </div>
               </div>
 
-              {selectedContractType && (
-                <div className="dashboard-filter-section">
-                  <span className="dashboard-filter-label">
-                    {selectedContractType === 'clt' ? 'Cargos CLT' : 'Entregáveis / Serviços'}
-                  </span>
-                  <div className="dashboard-filter-options">
-                    {getTitulosOptions().map((opt) => (
-                      <div 
-                        key={opt}
-                        className={`dashboard-filter-option ${filters.titulosTags.includes(opt) ? 'selected' : ''}`}
-                        onClick={() => toggleFilter('titulosTags', opt)}
-                      >
-                        {opt}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {selectedContractType === 'clt' && (
-                <div className="dashboard-filter-section">
-                  <span className="dashboard-filter-label">Níveis</span>
-                  <div className="dashboard-filter-options">
-                    {filterOptions.niveis.map((opt) => (
-                      <div 
-                        key={opt}
-                        className={`dashboard-filter-option ${filters.niveis.includes(opt) ? 'selected' : ''}`}
-                        onClick={() => toggleFilter('niveis', opt)}
-                      >
-                        {opt}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
               <div className="dashboard-filter-section">
                 <span className="dashboard-filter-label">Modalidades</span>
                 <div className="dashboard-filter-options">
@@ -360,25 +324,43 @@ export function Dashboard() {
                 </div>
               </div>
 
+              <div className="dashboard-filter-section">
+                <span className="dashboard-filter-label">Níveis</span>
+                <div className="dashboard-filter-options">
+                  {filterOptions.niveis.map((opt) => (
+                    <div 
+                      key={opt}
+                      className={`dashboard-filter-option ${filters.niveis.includes(opt) ? 'selected' : ''}`}
+                      onClick={() => toggleFilter('niveis', opt)}
+                    >
+                      {opt}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <div className="dashboard-advanced-divider">
                 <span>Filtros Avançados</span>
+                <Sparkle size={14} className="dashboard-advanced-sparkle" />
               </div>
 
               <div className="dashboard-filter-advanced-locked">
                 <div className="dashboard-lock-overlay">
-                  <div className="dashboard-lock-content">
-                    <Lock size={28} className="dashboard-lock-icon" />
-                    <h3>Desbloqueie filtros avançados</h3>
-                    <p>
-                      Assine o <strong>Plano Profissional</strong> e tenha acesso a 
-                      filtros exclusivos como tipo de serviço, tipo de cliente e 
-                      níveis de urgência para encontrar as melhores oportunidades.
-                    </p>
-                    <Link to="/plans">
-                      <Button variant="primary" size="md" icon={<Crown size={18} />}>
-                        Assinar Plano Profissional
-                      </Button>
-                    </Link>
+                  <div className="dashboard-lock-banner">
+                    <div className="dashboard-lock-banner-content">
+                      <div className="dashboard-lock-banner-icon">
+                        <Crown size={24} />
+                      </div>
+                      <div className="dashboard-lock-banner-text">
+                        <h3>Desbloqueie os filtros avançados</h3>
+                        <p>Tenha acesso a filtros exclusivos como tipo de serviço, tipo de cliente e níveis de urgência.</p>
+                      </div>
+                      <Link to="/plans">
+                        <Button variant="primary" size="sm" icon={<Crown size={16} />}>
+                          Assinar Plano Pro
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
 
                   <div className="dashboard-filter-section locked">
