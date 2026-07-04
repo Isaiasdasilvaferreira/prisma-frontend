@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, Copy, CheckCircle, Clock, 
-  CreditCard, Download, FileCheck, Loader2,
+  Download, FileCheck, Loader2,
   QrCode, Sparkles, ChevronRight, Crown,
-  AlertCircle, Mail, User, Calendar, DollarSign,
-  Building2, Zap, Shield, Star, Send
+  AlertCircle, Mail, User, Shield, Star, Send
 } from 'lucide-react';
 import './PaymentPage.css';
 
@@ -29,20 +29,47 @@ interface Order {
   paymentProof?: string;
 }
 
-export function PaymentPage() {
-  const [selectedPlan] = useState<Plan>({
-    id: 'pro',
-    name: 'Plano Pro',
+const planMap: Record<string, Plan> = {
+  professional: {
+    id: 'professional',
+    name: 'Plano Professional',
     price: 97.90,
     description: 'Acesso completo a todos os recursos premium',
     features: [
-      'Filtros avançados de busca',
-      'Visualização de contatos',
-      'Notificações em tempo real',
-      'Destaque no perfil',
-      'Suporte prioritário 24h'
+      'Oportunidades ilimitadas',
+      'Busca avançada com IA',
+      'Gerador de propostas',
+      'Gerador de mensagens',
+      'Filtros avançados',
+      'Suporte prioritário 24/7'
     ],
     popular: true
+  },
+  starter: {
+    id: 'starter',
+    name: 'Plano Starter',
+    price: 0,
+    description: 'Para começar sua jornada',
+    features: [
+      '10 oportunidades por mês',
+      'Busca básica',
+      'Perfil profissional',
+      'Suporte por email',
+      'Dashboard básico'
+    ],
+    popular: false
+  }
+};
+
+export function PaymentPage() {
+  const { planId } = useParams<{ planId: string }>();
+  const navigate = useNavigate();
+
+  const [selectedPlan] = useState<Plan>(() => {
+    if (planId && planId in planMap) {
+      return planMap[planId as keyof typeof planMap];
+    }
+    return planMap.professional;
   });
 
   const [order, setOrder] = useState<Order | null>(null);
@@ -98,7 +125,7 @@ export function PaymentPage() {
       setShowConfirmation(true);
       setLoading(false);
       
-      console.log('📧 Email enviado para equipe Prisma');
+      console.log('Email enviado para equipe Prisma');
       console.log('Pedido:', order?.id);
       console.log('Plano:', order?.planName);
       console.log('Valor:', order?.amount);
@@ -113,12 +140,15 @@ export function PaymentPage() {
     }, 1500);
   };
 
+  const handleBack = () => {
+    navigate('/plans');
+  };
+
   return (
     <div className="payment-page">
       <div className="payment-container">
-        {/* Header */}
         <div className="payment-header">
-          <button className="payment-back-btn">
+          <button className="payment-back-btn" onClick={handleBack}>
             <ArrowLeft size={18} />
             Voltar
           </button>
@@ -133,7 +163,6 @@ export function PaymentPage() {
           </div>
         </div>
 
-        {/* Order Summary */}
         <div className="payment-order-card">
           <div className="payment-order-header">
             <div className="payment-order-title">
@@ -175,7 +204,6 @@ export function PaymentPage() {
             </div>
           </div>
 
-          {/* Plan Features */}
           <div className="payment-plan-features">
             <div className="payment-features-title">
               <CheckCircle size={14} />
@@ -192,7 +220,6 @@ export function PaymentPage() {
           </div>
         </div>
 
-        {/* Pix Section */}
         {paymentStatus === 'pending' && (
           <div className="payment-pix-card">
             <div className="payment-pix-header">
@@ -263,7 +290,6 @@ export function PaymentPage() {
               </div>
             </div>
 
-            {/* Upload Proof */}
             <div className="payment-proof-section">
               <div className="payment-proof-header">
                 <div className="payment-proof-title">
@@ -325,7 +351,6 @@ export function PaymentPage() {
           </div>
         )}
 
-        {/* Confirmation */}
         {showConfirmation && paymentStatus === 'paid' && (
           <div className="payment-confirmation-card">
             <div className="payment-confirmation-icon">
@@ -365,7 +390,6 @@ export function PaymentPage() {
           </div>
         )}
 
-        {/* Active Plan */}
         {paymentStatus === 'active' && (
           <div className="payment-active-card">
             <div className="payment-active-icon">
@@ -391,7 +415,7 @@ export function PaymentPage() {
 
             <button 
               className="payment-start-btn"
-              onClick={() => window.location.href = '/dashboard'}
+              onClick={() => navigate('/dashboard')}
             >
               Acessar Agora
               <ChevronRight size={18} />
@@ -399,7 +423,6 @@ export function PaymentPage() {
           </div>
         )}
 
-        {/* Footer */}
         <div className="payment-footer">
           <div className="payment-footer-item">
             <Shield size={14} />
