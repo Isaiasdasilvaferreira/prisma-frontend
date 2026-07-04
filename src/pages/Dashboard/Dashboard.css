@@ -688,6 +688,8 @@
   margin: 0 auto 14px auto;
   max-width: 100%;
   flex-wrap: wrap;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .dashboard-lock-banner-icon {
@@ -704,9 +706,8 @@
 }
 
 .dashboard-lock-banner-text {
-  flex: 1;
-  min-width: 140px;
-  text-align: left;
+  flex: 0 1 auto;
+  text-align: center;
 }
 
 .dashboard-lock-banner-text h3 {
@@ -779,7 +780,7 @@
 
   .dashboard-lock-banner-text {
     text-align: center;
-    min-width: unset;
+    flex: 0 1 auto;
   }
 
   .dashboard-lock-banner-button {
