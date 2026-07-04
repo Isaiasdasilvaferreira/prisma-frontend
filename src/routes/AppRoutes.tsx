@@ -12,6 +12,7 @@ import { Tutorial } from '../pages/Tutorial/Tutorial';
 import { Settings } from '../pages/Settings/Settings';
 import { Tools } from '../pages/Tools/Tools';
 import { Plans } from '../pages/Plans/Plans';
+import { PaymentPage } from '../pages/PaymentPage/PaymentPage';
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -24,6 +25,18 @@ function PrivateRoute({ children }: { children: React.ReactNode }) {
 
   if (!user.onboardingCompleted) {
     return <Navigate to="/onboarding" replace />;
+  }
+
+  return <>{children}</>;
+}
+
+function PaymentRoute({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth();
+
+  if (loading) return null;
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
   }
 
   return <>{children}</>;
@@ -95,6 +108,16 @@ export function AppRoutes() {
             </PrivateRoute>
           }
         />
+
+        <Route
+          path="/payment/:planId"
+          element={
+            <PaymentRoute>
+              <PaymentPage />
+            </PaymentRoute>
+          }
+        />
+
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
