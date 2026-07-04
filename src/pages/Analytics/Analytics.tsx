@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BarChart3 } from 'lucide-react';
 import { Sidebar } from '../../components/Sidebar/Sidebar';
 import { Header } from '../../components/Header/Header';
 import { Card } from '../../components/Card/Card';
