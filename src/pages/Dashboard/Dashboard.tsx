@@ -14,7 +14,7 @@ import {
   ArrowUpRight, Bookmark, DollarSign, Globe, Building2,
   AlertCircle, ChevronRight, TrendingDown, Activity,
   LayoutDashboard, PieChart, Send, GraduationCap, Settings,
-  Sliders, ListFilter
+  Sliders, ListFilter, Lock
 } from 'lucide-react';
 import './Dashboard.css';
 
@@ -96,6 +96,31 @@ const filterOptions = {
     'Remoto',
     'Presencial',
     'Híbrido'
+  ],
+  tipoServico: [
+    'UI/UX Design',
+    'Branding / Identidade Visual',
+    'Social Media Design',
+    'Motion Graphics / Animação',
+    'Design Editorial',
+    'Packaging Design',
+    'Arte para Impressão',
+    'Landing Page Design'
+  ],
+  tipoCliente: [
+    'Startup',
+    'E-commerce',
+    'PME (Pequena e Média Empresa)',
+    'Corporação / Grande Empresa',
+    'Agência de Publicidade',
+    'Instituição Pública',
+    'Educacional',
+    'ONG / Terceiro Setor'
+  ],
+  urgencia: [
+    'Normal',
+    'Moderado',
+    'Urgente'
   ]
 };
 
@@ -110,6 +135,9 @@ export function Dashboard() {
     titulosTags: [] as string[],
     niveis: [] as string[],
     modalidades: [] as string[],
+    tipoServico: [] as string[],
+    tipoCliente: [] as string[],
+    urgencia: [] as string[]
   });
 
   useEffect(() => {
@@ -119,7 +147,7 @@ export function Dashboard() {
     else setGreeting('Boa noite');
   }, []);
 
-  const toggleFilter = (category: 'titulosTags' | 'niveis' | 'modalidades', value: string) => {
+  const toggleFilter = (category: 'titulosTags' | 'niveis' | 'modalidades' | 'tipoServico' | 'tipoCliente' | 'urgencia', value: string) => {
     setFilters(prev => {
       const current = prev[category];
       const newValues = current.includes(value)
@@ -130,7 +158,14 @@ export function Dashboard() {
   };
 
   const clearFilters = () => {
-    setFilters({ titulosTags: [], niveis: [], modalidades: [] });
+    setFilters({ 
+      titulosTags: [], 
+      niveis: [], 
+      modalidades: [],
+      tipoServico: [],
+      tipoCliente: [],
+      urgencia: []
+    });
     setSelectedContractType(null);
   };
 
@@ -218,7 +253,6 @@ export function Dashboard() {
           </div>
 
           <div className="dashboard-grid">
-            {/* Card de Oportunidades */}
             <Card className="dashboard-opportunities-card" glow>
               <div className="dashboard-section-header">
                 <div className="dashboard-section-header-right">
@@ -248,7 +282,6 @@ export function Dashboard() {
               </div>
             </Card>
 
-            {/* Card de Filtros */}
             <Card className="dashboard-filter-card" glow>
               <div className="dashboard-filter-header">
                 <div className="dashboard-filter-title">
@@ -258,7 +291,6 @@ export function Dashboard() {
                 <span className="dashboard-filter-clear" onClick={clearFilters}>Limpar</span>
               </div>
 
-              {/* Tipo de Contrato */}
               <div className="dashboard-filter-section">
                 <span className="dashboard-filter-label">Tipo de contrato</span>
                 <div className="dashboard-filter-options">
@@ -277,7 +309,6 @@ export function Dashboard() {
                 </div>
               </div>
 
-              {/* Títulos / Tags */}
               {selectedContractType && (
                 <div className="dashboard-filter-section">
                   <span className="dashboard-filter-label">
@@ -297,7 +328,6 @@ export function Dashboard() {
                 </div>
               )}
 
-              {/* Níveis */}
               {selectedContractType === 'clt' && (
                 <div className="dashboard-filter-section">
                   <span className="dashboard-filter-label">Níveis</span>
@@ -315,7 +345,6 @@ export function Dashboard() {
                 </div>
               )}
 
-              {/* Modalidades */}
               <div className="dashboard-filter-section">
                 <span className="dashboard-filter-label">Modalidades</span>
                 <div className="dashboard-filter-options">
@@ -328,6 +357,62 @@ export function Dashboard() {
                       {opt}
                     </div>
                   ))}
+                </div>
+              </div>
+
+              <div className="dashboard-advanced-divider">
+                <span>Filtros Avançados</span>
+              </div>
+
+              <div className="dashboard-filter-advanced-locked">
+                <div className="dashboard-lock-overlay">
+                  <div className="dashboard-lock-content">
+                    <Lock size={28} className="dashboard-lock-icon" />
+                    <h3>Desbloqueie filtros avançados</h3>
+                    <p>
+                      Assine o <strong>Plano Profissional</strong> e tenha acesso a 
+                      filtros exclusivos como tipo de serviço, tipo de cliente e 
+                      níveis de urgência para encontrar as melhores oportunidades.
+                    </p>
+                    <Link to="/plans">
+                      <Button variant="primary" size="md" icon={<Crown size={18} />}>
+                        Assinar Plano Profissional
+                      </Button>
+                    </Link>
+                  </div>
+
+                  <div className="dashboard-filter-section locked">
+                    <span className="dashboard-filter-label">Tipo de serviço</span>
+                    <div className="dashboard-filter-options">
+                      {filterOptions.tipoServico.map((opt) => (
+                        <div key={opt} className="dashboard-filter-option disabled">
+                          {opt}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="dashboard-filter-section locked">
+                    <span className="dashboard-filter-label">Tipo de cliente</span>
+                    <div className="dashboard-filter-options">
+                      {filterOptions.tipoCliente.map((opt) => (
+                        <div key={opt} className="dashboard-filter-option disabled">
+                          {opt}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="dashboard-filter-section locked">
+                    <span className="dashboard-filter-label">Níveis de urgência</span>
+                    <div className="dashboard-filter-options">
+                      {filterOptions.urgencia.map((opt) => (
+                        <div key={opt} className={`dashboard-filter-option disabled urgency-${opt.toLowerCase()}`}>
+                          {opt}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
 
