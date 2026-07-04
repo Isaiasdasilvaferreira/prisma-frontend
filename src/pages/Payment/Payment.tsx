@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, Copy, CheckCircle, Clock, 
-  CreditCard, Download, FileCheck, Loader2,
+  Download, FileCheck, Loader2,
   QrCode, Sparkles, ChevronRight, Crown,
-  AlertCircle, Mail, User, Calendar, DollarSign,
-  Building2, Zap, Shield, Star, Send
+  AlertCircle, Mail, User, Shield, Star, Send,
+  Zap, Briefcase, Filter, MessageSquare, TrendingUp,
+  Award, ShieldCheck, Rocket, Target, Users, Eye
 } from 'lucide-react';
 import './Payment.css';
 
@@ -15,6 +17,7 @@ interface Plan {
   description: string;
   features: string[];
   popular?: boolean;
+  icon: React.ReactNode;
 }
 
 interface Order {
@@ -30,17 +33,21 @@ interface Order {
 }
 
 export function Payment() {
+  const navigate = useNavigate();
+
   const [selectedPlan] = useState<Plan>({
-    id: 'pro',
-    name: 'Plano Pro',
-    price: 97.90,
-    description: 'Acesso completo a todos os recursos premium',
+    id: 'professional',
+    name: 'Plano Profissional',
+    price: 29.90,
+    description: 'Tudo que você precisa para alavancar sua carreira como designer',
+    icon: <Rocket size={24} />,
     features: [
-      'Filtros avançados de busca',
-      'Visualização de contatos',
-      'Notificações em tempo real',
-      'Destaque no perfil',
-      'Suporte prioritário 24h'
+      { icon: <Target size={14} />, text: 'Oportunidades ilimitadas' },
+      { icon: <Filter size={14} />, text: 'Filtros avançados de busca' },
+      { icon: <Eye size={14} />, text: 'Visualização de contatos' },
+      { icon: <Bell size={14} />, text: 'Notificações em tempo real' },
+      { icon: <Award size={14} />, text: 'Destaque no perfil' },
+      { icon: <MessageSquare size={14} />, text: 'Suporte prioritário 24h' }
     ],
     popular: true
   });
@@ -98,7 +105,7 @@ export function Payment() {
       setShowConfirmation(true);
       setLoading(false);
       
-      console.log('📧 Email enviado para equipe Prisma');
+      console.log('Email enviado para equipe Prisma');
       console.log('Pedido:', order?.id);
       console.log('Plano:', order?.planName);
       console.log('Valor:', order?.amount);
@@ -113,98 +120,65 @@ export function Payment() {
     }, 1500);
   };
 
+  const handleBack = () => {
+    navigate('/plans');
+  };
+
   return (
     <div className="payment-page">
+      <div className="payment-bg-glow" />
+      <div className="payment-bg-grid" />
+      
       <div className="payment-container">
-        {/* Header */}
-        <div className="payment-header">
-          <button className="payment-back-btn">
-            <ArrowLeft size={18} />
-            Voltar
-          </button>
-          <div className="payment-header-content">
-            <div className="payment-header-icon">
+        <button className="payment-back-btn" onClick={handleBack}>
+          <ArrowLeft size={18} />
+          Voltar para planos
+        </button>
+
+        <div className="payment-main-card">
+          <div className="payment-plan-banner">
+            <div className="payment-plan-banner-icon">
               <Sparkles size={24} />
             </div>
             <div>
-              <h1>Finalizar Pagamento</h1>
-              <p>Complete sua assinatura e tenha acesso imediato</p>
+              <h1 className="payment-plan-banner-title">Assinar Plano Profissional</h1>
+              <p className="payment-plan-banner-sub">Acesso imediato a todas as funcionalidades</p>
             </div>
-          </div>
-        </div>
-
-        {/* Order Summary */}
-        <div className="payment-order-card">
-          <div className="payment-order-header">
-            <div className="payment-order-title">
-              <FileCheck size={18} />
-              <span>Resumo do Pedido</span>
-            </div>
-            <span className={`payment-order-status status-${paymentStatus}`}>
-              {paymentStatus === 'pending' && 'Aguardando Pagamento'}
-              {paymentStatus === 'paid' && 'Pagamento Confirmado'}
-              {paymentStatus === 'approved' && 'Em Análise'}
-              {paymentStatus === 'active' && 'Ativo'}
-            </span>
-          </div>
-
-          <div className="payment-order-details">
-            <div className="payment-order-row">
-              <span>Pedido</span>
-              <strong>{order?.id}</strong>
-            </div>
-            <div className="payment-order-row">
-              <span>Plano</span>
-              <div className="payment-order-plan">
-                <Crown size={14} className="payment-order-crown" />
-                <strong>{order?.planName}</strong>
-                {selectedPlan.popular && (
-                  <span className="payment-order-popular">Popular</span>
-                )}
-              </div>
-            </div>
-            <div className="payment-order-row">
-              <span>Data</span>
-              <span>{order?.createdAt.toLocaleDateString('pt-BR')}</span>
-            </div>
-            <div className="payment-order-row total">
-              <span>Total</span>
-              <strong className="payment-order-price">
-                R$ {order?.amount.toFixed(2)}
-              </strong>
+            <div className="payment-plan-banner-price">
+              <span className="payment-plan-banner-currency">R$</span>
+              <span className="payment-plan-banner-amount">29,90</span>
+              <span className="payment-plan-banner-period">/mês</span>
             </div>
           </div>
 
-          {/* Plan Features */}
-          <div className="payment-plan-features">
-            <div className="payment-features-title">
-              <CheckCircle size={14} />
-              <span>Benefícios do plano</span>
-            </div>
-            <div className="payment-features-list">
-              {selectedPlan.features.map((feature, index) => (
-                <div key={index} className="payment-feature-item">
-                  <Star size={12} />
-                  <span>{feature}</span>
+          <div className="payment-divider" />
+
+          <div className="payment-plan-features-grid">
+            {selectedPlan.features.map((feature, index) => (
+              <div key={index} className="payment-plan-feature">
+                <div className="payment-plan-feature-icon">
+                  {feature.icon}
                 </div>
-              ))}
-            </div>
+                <span>{feature.text}</span>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Pix Section */}
         {paymentStatus === 'pending' && (
           <div className="payment-pix-card">
             <div className="payment-pix-header">
               <div className="payment-pix-title">
-                <QrCode size={18} />
-                <h2>Pagamento via Pix</h2>
+                <div className="payment-pix-title-icon">
+                  <QrCode size={20} />
+                </div>
+                <h2>Pague com Pix</h2>
               </div>
               <span className="payment-pix-badge">Instantâneo</span>
             </div>
 
             <p className="payment-pix-instruction">
-              Escaneie o QR Code ou copie o código Pix para realizar o pagamento
+              Escaneie o QR Code ou copie o código para realizar o pagamento
             </p>
 
             <div className="payment-pix-content">
@@ -215,8 +189,9 @@ export function Payment() {
                     alt="QR Code Pix" 
                     className="payment-qr-code"
                   />
+                  <div className="payment-qr-pulse" />
                   <div className="payment-qr-overlay">
-                    <QrCode size={32} />
+                    <QrCode size={28} />
                   </div>
                 </div>
                 <button 
@@ -231,7 +206,7 @@ export function Payment() {
                   ) : (
                     <>
                       <Copy size={16} />
-                      Copiar Código Pix
+                      Copiar código Pix
                     </>
                   )}
                 </button>
@@ -239,7 +214,7 @@ export function Payment() {
 
               <div className="payment-pix-code-container">
                 <div className="payment-pix-code-label">
-                  <span>Código Pix para Copia e Cola</span>
+                  <span>Código para copiar e colar</span>
                 </div>
                 <div className="payment-pix-code-box">
                   <p>{order?.pixCode}</p>
@@ -256,25 +231,24 @@ export function Payment() {
                   ) : (
                     <>
                       <Copy size={16} />
-                      Copiar Código
+                      Copiar código
                     </>
                   )}
                 </button>
               </div>
             </div>
 
-            {/* Upload Proof */}
             <div className="payment-proof-section">
               <div className="payment-proof-header">
                 <div className="payment-proof-title">
                   <Send size={18} />
-                  <h3>Já realizou o pagamento?</h3>
+                  <h3>Já fez o pagamento?</h3>
                 </div>
-                <span className="payment-proof-badge">Obrigatório</span>
+                <span className="payment-proof-badge">Envio obrigatório</span>
               </div>
 
               <p className="payment-proof-instruction">
-                Envie o comprovante para agilizar a ativação do seu plano
+                Envie o comprovante para confirmar o pagamento e ativar seu plano
               </p>
               
               <div className="payment-upload-area">
@@ -297,7 +271,7 @@ export function Payment() {
                   ) : (
                     <div className="payment-upload-placeholder">
                       <Download size={24} />
-                      <span>Clique para anexar comprovante</span>
+                      <span>Anexar comprovante</span>
                       <span className="payment-upload-hint">PNG, JPG ou PDF até 5MB</span>
                     </div>
                   )}
@@ -317,7 +291,7 @@ export function Payment() {
                 ) : (
                   <>
                     <CheckCircle size={18} />
-                    Já paguei
+                    Confirmar pagamento
                   </>
                 )}
               </button>
@@ -325,19 +299,22 @@ export function Payment() {
           </div>
         )}
 
-        {/* Confirmation */}
         {showConfirmation && paymentStatus === 'paid' && (
           <div className="payment-confirmation-card">
             <div className="payment-confirmation-icon">
               <CheckCircle size={48} />
             </div>
-            <h2>Pagamento Confirmado!</h2>
+            <h2>Pagamento confirmado!</h2>
             <p>Seu comprovante foi enviado para nossa equipe.</p>
             
             <div className="payment-confirmation-details">
               <div className="payment-confirmation-item">
                 <span>Pedido</span>
                 <strong>{order?.id}</strong>
+              </div>
+              <div className="payment-confirmation-item">
+                <span>Plano</span>
+                <strong>{order?.planName}</strong>
               </div>
               <div className="payment-confirmation-item">
                 <span>Valor</span>
@@ -354,8 +331,8 @@ export function Payment() {
                 className="payment-approve-btn"
                 onClick={handleApprovePayment}
               >
-                <Crown size={16} />
-                Aprovar (Simulação)
+                <ShieldCheck size={16} />
+                Aprovar (simulação)
               </button>
               <p className="payment-approve-note">
                 <AlertCircle size={12} />
@@ -365,14 +342,13 @@ export function Payment() {
           </div>
         )}
 
-        {/* Active Plan */}
         {paymentStatus === 'active' && (
           <div className="payment-active-card">
             <div className="payment-active-icon">
               <Sparkles size={48} />
             </div>
-            <h2>Plano Ativado! 🎉</h2>
-            <p>Seu plano {order?.planName} está ativo e disponível.</p>
+            <h2>Plano ativado! 🎉</h2>
+            <p>Seu plano {order?.planName} já está disponível.</p>
             
             <div className="payment-active-details">
               <div className="payment-active-item">
@@ -391,15 +367,14 @@ export function Payment() {
 
             <button 
               className="payment-start-btn"
-              onClick={() => window.location.href = '/dashboard'}
+              onClick={() => navigate('/dashboard')}
             >
-              Acessar Agora
+              Acessar agora
               <ChevronRight size={18} />
             </button>
           </div>
         )}
 
-        {/* Footer */}
         <div className="payment-footer">
           <div className="payment-footer-item">
             <Shield size={14} />
@@ -407,11 +382,11 @@ export function Payment() {
           </div>
           <div className="payment-footer-item">
             <Clock size={14} />
-            <span>Ativação em até 24h úteis</span>
+            <span>Ativação em até 24h</span>
           </div>
           <div className="payment-footer-item">
             <Mail size={14} />
-            <span>Dúvidas? suporte@prisma.com</span>
+            <span>suporte@prisma.com</span>
           </div>
         </div>
       </div>
