@@ -599,6 +599,113 @@
   border-top: 1px solid rgba(255, 255, 255, 0.04);
 }
 
+.dashboard-advanced-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 0 12px 0;
+  padding: 0 4px;
+}
+
+.dashboard-advanced-divider::before,
+.dashboard-advanced-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.08), transparent);
+}
+
+.dashboard-advanced-divider span {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #666;
+  background: transparent;
+  padding: 0 12px;
+  white-space: nowrap;
+}
+
+.dashboard-filter-advanced-locked {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  margin-bottom: 4px;
+}
+
+.dashboard-lock-overlay {
+  position: relative;
+  padding: 4px 0 8px 0;
+}
+
+.dashboard-lock-overlay .dashboard-filter-section.locked {
+  opacity: 0.3;
+  pointer-events: none;
+  user-select: none;
+}
+
+.dashboard-filter-option.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.02);
+  border-color: rgba(255, 255, 255, 0.03);
+  color: #555;
+}
+
+.dashboard-filter-option.disabled.urgency-normal {
+  border-left: 3px solid #22c55e;
+}
+
+.dashboard-filter-option.disabled.urgency-moderado {
+  border-left: 3px solid #f59e0b;
+}
+
+.dashboard-filter-option.disabled.urgency-urgente {
+  border-left: 3px solid #ef4444;
+}
+
+.dashboard-lock-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px 16px 16px 16px;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.06), rgba(59, 130, 246, 0.04));
+  border-radius: 10px;
+  border: 1px dashed rgba(168, 85, 247, 0.15);
+}
+
+.dashboard-lock-icon {
+  color: #a855f7;
+  margin-bottom: 12px;
+}
+
+.dashboard-lock-content h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #e8e8f0;
+  margin: 0 0 6px 0;
+}
+
+.dashboard-lock-content p {
+  font-size: 13px;
+  color: #888;
+  max-width: 380px;
+  margin: 0 0 16px 0;
+  line-height: 1.5;
+}
+
+.dashboard-lock-content p strong {
+  color: #a855f7;
+}
+
+.dashboard-lock-content .button {
+  min-width: 200px;
+}
+
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.4; }
