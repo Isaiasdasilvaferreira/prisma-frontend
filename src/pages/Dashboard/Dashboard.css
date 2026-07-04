@@ -679,14 +679,15 @@
 .dashboard-lock-banner {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 14px;
   background: linear-gradient(135deg, rgba(255, 215, 0, 0.08), rgba(255, 215, 0, 0.02));
   border: 1px solid rgba(255, 215, 0, 0.12);
   border-radius: 10px;
   padding: 14px 18px;
-  margin-bottom: 14px;
+  margin: 0 auto 14px auto;
+  max-width: 100%;
   flex-wrap: wrap;
-  justify-content: center;
 }
 
 .dashboard-lock-banner-icon {
@@ -704,7 +705,8 @@
 
 .dashboard-lock-banner-text {
   flex: 1;
-  min-width: 160px;
+  min-width: 140px;
+  text-align: left;
 }
 
 .dashboard-lock-banner-text h3 {
@@ -776,6 +778,7 @@
   }
 
   .dashboard-lock-banner-text {
+    text-align: center;
     min-width: unset;
   }
 
