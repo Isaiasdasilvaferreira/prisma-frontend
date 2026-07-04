@@ -6,6 +6,10 @@ import { Login } from '../pages/Login/Login';
 import { Register } from '../pages/Register/Register';
 import { Onboarding } from '../pages/Onboarding/Onboarding';
 import { Dashboard } from '../pages/Dashboard/Dashboard';
+import { Analytics } from '../pages/Analytics/Analytics';
+import { Messages } from '../pages/Messages/Messages';
+import { Tutorial } from '../pages/Tutorial/Tutorial';
+import { Settings } from '../pages/Settings/Settings';
 import { Tools } from '../pages/Tools/Tools';
 import { Plans } from '../pages/Plans/Plans';
 
@@ -33,6 +37,7 @@ export function AppRoutes() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/onboarding" element={<Onboarding />} />
+
         <Route
           path="/dashboard"
           element={
@@ -41,6 +46,39 @@ export function AppRoutes() {
             </PrivateRoute>
           }
         />
+        <Route
+          path="/analytics"
+          element={
+            <PrivateRoute>
+              <Analytics />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/messages"
+          element={
+            <PrivateRoute>
+              <Messages />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/tutorial"
+          element={
+            <PrivateRoute>
+              <Tutorial />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <PrivateRoute>
+              <Settings />
+            </PrivateRoute>
+          }
+        />
+
         <Route
           path="/tools/:toolId"
           element={
