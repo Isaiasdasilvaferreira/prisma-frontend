@@ -602,17 +602,22 @@
 .dashboard-advanced-divider {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   margin: 4px 0 12px 0;
-  padding: 0 4px;
 }
 
-.dashboard-advanced-divider::before,
+.dashboard-advanced-divider::before {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255, 215, 0, 0.2));
+}
+
 .dashboard-advanced-divider::after {
   content: '';
   flex: 1;
   height: 1px;
-  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.08), transparent);
+  background: linear-gradient(to left, transparent, rgba(255, 215, 0, 0.2));
 }
 
 .dashboard-advanced-divider span {
@@ -620,34 +625,39 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  color: #666;
+  color: #f59e0b;
   background: transparent;
-  padding: 0 12px;
+  padding: 0 10px;
   white-space: nowrap;
+}
+
+.dashboard-advanced-sparkle {
+  color: #f59e0b;
+  flex-shrink: 0;
 }
 
 .dashboard-filter-advanced-locked {
   position: relative;
   border-radius: 12px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgba(255, 215, 0, 0.03);
+  border: 1px solid rgba(255, 215, 0, 0.08);
   margin-bottom: 4px;
 }
 
 .dashboard-lock-overlay {
   position: relative;
-  padding: 4px 0 8px 0;
+  padding: 0 0 8px 0;
 }
 
 .dashboard-lock-overlay .dashboard-filter-section.locked {
-  opacity: 0.3;
+  opacity: 0.25;
   pointer-events: none;
   user-select: none;
 }
 
 .dashboard-filter-option.disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
   background: rgba(255, 255, 255, 0.02);
   border-color: rgba(255, 255, 255, 0.03);
@@ -666,44 +676,53 @@
   border-left: 3px solid #ef4444;
 }
 
-.dashboard-lock-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 20px 16px 16px 16px;
-  margin-bottom: 8px;
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.06), rgba(59, 130, 246, 0.04));
+.dashboard-lock-banner {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.08), rgba(255, 215, 0, 0.02));
+  border: 1px solid rgba(255, 215, 0, 0.12);
   border-radius: 10px;
-  border: 1px dashed rgba(168, 85, 247, 0.15);
+  padding: 16px 18px;
+  margin-bottom: 14px;
 }
 
-.dashboard-lock-icon {
-  color: #a855f7;
-  margin-bottom: 12px;
+.dashboard-lock-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
-.dashboard-lock-content h3 {
-  font-size: 15px;
+.dashboard-lock-banner-icon {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  border-radius: 10px;
+  color: #fff;
+}
+
+.dashboard-lock-banner-text {
+  flex: 1;
+}
+
+.dashboard-lock-banner-text h3 {
+  font-size: 14px;
   font-weight: 600;
-  color: #e8e8f0;
-  margin: 0 0 6px 0;
+  color: #fcd34d;
+  margin: 0 0 2px 0;
 }
 
-.dashboard-lock-content p {
-  font-size: 13px;
+.dashboard-lock-banner-text p {
+  font-size: 12px;
   color: #888;
-  max-width: 380px;
-  margin: 0 0 16px 0;
-  line-height: 1.5;
+  margin: 0;
+  line-height: 1.4;
 }
 
-.dashboard-lock-content p strong {
-  color: #a855f7;
-}
-
-.dashboard-lock-content .button {
-  min-width: 200px;
+.dashboard-lock-banner-content .button {
+  min-width: 140px;
+  flex-shrink: 0;
 }
 
 @keyframes pulse {
@@ -744,6 +763,15 @@
     flex-direction: column;
     gap: 12px;
     align-items: flex-start;
+  }
+
+  .dashboard-lock-banner-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .dashboard-lock-banner-content .button {
+    width: 100%;
   }
   
   .dashboard-opportunity-card {
