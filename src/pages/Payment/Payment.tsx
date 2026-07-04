@@ -6,7 +6,7 @@ import {
   QrCode, Sparkles, ChevronRight, Crown,
   AlertCircle, Mail, User, Shield, Star, Send,
   Zap, Briefcase, Filter, MessageSquare, TrendingUp,
-  Award, ShieldCheck, Rocket, Target, Users, Eye
+  Award, ShieldCheck, Rocket, Target, Users, Eye, Bell
 } from 'lucide-react';
 import './Payment.css';
 
@@ -15,7 +15,7 @@ interface Plan {
   name: string;
   price: number;
   description: string;
-  features: string[];
+  features: { icon: React.ReactNode; text: string }[];
   popular?: boolean;
   icon: React.ReactNode;
 }
