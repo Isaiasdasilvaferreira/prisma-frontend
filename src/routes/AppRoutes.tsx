@@ -12,7 +12,7 @@ import { Tutorial } from '../pages/Tutorial/Tutorial';
 import { Settings } from '../pages/Settings/Settings';
 import { Tools } from '../pages/Tools/Tools';
 import { Plans } from '../pages/Plans/Plans';
-import { PaymentPage } from '../pages/PaymentPage/PaymentPage';
+import { PaymentPage } from '../pages/Payment/Payment';
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
