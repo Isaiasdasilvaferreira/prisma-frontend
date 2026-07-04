@@ -148,6 +148,12 @@ export function Dashboard() {
   const [savedOpps, setSavedOpps] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
+  const [filters, setFilters] = useState({
+    contract: [] as string[],
+    area: [] as string[],
+    location: [] as string[],
+  });
+
   useEffect(() => {
     const hour = new Date().getHours();
     if (hour < 12) setGreeting('Bom dia');
@@ -159,10 +165,27 @@ export function Dashboard() {
     setSavedOpps(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
   };
 
+  const toggleFilter = (category: 'contract' | 'area' | 'location', value: string) => {
+    setFilters(prev => {
+      const current = prev[category];
+      const newValues = current.includes(value)
+        ? current.filter(v => v !== value)
+        : [...current, value];
+      return { ...prev, [category]: newValues };
+    });
+  };
+
+  const clearFilters = () => {
+    setFilters({ contract: [], area: [], location: [] });
+  };
+
   const filteredOpportunities = opportunities.filter(opp =>
-    opp.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    opp.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    opp.service.toLowerCase().includes(searchTerm.toLowerCase())
+    (filters.contract.length === 0 || filters.contract.includes(opp.type)) &&
+    (filters.area.length === 0 || filters.area.includes(opp.service)) &&
+    (filters.location.length === 0 || filters.location.includes(opp.location)) &&
+    (opp.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+     opp.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+     opp.service.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   return (
@@ -240,7 +263,8 @@ export function Dashboard() {
           </div>
 
           <div className="dashboard-grid">
-            <div className="dashboard-main-content">
+            {/* Card de Oportunidades */}
+            <Card className="dashboard-opportunities-card" glow>
               <div className="dashboard-section-header">
                 <div className="dashboard-section-header-right">
                   <div className="dashboard-search-wrapper">
@@ -331,53 +355,69 @@ export function Dashboard() {
                   </div>
                 )}
               </div>
-            </div>
+            </Card>
 
-            <div className="dashboard-sidebar">
-              <Card className="dashboard-filter-card" glow>
-                <div className="dashboard-filter-header">
-                  <div className="dashboard-filter-title">
-                    <Sliders size={16} />
-                    Filtros
-                  </div>
-                  <span className="dashboard-filter-clear">Limpar</span>
+            {/* Card de Filtros */}
+            <Card className="dashboard-filter-card" glow>
+              <div className="dashboard-filter-header">
+                <div className="dashboard-filter-title">
+                  <Sliders size={16} />
+                  Filtros
                 </div>
-                
-                <div className="dashboard-filter-section">
-                  <span className="dashboard-filter-label">Tipo de contrato</span>
-                  <div className="dashboard-filter-options">
-                    <div className="dashboard-filter-option">Freelancer</div>
-                    <div className="dashboard-filter-option">CLT</div>
-                    <div className="dashboard-filter-option">Presencial</div>
-                  </div>
+                <span className="dashboard-filter-clear" onClick={clearFilters}>Limpar</span>
+              </div>
+              
+              <div className="dashboard-filter-section">
+                <span className="dashboard-filter-label">Tipo de contrato</span>
+                <div className="dashboard-filter-options">
+                  {['Freelancer', 'CLT', 'Presencial'].map((opt) => (
+                    <div 
+                      key={opt}
+                      className={`dashboard-filter-option ${filters.contract.includes(opt) ? 'selected' : ''}`}
+                      onClick={() => toggleFilter('contract', opt)}
+                    >
+                      {opt}
+                    </div>
+                  ))}
                 </div>
+              </div>
 
-                <div className="dashboard-filter-section">
-                  <span className="dashboard-filter-label">Área de atuação</span>
-                  <div className="dashboard-filter-options">
-                    <div className="dashboard-filter-option">UI Design</div>
-                    <div className="dashboard-filter-option">UX Design</div>
-                    <div className="dashboard-filter-option">Branding</div>
-                    <div className="dashboard-filter-option">Motion</div>
-                  </div>
+              <div className="dashboard-filter-section">
+                <span className="dashboard-filter-label">Área de atuação</span>
+                <div className="dashboard-filter-options">
+                  {['UI Design', 'UX Design', 'Branding', 'Motion'].map((opt) => (
+                    <div 
+                      key={opt}
+                      className={`dashboard-filter-option ${filters.area.includes(opt) ? 'selected' : ''}`}
+                      onClick={() => toggleFilter('area', opt)}
+                    >
+                      {opt}
+                    </div>
+                  ))}
                 </div>
+              </div>
 
-                <div className="dashboard-filter-section">
-                  <span className="dashboard-filter-label">Localização</span>
-                  <div className="dashboard-filter-options">
-                    <div className="dashboard-filter-option">Remoto</div>
-                    <div className="dashboard-filter-option">São Paulo</div>
-                    <div className="dashboard-filter-option">Rio de Janeiro</div>
-                  </div>
+              <div className="dashboard-filter-section">
+                <span className="dashboard-filter-label">Localização</span>
+                <div className="dashboard-filter-options">
+                  {['Remoto', 'São Paulo', 'Rio de Janeiro'].map((opt) => (
+                    <div 
+                      key={opt}
+                      className={`dashboard-filter-option ${filters.location.includes(opt) ? 'selected' : ''}`}
+                      onClick={() => toggleFilter('location', opt)}
+                    >
+                      {opt}
+                    </div>
+                  ))}
                 </div>
+              </div>
 
-                <div className="dashboard-filter-apply">
-                  <Button fullWidth size="sm" icon={<ListFilter size={16} />}>
-                    Aplicar filtros
-                  </Button>
-                </div>
-              </Card>
-            </div>
+              <div className="dashboard-filter-apply">
+                <Button fullWidth size="sm" icon={<ListFilter size={16} />}>
+                  Aplicar filtros
+                </Button>
+              </div>
+            </Card>
           </div>
         </div>
       </div>
