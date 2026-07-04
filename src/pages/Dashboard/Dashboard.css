@@ -219,13 +219,17 @@
   display: grid;
   grid-template-columns: 1fr 360px;
   gap: 24px;
-  align-items: start;
+  align-items: stretch;
 }
 
-.dashboard-main-content {
+.dashboard-opportunities-card {
+  padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
 }
 
 .dashboard-section-header {
@@ -511,9 +515,12 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
-  min-height: 560px;
+  flex: 1;
   position: sticky;
   top: 28px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
 }
 
 .dashboard-filter-header {
