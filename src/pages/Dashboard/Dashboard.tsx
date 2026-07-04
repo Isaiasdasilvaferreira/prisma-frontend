@@ -21,117 +21,39 @@ import './Dashboard.css';
 const statsCards = [
   { 
     icon: TrendingUp, 
-    value: '247', 
+    value: '0', 
     label: 'Oportunidades',
-    change: '+12.5%',
+    change: '+0%',
     trend: 'up',
     color: '#22c55e',
     bgColor: 'rgba(34, 197, 94, 0.08)'
   },
   { 
     icon: Star, 
-    value: '12', 
+    value: '0', 
     label: 'Novas esta semana',
-    change: '+3',
+    change: '0',
     trend: 'up',
     color: '#f59e0b',
     bgColor: 'rgba(245, 158, 11, 0.08)'
   },
   { 
     icon: MessageSquare, 
-    value: '38', 
+    value: '0', 
     label: 'Mensagens',
-    change: '+18.2%',
+    change: '+0%',
     trend: 'up',
     color: '#3b82f6',
     bgColor: 'rgba(59, 130, 246, 0.08)'
   },
   { 
     icon: Target, 
-    value: '94.2%', 
+    value: '0%', 
     label: 'Taxa de match',
-    change: '+2.1%',
+    change: '+0%',
     trend: 'up',
     color: '#a855f7',
     bgColor: 'rgba(168, 85, 247, 0.08)'
-  }
-];
-
-const opportunities = [
-  {
-    id: '1',
-    company: 'TechCorp Brasil',
-    logo: 'TC',
-    title: 'UI Designer Sênior para App Mobile',
-    service: 'UI Design',
-    compatibility: 95,
-    location: 'Remoto',
-    type: 'Freelancer',
-    budget: 'R$ 8.000 - 12.000',
-    postedAt: 'Há 2 horas',
-    isNew: true,
-    isUrgent: true,
-    isSaved: false
-  },
-  {
-    id: '2',
-    company: 'Creative Studio SP',
-    logo: 'CS',
-    title: 'Designer de Identidade Visual',
-    service: 'Branding',
-    compatibility: 88,
-    location: 'São Paulo, SP',
-    type: 'Presencial',
-    budget: 'R$ 5.000 - 8.000',
-    postedAt: 'Há 5 horas',
-    isNew: true,
-    isUrgent: false,
-    isSaved: true
-  },
-  {
-    id: '3',
-    company: 'StartupXYZ',
-    logo: 'SX',
-    title: 'UX Designer para Plataforma SaaS',
-    service: 'UX Design',
-    compatibility: 82,
-    location: 'Remoto',
-    type: 'CLT',
-    budget: 'R$ 12.000 - 15.000',
-    postedAt: 'Há 1 dia',
-    isNew: false,
-    isUrgent: false,
-    isSaved: false
-  },
-  {
-    id: '4',
-    company: 'Agência Nova',
-    logo: 'AN',
-    title: 'Motion Designer para Campanha Publicitária',
-    service: 'Motion Design',
-    compatibility: 78,
-    location: 'Remoto',
-    type: 'Freelancer',
-    budget: 'R$ 6.000 - 9.000',
-    postedAt: 'Há 1 dia',
-    isNew: false,
-    isUrgent: true,
-    isSaved: false
-  },
-  {
-    id: '5',
-    company: 'E-commerce Top',
-    logo: 'ET',
-    title: 'Designer de Social Media',
-    service: 'Social Media',
-    compatibility: 75,
-    location: 'Rio de Janeiro, RJ',
-    type: 'Presencial',
-    budget: 'R$ 4.500 - 6.500',
-    postedAt: 'Há 2 dias',
-    isNew: false,
-    isUrgent: false,
-    isSaved: false
   }
 ];
 
@@ -142,16 +64,52 @@ const quickActions = [
   { icon: Settings, label: 'Configurações', path: '/settings', color: '#ec4899' },
 ];
 
+const filterOptions = {
+  cltCargos: [
+    'UI Design',
+    'UX Design',
+    'Product Design',
+    'Branding / Identidade Visual',
+    'Motion Design',
+    'Design Gráfico (generalista)',
+    'Design Editorial',
+    'Packaging'
+  ],
+  freelancerServicos: [
+    'Criação de Identidade Visual / Branding',
+    'Social Media Design',
+    'UI/UX para Apps e Sites',
+    'Motion Graphics / Animação',
+    'Arte para Impressão',
+    'Redesign de Marca',
+    'Landing Page Design',
+    'Apresentações'
+  ],
+  niveis: [
+    'Júnior',
+    'Pleno',
+    'Sênior',
+    'Especialista',
+    'Estagiário / Trainee'
+  ],
+  modalidades: [
+    'Remoto',
+    'Presencial',
+    'Híbrido'
+  ]
+};
+
 export function Dashboard() {
   const { user } = useAuth();
   const [greeting, setGreeting] = useState('');
   const [savedOpps, setSavedOpps] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedContractType, setSelectedContractType] = useState<'clt' | 'freelancer' | null>(null);
 
   const [filters, setFilters] = useState({
-    contract: [] as string[],
-    area: [] as string[],
-    location: [] as string[],
+    titulosTags: [] as string[],
+    niveis: [] as string[],
+    modalidades: [] as string[],
   });
 
   useEffect(() => {
@@ -161,11 +119,7 @@ export function Dashboard() {
     else setGreeting('Boa noite');
   }, []);
 
-  const toggleSave = (id: string) => {
-    setSavedOpps(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
-  };
-
-  const toggleFilter = (category: 'contract' | 'area' | 'location', value: string) => {
+  const toggleFilter = (category: 'titulosTags' | 'niveis' | 'modalidades', value: string) => {
     setFilters(prev => {
       const current = prev[category];
       const newValues = current.includes(value)
@@ -176,17 +130,18 @@ export function Dashboard() {
   };
 
   const clearFilters = () => {
-    setFilters({ contract: [], area: [], location: [] });
+    setFilters({ titulosTags: [], niveis: [], modalidades: [] });
+    setSelectedContractType(null);
   };
 
-  const filteredOpportunities = opportunities.filter(opp =>
-    (filters.contract.length === 0 || filters.contract.includes(opp.type)) &&
-    (filters.area.length === 0 || filters.area.includes(opp.service)) &&
-    (filters.location.length === 0 || filters.location.includes(opp.location)) &&
-    (opp.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-     opp.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-     opp.service.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  const getTitulosOptions = () => {
+    if (selectedContractType === 'clt') {
+      return filterOptions.cltCargos;
+    } else if (selectedContractType === 'freelancer') {
+      return filterOptions.freelancerServicos;
+    }
+    return [];
+  };
 
   return (
     <div className="dashboard-page">
@@ -207,7 +162,7 @@ export function Dashboard() {
                   <span>{greeting}, {user?.name?.split(' ')[0]}</span>
                 </div>
                 <p className="dashboard-welcome-text">
-                  Sua IA encontrou <strong>12 novas oportunidades</strong> hoje. Confira abaixo.
+                  Conecte-se com as melhores oportunidades para designers.
                 </p>
               </div>
             </div>
@@ -280,80 +235,16 @@ export function Dashboard() {
                 </div>
                 <div className="dashboard-section-header-left">
                   <h2 className="dashboard-section-title">Oportunidades</h2>
-                  <span className="dashboard-section-badge pulse">{filteredOpportunities.length} disponíveis</span>
+                  <span className="dashboard-section-badge pulse">0 disponíveis</span>
                 </div>
               </div>
               
               <div className="dashboard-opportunities-container">
-                {filteredOpportunities.length > 0 ? (
-                  filteredOpportunities.map((opportunity) => (
-                    <div key={opportunity.id} className={`dashboard-opportunity-card ${opportunity.isNew ? 'card-new' : ''}`}>
-                      <div className="dashboard-opportunity-card-left">
-                        <div className="dashboard-opportunity-company-logo">
-                          {opportunity.logo}
-                        </div>
-                        <div className="dashboard-opportunity-card-badges">
-                          {opportunity.isNew && <span className="badge badge-new">Novo</span>}
-                          {opportunity.isUrgent && <span className="badge badge-urgent">Urgente</span>}
-                        </div>
-                      </div>
-                      
-                      <div className="dashboard-opportunity-card-body">
-                        <div className="dashboard-opportunity-card-header">
-                          <div>
-                            <h3 className="dashboard-opportunity-card-title">{opportunity.title}</h3>
-                            <p className="dashboard-opportunity-card-company">
-                              <Building2 size={12} />
-                              {opportunity.company}
-                            </p>
-                          </div>
-                          <button 
-                            className={`dashboard-opportunity-save ${savedOpps.includes(opportunity.id) ? 'saved' : ''}`}
-                            onClick={() => toggleSave(opportunity.id)}
-                          >
-                            <Bookmark size={16} fill={savedOpps.includes(opportunity.id) ? '#fff' : 'none'} />
-                          </button>
-                        </div>
-                        
-                        <div className="dashboard-opportunity-card-meta">
-                          <span><Briefcase size={12} />{opportunity.service}</span>
-                          <span><MapPin size={12} />{opportunity.location}</span>
-                          <span><Clock size={12} />{opportunity.postedAt}</span>
-                          <span className="meta-type">{opportunity.type}</span>
-                        </div>
-                        
-                        <div className="dashboard-opportunity-card-footer">
-                          <div className="dashboard-opportunity-budget">
-                            <DollarSign size={14} />
-                            <span>{opportunity.budget}</span>
-                          </div>
-                          <div className="dashboard-opportunity-card-actions">
-                            <div 
-                              className="dashboard-opportunity-match"
-                              style={{ 
-                                color: opportunity.compatibility >= 90 ? '#22c55e' : 
-                                       opportunity.compatibility >= 80 ? '#f59e0b' : '#888',
-                                background: opportunity.compatibility >= 90 ? 'rgba(34, 197, 94, 0.1)' : 
-                                            opportunity.compatibility >= 80 ? 'rgba(245, 158, 11, 0.1)' : 'rgba(255,255,255,0.04)'
-                              }}
-                            >
-                              <TrendingUp size={13} />
-                              {opportunity.compatibility}% match
-                            </div>
-                            <Button variant="outline" size="sm" icon={<ArrowUpRight size={14} />}>
-                              Ver detalhes
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="dashboard-no-results">
-                    <Search size={32} className="dashboard-no-results-icon" />
-                    <p>Nenhuma oportunidade encontrada com os termos da busca.</p>
-                  </div>
-                )}
+                <div className="dashboard-no-results">
+                  <Search size={32} className="dashboard-no-results-icon" />
+                  <p>Nenhuma oportunidade disponível no momento.</p>
+                  <p className="dashboard-no-results-sub">Configure os filtros para encontrar oportunidades.</p>
+                </div>
               </div>
             </Card>
 
@@ -366,45 +257,73 @@ export function Dashboard() {
                 </div>
                 <span className="dashboard-filter-clear" onClick={clearFilters}>Limpar</span>
               </div>
-              
+
+              {/* Tipo de Contrato */}
               <div className="dashboard-filter-section">
                 <span className="dashboard-filter-label">Tipo de contrato</span>
                 <div className="dashboard-filter-options">
-                  {['Freelancer', 'CLT', 'Presencial'].map((opt) => (
-                    <div 
-                      key={opt}
-                      className={`dashboard-filter-option ${filters.contract.includes(opt) ? 'selected' : ''}`}
-                      onClick={() => toggleFilter('contract', opt)}
-                    >
-                      {opt}
-                    </div>
-                  ))}
+                  <div 
+                    className={`dashboard-filter-option ${selectedContractType === 'clt' ? 'selected' : ''}`}
+                    onClick={() => setSelectedContractType(selectedContractType === 'clt' ? null : 'clt')}
+                  >
+                    CLT
+                  </div>
+                  <div 
+                    className={`dashboard-filter-option ${selectedContractType === 'freelancer' ? 'selected' : ''}`}
+                    onClick={() => setSelectedContractType(selectedContractType === 'freelancer' ? null : 'freelancer')}
+                  >
+                    Freelancer
+                  </div>
                 </div>
               </div>
 
-              <div className="dashboard-filter-section">
-                <span className="dashboard-filter-label">Área de atuação</span>
-                <div className="dashboard-filter-options">
-                  {['UI Design', 'UX Design', 'Branding', 'Motion'].map((opt) => (
-                    <div 
-                      key={opt}
-                      className={`dashboard-filter-option ${filters.area.includes(opt) ? 'selected' : ''}`}
-                      onClick={() => toggleFilter('area', opt)}
-                    >
-                      {opt}
-                    </div>
-                  ))}
+              {/* Títulos / Tags */}
+              {selectedContractType && (
+                <div className="dashboard-filter-section">
+                  <span className="dashboard-filter-label">
+                    {selectedContractType === 'clt' ? 'Cargos CLT' : 'Entregáveis / Serviços'}
+                  </span>
+                  <div className="dashboard-filter-options">
+                    {getTitulosOptions().map((opt) => (
+                      <div 
+                        key={opt}
+                        className={`dashboard-filter-option ${filters.titulosTags.includes(opt) ? 'selected' : ''}`}
+                        onClick={() => toggleFilter('titulosTags', opt)}
+                      >
+                        {opt}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
+              {/* Níveis */}
+              {selectedContractType === 'clt' && (
+                <div className="dashboard-filter-section">
+                  <span className="dashboard-filter-label">Níveis</span>
+                  <div className="dashboard-filter-options">
+                    {filterOptions.niveis.map((opt) => (
+                      <div 
+                        key={opt}
+                        className={`dashboard-filter-option ${filters.niveis.includes(opt) ? 'selected' : ''}`}
+                        onClick={() => toggleFilter('niveis', opt)}
+                      >
+                        {opt}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Modalidades */}
               <div className="dashboard-filter-section">
-                <span className="dashboard-filter-label">Localização</span>
+                <span className="dashboard-filter-label">Modalidades</span>
                 <div className="dashboard-filter-options">
-                  {['Remoto', 'São Paulo', 'Rio de Janeiro'].map((opt) => (
+                  {filterOptions.modalidades.map((opt) => (
                     <div 
                       key={opt}
-                      className={`dashboard-filter-option ${filters.location.includes(opt) ? 'selected' : ''}`}
-                      onClick={() => toggleFilter('location', opt)}
+                      className={`dashboard-filter-option ${filters.modalidades.includes(opt) ? 'selected' : ''}`}
+                      onClick={() => toggleFilter('modalidades', opt)}
                     >
                       {opt}
                     </div>
