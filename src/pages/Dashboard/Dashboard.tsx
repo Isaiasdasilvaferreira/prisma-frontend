@@ -13,7 +13,8 @@ import {
   CheckCircle2, RefreshCw, FileText, BarChart3,
   ArrowUpRight, Bookmark, DollarSign, Globe, Building2,
   AlertCircle, ChevronRight, TrendingDown, Activity,
-  LayoutDashboard, PieChart, Send, GraduationCap, Settings
+  LayoutDashboard, PieChart, Send, GraduationCap, Settings,
+  Sliders, ListFilter
 } from 'lucide-react';
 import './Dashboard.css';
 
@@ -241,10 +242,6 @@ export function Dashboard() {
           <div className="dashboard-grid">
             <div className="dashboard-main-content">
               <div className="dashboard-section-header">
-                <div className="dashboard-section-header-left">
-                  <h2 className="dashboard-section-title">Oportunidades</h2>
-                  <span className="dashboard-section-badge pulse">{filteredOpportunities.length} disponíveis</span>
-                </div>
                 <div className="dashboard-section-header-right">
                   <div className="dashboard-search-wrapper">
                     <Search size={16} className="dashboard-search-icon" />
@@ -256,7 +253,10 @@ export function Dashboard() {
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
                   </div>
-                  <Button variant="ghost" size="sm" icon={<Filter size={14} />}>Filtrar</Button>
+                </div>
+                <div className="dashboard-section-header-left">
+                  <h2 className="dashboard-section-title">Oportunidades</h2>
+                  <span className="dashboard-section-badge pulse">{filteredOpportunities.length} disponíveis</span>
                 </div>
               </div>
               
@@ -334,45 +334,47 @@ export function Dashboard() {
             </div>
 
             <div className="dashboard-sidebar">
-              <Card className="dashboard-profile-widget" glow>
-                <div className="dashboard-profile-widget-header">
-                  <div className="dashboard-profile-widget-avatar">
-                    {user?.name?.charAt(0)}
+              <Card className="dashboard-filter-card" glow>
+                <div className="dashboard-filter-header">
+                  <div className="dashboard-filter-title">
+                    <Sliders size={16} />
+                    Filtros
                   </div>
-                  <div className="dashboard-profile-widget-info">
-                    <h3 className="dashboard-profile-widget-name">{user?.name}</h3>
-                    <p className="dashboard-profile-widget-plan">
-                      <Crown size={11} />
-                      Plano Gratuito
-                    </p>
-                  </div>
-                  <Link to="/tools/profile">
-                    <Button variant="ghost" size="sm">Editar</Button>
-                  </Link>
+                  <span className="dashboard-filter-clear">Limpar</span>
                 </div>
                 
-                <div className="dashboard-profile-stats-row">
-                  <div className="dashboard-profile-stat-item">
-                    <span className="dashboard-profile-stat-num">247</span>
-                    <span className="dashboard-profile-stat-lbl">Ops</span>
-                  </div>
-                  <div className="dashboard-profile-stat-divider" />
-                  <div className="dashboard-profile-stat-item">
-                    <span className="dashboard-profile-stat-num">12</span>
-                    <span className="dashboard-profile-stat-lbl">Propostas</span>
-                  </div>
-                  <div className="dashboard-profile-stat-divider" />
-                  <div className="dashboard-profile-stat-item">
-                    <span className="dashboard-profile-stat-num">5</span>
-                    <span className="dashboard-profile-stat-lbl">Ativas</span>
+                <div className="dashboard-filter-section">
+                  <span className="dashboard-filter-label">Tipo de contrato</span>
+                  <div className="dashboard-filter-options">
+                    <div className="dashboard-filter-option">Freelancer</div>
+                    <div className="dashboard-filter-option">CLT</div>
+                    <div className="dashboard-filter-option">Presencial</div>
                   </div>
                 </div>
 
-                <div className="dashboard-profile-services-tags">
-                  <span>UI Design</span>
-                  <span>UX Design</span>
-                  <span>Branding</span>
-                  <span>Motion</span>
+                <div className="dashboard-filter-section">
+                  <span className="dashboard-filter-label">Área de atuação</span>
+                  <div className="dashboard-filter-options">
+                    <div className="dashboard-filter-option">UI Design</div>
+                    <div className="dashboard-filter-option">UX Design</div>
+                    <div className="dashboard-filter-option">Branding</div>
+                    <div className="dashboard-filter-option">Motion</div>
+                  </div>
+                </div>
+
+                <div className="dashboard-filter-section">
+                  <span className="dashboard-filter-label">Localização</span>
+                  <div className="dashboard-filter-options">
+                    <div className="dashboard-filter-option">Remoto</div>
+                    <div className="dashboard-filter-option">São Paulo</div>
+                    <div className="dashboard-filter-option">Rio de Janeiro</div>
+                  </div>
+                </div>
+
+                <div className="dashboard-filter-apply">
+                  <Button fullWidth size="sm" icon={<ListFilter size={16} />}>
+                    Aplicar filtros
+                  </Button>
                 </div>
               </Card>
             </div>
