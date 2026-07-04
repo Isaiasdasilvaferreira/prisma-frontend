@@ -29,7 +29,7 @@ interface Order {
   paymentProof?: string;
 }
 
-export function PaymentPage() {
+export function Payment() {
   const [selectedPlan] = useState<Plan>({
     id: 'pro',
     name: 'Plano Pro',
