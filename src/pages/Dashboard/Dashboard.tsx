@@ -347,20 +347,18 @@ export function Dashboard() {
               <div className="dashboard-filter-advanced-locked">
                 <div className="dashboard-lock-overlay">
                   <div className="dashboard-lock-banner">
-                    <div className="dashboard-lock-banner-content">
-                      <div className="dashboard-lock-banner-icon">
-                        <Crown size={24} />
-                      </div>
-                      <div className="dashboard-lock-banner-text">
-                        <h3>Desbloqueie os filtros avançados</h3>
-                        <p>Tenha acesso a filtros exclusivos como tipo de serviço, tipo de cliente e níveis de urgência.</p>
-                      </div>
-                      <Link to="/plans">
-                        <Button variant="primary" size="sm" icon={<Crown size={16} />}>
-                          Assinar Plano Pro
-                        </Button>
-                      </Link>
+                    <div className="dashboard-lock-banner-icon">
+                      <Crown size={22} />
                     </div>
+                    <div className="dashboard-lock-banner-text">
+                      <h3>Desbloqueie filtros avançados</h3>
+                      <p>Acesse tipo de serviço, tipo de cliente e níveis de urgência</p>
+                    </div>
+                    <Link to="/plans" className="dashboard-lock-banner-button">
+                      <Button variant="primary" size="sm" icon={<Crown size={14} />}>
+                        Assinar Plano Pro
+                      </Button>
+                    </Link>
                   </div>
 
                   <div className="dashboard-filter-section locked">
