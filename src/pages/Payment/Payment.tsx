@@ -142,7 +142,8 @@ export function Payment() {
         'service_5cvh0zk',
         'template_qd8jbbd',
         templateParams,
-        'lKtYPzGYWDwSXgPCg'
+        'lKtYPzGYWDwSXgPCg',
+        'prismaanalytics80@gmail.com'
       );
 
       setPaymentStatus('paid');
