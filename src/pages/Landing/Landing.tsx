@@ -589,11 +589,11 @@ export function Landing() {
                 popular: false, 
                 disabled: true, 
                 features: [
-                  'Para times e agências',
-                  'Até 10 usuários',
-                  'Dashboard colaborativo',
-                  'API de integração',
-                  'Gerente de conta dedicado'
+                  '***',
+                  '***',
+                  '***',
+                  '***',
+                  '***'
                 ], 
                 cta: 'Em breve', 
                 variant: 'outline' as const 
