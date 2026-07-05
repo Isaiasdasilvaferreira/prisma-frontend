@@ -352,9 +352,48 @@
   margin: 0 0 16px 0;
 }
 
+.payment-email-field {
+  margin-bottom: 16px;
+}
+
+.payment-email-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #0a0a0a;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 0 14px;
+  transition: border-color 0.2s ease;
+}
+
+.payment-email-input-wrapper:focus-within {
+  border-color: #444;
+}
+
+.payment-email-icon {
+  color: #555;
+  flex-shrink: 0;
+}
+
+.payment-email-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 14px;
+  padding: 12px 0;
+  width: 100%;
+  font-family: inherit;
+}
+
+.payment-email-input::placeholder {
+  color: #444;
+}
+
 .payment-upload-area {
   width: 100%;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .payment-file-input {
@@ -417,6 +456,28 @@
   margin-left: auto;
 }
 
+.payment-email-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #555;
+  padding: 10px 14px;
+  background: #0a0a0a;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.payment-email-info svg {
+  color: #333;
+  flex-shrink: 0;
+}
+
+.payment-email-info strong {
+  color: #888;
+  font-weight: 500;
+}
+
 .payment-confirm-btn {
   width: 100%;
   padding: 14px;
@@ -444,6 +505,11 @@
   cursor: not-allowed;
   background: #2a2a2a;
   color: #666;
+}
+
+.payment-confirm-btn.disabled:hover {
+  transform: none;
+  background: #2a2a2a;
 }
 
 .payment-spinner {
@@ -521,25 +587,6 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
-}
-
-.payment-approve-btn {
-  padding: 12px 32px;
-  background: #1a1a1a;
-  color: #fff;
-  border: 1px solid #2a2a2a;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.payment-approve-btn:hover {
-  background: #2a2a2a;
 }
 
 .payment-approve-note {
@@ -783,6 +830,15 @@
     padding: 16px;
   }
 
+  .payment-email-input {
+    font-size: 13px;
+    padding: 10px 0;
+  }
+
+  .payment-email-input-wrapper {
+    padding: 0 12px;
+  }
+
   .payment-confirm-btn {
     font-size: 15px;
     padding: 12px;
@@ -803,5 +859,10 @@
 
   .payment-active-card {
     padding: 24px 16px;
+  }
+
+  .payment-email-info {
+    font-size: 11px;
+    padding: 8px 12px;
   }
 }
