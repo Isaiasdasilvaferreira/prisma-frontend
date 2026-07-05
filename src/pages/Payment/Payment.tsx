@@ -110,13 +110,6 @@ export function Payment() {
     setLoading(true);
 
     try {
-      const base64 = await new Promise<string>((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(proofFile);
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = reject;
-      });
-
       const hoje = new Date();
       const dataFormatada = hoje.toLocaleDateString('pt-BR');
       const valorFormatado = selectedPlan.price.toFixed(2).replace('.', ',');
@@ -129,14 +122,17 @@ export function Payment() {
         total: valorFormatado,
         data_pagamento: dataFormatada,
         data_envio: dataFormatada,
-        comprovante: base64
+        comprovante: `[Comprovante anexado]` // Se quiser, pode enviar uma string ou link
       };
 
       await emailjs.send(
         'service_5cvh0zk',
         'template_qd8jbbd',
         templateParams,
-        'lKtYPzGYWDwSXgPCg'
+        'lKtYPzGYWDwSXgPCg',
+        {
+          to: 'prismaanalytics80@gmail.com' // E-mail fixo aqui
+        }
       );
 
       setPaymentStatus('paid');
