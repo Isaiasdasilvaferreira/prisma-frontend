@@ -70,7 +70,7 @@ export function Payment() {
       status: 'pending',
       createdAt: new Date(),
       pixCode: '83c3283c-157f-4e81-8b80-e8b4851fbc26',
-      qrCode: '../assets/qr-code.png'
+      qrCode: '../../../assets/qr-code-pix.png'
     };
     setOrder(newOrder);
   };
