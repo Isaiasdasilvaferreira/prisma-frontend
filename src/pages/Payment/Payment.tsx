@@ -9,6 +9,7 @@ import {
   CreditCard, Lock, Check, AtSign
 } from 'lucide-react';
 import './Payment.css';
+import qrCodeImage from '../../assets/qr-code-pix.png';
 
 interface Plan {
   id: string;
@@ -70,7 +71,7 @@ export function Payment() {
       status: 'pending',
       createdAt: new Date(),
       pixCode: '83c3283c-157f-4e81-8b80-e8b4851fbc26',
-      qrCode: require('../../assets/qr-code-pix.png')
+      qrCode: qrCodeImage
     };
     setOrder(newOrder);
   };
