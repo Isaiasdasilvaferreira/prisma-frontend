@@ -5,9 +5,9 @@ import {
   Download, FileCheck, Loader2,
   QrCode, ChevronRight,
   AlertCircle, Mail, User, Shield, Send,
-  Filter, MessageSquare, Eye, Bell, Target, Award,
   CreditCard, Lock, Check, AtSign
 } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 import './Payment.css';
 import qrCodeImage from '../../assets/qr-code-pix.png';
 
@@ -56,6 +56,7 @@ export function Payment() {
   const [paymentStatus, setPaymentStatus] = useState<'pending' | 'paid' | 'approved' | 'active'>('pending');
   const [copied, setCopied] = useState(false);
   const [email, setEmail] = useState('');
+  const [nome, setNome] = useState('');
 
   useEffect(() => {
     generateOrder();
@@ -101,24 +102,53 @@ export function Payment() {
       return;
     }
 
+    if (!nome.trim()) {
+      alert('Por favor, informe seu nome completo');
+      return;
+    }
+
     setLoading(true);
-    
-    setTimeout(() => {
+
+    try {
+      const base64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(proofFile);
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = reject;
+      });
+
+      const hoje = new Date();
+      const dataFormatada = hoje.toLocaleDateString('pt-BR');
+      const valorFormatado = selectedPlan.price.toFixed(2).replace('.', ',');
+
+      const templateParams = {
+        nome_cliente: nome,
+        email_cliente: email,
+        plano: selectedPlan.name,
+        valor: valorFormatado,
+        total: valorFormatado,
+        data_pagamento: dataFormatada,
+        data_envio: dataFormatada,
+        comprovante: base64,
+        to_email: 'prismaanalytics80@gmail.com'
+      };
+
+      await emailjs.send(
+        'service_5cvh0zk',
+        'template_qd8jbbd',
+        templateParams,
+        'lKtYPzGYWDwSXgPCg'
+      );
+
       setPaymentStatus('paid');
       setShowConfirmation(true);
+      alert(`Solicitação enviada!\n\nPedido: ${order?.id}\nPlano: ${order?.planName}\nValor: R$ ${selectedPlan.price.toFixed(2)}\n\nO comprovante foi enviado para prismaanalytics80@gmail.com junto com seus dados.`);
+    } catch (error) {
+      console.error('Erro ao enviar:', error);
+      alert('Erro ao enviar o comprovante. Tente novamente mais tarde.');
+    } finally {
       setLoading(false);
-      
-      console.log('=== NOVA SOLICITAÇÃO DE PAGAMENTO ===');
-      console.log('Email do cliente:', email);
-      console.log('Pedido:', order?.id);
-      console.log('Plano:', order?.planName);
-      console.log('Valor:', order?.amount);
-      console.log('Comprovante:', proofFile.name);
-      console.log('Enviar para: isaiasdasilvaf52@gmail.com');
-      console.log('=== FIM ===');
-      
-      alert(`Solicitação enviada!\n\nPedido: ${order?.id}\nPlano: ${order?.planName}\nValor: R$ ${order?.amount.toFixed(2)}\n\nO comprovante foi enviado para isaiasdasilvaf52@gmail.com junto com seu e-mail.`);
-    }, 2000);
+    }
   };
 
   const handleBack = () => {
@@ -243,15 +273,28 @@ export function Payment() {
               </div>
 
               <p className="payment-proof-instruction">
-                Preencha seu e-mail, anexe o comprovante e envie para confirmar
+                Preencha seus dados, anexe o comprovante e envie para confirmar
               </p>
+
+              <div className="payment-name-field">
+                <div className="payment-name-input-wrapper">
+                  <User size={16} className="payment-name-icon" />
+                  <input
+                    type="text"
+                    placeholder="Seu nome completo"
+                    value={nome}
+                    onChange={(e) => setNome(e.target.value)}
+                    className="payment-name-input"
+                  />
+                </div>
+              </div>
 
               <div className="payment-email-field">
                 <div className="payment-email-input-wrapper">
                   <AtSign size={16} className="payment-email-icon" />
                   <input
                     type="email"
-                    placeholder="Seu e-mail para contato"
+                    placeholder="Seu e-mail cadastrado na Prisma"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="payment-email-input"
@@ -288,13 +331,13 @@ export function Payment() {
 
               <div className="payment-email-info">
                 <Mail size={14} />
-                <span>O comprovante será enviado para: <strong>isaiasdasilvaf52@gmail.com</strong></span>
+                <span>O comprovante será enviado para: <strong>prismaanalytics80@gmail.com</strong></span>
               </div>
 
               <button 
-                className={`payment-confirm-btn ${(!proofFile || !email || !email.includes('@')) ? 'disabled' : ''}`}
+                className={`payment-confirm-btn ${(!proofFile || !email || !email.includes('@') || !nome.trim()) ? 'disabled' : ''}`}
                 onClick={handlePaymentConfirmation}
-                disabled={loading || !proofFile || !email || !email.includes('@')}
+                disabled={loading || !proofFile || !email || !email.includes('@') || !nome.trim()}
               >
                 {loading ? (
                   <>
@@ -331,7 +374,7 @@ export function Payment() {
               </div>
               <div className="payment-confirmation-item">
                 <span>Valor</span>
-                <strong>R$ {order?.amount.toFixed(2)}</strong>
+                <strong>R$ {selectedPlan.price.toFixed(2)}</strong>
               </div>
               <div className="payment-confirmation-item">
                 <span>E-mail</span>
