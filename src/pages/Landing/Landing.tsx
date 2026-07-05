@@ -538,9 +538,66 @@ export function Landing() {
           
           <div className="plans-grid">
             {[
-              { name: 'Starter', price: 'Grátis', period: '', desc: 'Para começar a explorar', icon: Zap, color: '#888', gradientClass: 'plan-gradient-starter', popular: false, disabled: false, features: ['10 oportunidades/mês', 'Busca básica', 'Perfil profissional', 'Suporte por email'], cta: 'Começar grátis', variant: 'outline' as const },
-              { name: 'Professional', price: 'R$97', period: '/mês', desc: 'Para designers ativos', icon: Star, color: '#f59e0b', gradientClass: 'plan-gradient-pro', popular: true, disabled: false, features: ['Oportunidades ilimitadas', 'Busca avançada com IA', 'Gerador de propostas', 'Gerador de mensagens', 'Suporte prioritário 24/7'], cta: 'Assinar Professional', variant: 'primary' as const },
-              { name: 'Enterprise', price: 'R$247', period: '/mês', desc: 'Para times e agências', icon: Building2, color: '#a855f7', gradientClass: 'plan-gradient-enterprise', popular: false, disabled: true, features: ['Tudo do Professional', 'Até 10 usuários', 'Dashboard colaborativo', 'API de integração', 'Gerente de conta'], cta: 'Em breve', variant: 'outline' as const }
+              { 
+                name: 'Starter', 
+                price: 'Grátis', 
+                period: '', 
+                desc: 'Para começar a explorar', 
+                icon: Zap, 
+                color: '#888', 
+                gradientClass: 'plan-gradient-starter', 
+                popular: false, 
+                disabled: false, 
+                features: [
+                  '10 oportunidades por semana',
+                  'Suporte por email',
+                  'Dashboard básico',
+                  'Filtros básicos'
+                ], 
+                cta: 'Começar grátis', 
+                variant: 'outline' as const 
+              },
+              { 
+                name: 'Professional', 
+                price: 'R$29,90', 
+                period: '/mês', 
+                desc: 'Para designers ativos', 
+                icon: Star, 
+                color: '#f59e0b', 
+                gradientClass: 'plan-gradient-pro', 
+                popular: true, 
+                disabled: false, 
+                features: [
+                  'Oportunidades ilimitadas',
+                  'Busca aprofundada',
+                  'Suporte prioritário 24/7',
+                  'Dashboard avançado',
+                  'Gerador de mensagens',
+                  'Filtros avançados'
+                ], 
+                cta: 'Assinar Professional', 
+                variant: 'primary' as const 
+              },
+              { 
+                name: 'Enterprise', 
+                price: 'Em breve', 
+                period: '', 
+                desc: 'Para times e agências', 
+                icon: Building2, 
+                color: '#a855f7', 
+                gradientClass: 'plan-gradient-enterprise', 
+                popular: false, 
+                disabled: true, 
+                features: [
+                  'Para times e agências',
+                  'Até 10 usuários',
+                  'Dashboard colaborativo',
+                  'API de integração',
+                  'Gerente de conta dedicado'
+                ], 
+                cta: 'Em breve', 
+                variant: 'outline' as const 
+              }
             ].map((plan, i) => (
               <Card key={i} className={`plan-card ${plan.gradientClass} ${plan.popular ? 'plan-card-featured' : ''} ${plan.disabled ? 'plan-card-disabled' : ''} reveal`} glow={plan.popular}>
                 {plan.popular && <div className="plan-badge"><Star size={12} fill="#050505" />Mais popular</div>}
