@@ -41,8 +41,8 @@ const plans = [
     id: 'professional',
     name: 'Professional',
     subtitle: 'Para designers ativos',
-    price: 'R$299,90',
-    period: '/ano',
+    price: 'R$29,90',
+    period: '/mês',
     icon: Star,
     color: '#f59e0b',
     gradientClass: 'plan-gradient-pro',
@@ -61,6 +61,7 @@ const plans = [
     cta: 'Assinar Professional',
     variant: 'primary' as const,
     redirect: '/payment/professional',
+    annualPrice: 'R$299,90',
     savings: 'Economize R$ 58,90 por ano'
   },
   {
@@ -119,20 +120,25 @@ export function Plans() {
   const getPrice = (plan: typeof plans[0]) => {
     if (plan.price === 'Grátis') return 'Grátis';
     if (plan.price === '***') return '***';
-    if (isAnnual) {
-      const monthly = parseInt(plan.price.replace('R$', '').replace(',', ''));
-      const annual = Math.floor(monthly * 12 * 0.8);
-      return `R$${Math.floor(annual / 12)}`;
-    }
     return plan.price;
   };
 
-  const getAnnualPrice = (plan: typeof plans[0]) => {
+  const getPeriod = (plan: typeof plans[0]) => {
     if (plan.price === 'Grátis') return '';
     if (plan.price === '***') return '';
-    const monthly = parseInt(plan.price.replace('R$', '').replace(',', ''));
-    const annual = Math.floor(monthly * 12 * 0.8);
-    return `R$${annual}/ano`;
+    if (isAnnual && plan.annualPrice) {
+      return '/ano';
+    }
+    return plan.period;
+  };
+
+  const getDisplayPrice = (plan: typeof plans[0]) => {
+    if (plan.price === 'Grátis') return 'Grátis';
+    if (plan.price === '***') return '***';
+    if (isAnnual && plan.annualPrice) {
+      return plan.annualPrice;
+    }
+    return plan.price;
   };
 
   const handlePlanClick = (plan: typeof plans[0]) => {
@@ -182,8 +188,8 @@ export function Plans() {
           <div className="plans-cards-grid">
             {plans.map((plan) => {
               const PlanIcon = plan.icon;
-              const price = getPrice(plan);
-              const annualPrice = getAnnualPrice(plan);
+              const displayPrice = getDisplayPrice(plan);
+              const period = getPeriod(plan);
               
               return (
                 <Card 
@@ -217,18 +223,12 @@ export function Plans() {
 
                   <div className="plans-card-price-row">
                     <div className="plans-card-price">
-                      <span className="plans-card-amount">{price}</span>
-                      {plan.period && <span className="plans-card-period">{plan.period}</span>}
+                      <span className="plans-card-amount">{displayPrice}</span>
+                      {period && <span className="plans-card-period">{period}</span>}
                     </div>
-                    {isAnnual && annualPrice && (
-                      <div className="plans-card-annual">
-                        <Gift size={12} />
-                        {annualPrice}
-                      </div>
-                    )}
                   </div>
 
-                  {plan.savings && (
+                  {isAnnual && plan.savings && (
                     <div className="plans-card-savings">
                       <span>{plan.savings}</span>
                     </div>
