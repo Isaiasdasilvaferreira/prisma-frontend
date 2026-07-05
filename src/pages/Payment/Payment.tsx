@@ -110,10 +110,9 @@ export function Payment() {
     setLoading(true);
 
     try {
-      // 1. Upload do comprovante para o Cloudinary
       const formData = new FormData();
       formData.append('file', proofFile);
-      formData.append('upload_preset', 'prisma_upload'); // Substitua pelo seu upload preset
+      formData.append('upload_preset', 'prisma_upload');
       formData.append('cloud_name', 'inif4krp');
 
       const uploadResponse = await fetch('https://api.cloudinary.com/v1_1/inif4krp/image/upload', {
@@ -124,7 +123,6 @@ export function Payment() {
       const uploadData = await uploadResponse.json();
       const comprovanteUrl = uploadData.secure_url;
 
-      // 2. Preparar os dados do e-mail
       const hoje = new Date();
       const dataFormatada = hoje.toLocaleDateString('pt-BR');
       const valorFormatado = selectedPlan.price.toFixed(2).replace('.', ',');
@@ -137,18 +135,15 @@ export function Payment() {
         total: valorFormatado,
         data_pagamento: dataFormatada,
         data_envio: dataFormatada,
-        comprovante: comprovanteUrl
+        comprovante: comprovanteUrl,
+        to_email: 'prismaanalytics80@gmail.com'
       };
 
-      // 3. Enviar o e-mail via EmailJS
       await emailjs.send(
         'service_5cvh0zk',
         'template_qd8jbbd',
         templateParams,
-        'lKtYPzGYWDwSXgPCg',
-        {
-          to: 'prismaanalytics80@gmail.com'
-        }
+        'lKtYPzGYWDwSXgPCg'
       );
 
       setPaymentStatus('paid');
