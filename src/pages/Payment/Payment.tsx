@@ -6,7 +6,7 @@ import {
   QrCode, ChevronRight,
   AlertCircle, Mail, User, Shield, Send,
   Filter, MessageSquare, Eye, Bell, Target, Award,
-  CreditCard, Lock, Check
+  CreditCard, Lock, Check, AtSign
 } from 'lucide-react';
 import './Payment.css';
 
@@ -54,6 +54,7 @@ export function Payment() {
   const [loading, setLoading] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState<'pending' | 'paid' | 'approved' | 'active'>('pending');
   const [copied, setCopied] = useState(false);
+  const [email, setEmail] = useState('');
 
   useEffect(() => {
     generateOrder();
@@ -68,8 +69,8 @@ export function Payment() {
       amount: selectedPlan.price,
       status: 'pending',
       createdAt: new Date(),
-      pixCode: '00020126360014BR.GOV.BCB.PIX0114+552199999999952040000530398654091.005802BR5908Empresa6009Sao Paulo62070503***6304B14E',
-      qrCode: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAAAXNSR0IArs4c6QAABARJREFUeJztnUuPFEUQx6tnZmf2AWtAEQWPihFBMHjhwBfgwQMHv4CJJz9h4slP4MGDBxM/geGP8MDLRUQFxAcKiIoKggKC+5h9dFcz1ZldPdM93c/sL+XSmZ3qzHaqfvu/r6qqZ2MAgD+wAexVwU5zMwgB4ABaAADYby3zAE60FgJAC1rLMXAWrQ1aCwKgQWuD1oLcaUWWqVhWYlnpOFZiWak4VmJZ6ThWYlmpOFZiWak4VmJZ6ThWYlmpOFZiWak4VmJZ6ThWYlmpOJZz7cDca5M4jQPDdu45jmMl5jiOlZjjOFZiGTiHsmMnTzCcmsBwSh7XlNl6F+n2x2xfg+sR0wZfX+5rcdrpmAbXJ6YNvr7c12K+w3imxXWJ6fDRRJt6zw9OOx3T4LrEdPhoos2OBcenoxswOjYFJiHcmcAcx3Gaf5b7WrjtFurcL/XjWp51Rja4rMUGZHHdZnpcf3tly7H9LrAeA4X3ZcLxTXSsmcIghRuOmUzWuWlY1LBXKreEuwUAIQtigyeWcSPjOLYVJ5jE+ZJYd7Ld4LMWrU4A0r++P8Sg5UBrRlcS0dCQrB1jQ1FvmS1ItjXaEednJQAAAFCeswAANI+cqU5qmsaxu3C2pamz+UqQcY6HZb/rcfD3d+57os3G/P3T1NNPpuwP+V4b7U4p3JP3ygaRG0esu6P2HDPN5q9oPUL2iB1Xtl7ndyHyxTKyTgAAnK3uzw05W92Z3/eEbl2QrlL9gvF4P57ou1/m2eG2W8laIe/fLY9NZ95qD9a2cwztzGgF2XJ7DqNrO3bp6lyMthK0A9eZ1zh3IgC6vT8BQK/XR7fbw2AwGJ3HnNGBQLS1a7fba3p9AqC1zs6bHst9Laxt52rXtrIdR4ajQ2Lt6XGeBAmMS/uwyD5FmJkHwm5+J9hQ3VaI9l67qJfR7uR+J5jbyqyMbu/k6Gz6xM4qo7SzxPte9irZYyWyd0VlbyLxfjMbXfu6a9VqBVHw5Px8pCukTlVkC1IerUSU7Yr+1/rkt+77eFYhsjUzlrJtx4/8LT9Vp4jyct97IWsLQazK1hJjWZbB5rrLfS1GO54pK1E1W7qufwnWaUGGS7Luf7bG3Zx92cnIfXfGsc7bGkM7oUJOCFcHUn+fE+9vtuH+vaKPFJl9cj6oMrX6r62jK/OkH4GofxTq77N6lRnLmTWvMvPXphG/awX5C66N1XcNWn5Lf8J6hMi/4/yU+1qMduIUoP79MfP9/8K62zWWHdRnvTRXj4/N8cyAfebfw7IlDmeWmI3UsTIfQDrbA6yPIB0LtY1AnZOBF4Z1DfbtSx1nIVeHqUq0teh0HsC4OQkP0DmO0Vg7rCg0MM7PImOZDRprh5FDRKtUHKdRj7KtcXXY1jEUSj8YF9E1nAtkHIf2qLJtx8nUl+hUOJ04bdsGm/gm6/0/3cpoxmYFxgUAAAAASUVORK5CYII='
+      pixCode: '00020126360014BR.GOV.BCB.PIX011483c3283c-157f-4e81-8b80-e8b4851fbc2652040000530398654091.005802BR5908Empresa6009Sao Paulo62070503***6304B14E',
+      qrCode: '../imagem/imagemqueeuquero'
     };
     setOrder(newOrder);
   };
@@ -94,6 +95,11 @@ export function Payment() {
       return;
     }
 
+    if (!email || !email.includes('@')) {
+      alert('Por favor, informe um e-mail válido');
+      return;
+    }
+
     setLoading(true);
     
     setTimeout(() => {
@@ -101,19 +107,17 @@ export function Payment() {
       setShowConfirmation(true);
       setLoading(false);
       
-      console.log('Email enviado para equipe Prisma');
+      console.log('=== NOVA SOLICITAÇÃO DE PAGAMENTO ===');
+      console.log('Email do cliente:', email);
       console.log('Pedido:', order?.id);
       console.log('Plano:', order?.planName);
       console.log('Valor:', order?.amount);
       console.log('Comprovante:', proofFile.name);
+      console.log('Enviar para: isaiasdasilvaf52@gmail.com');
+      console.log('=== FIM ===');
+      
+      alert(`Solicitação enviada!\n\nPedido: ${order?.id}\nPlano: ${order?.planName}\nValor: R$ ${order?.amount.toFixed(2)}\n\nO comprovante foi enviado para isaiasdasilvaf52@gmail.com junto com seu e-mail.`);
     }, 2000);
-  };
-
-  const handleApprovePayment = () => {
-    setPaymentStatus('approved');
-    setTimeout(() => {
-      setPaymentStatus('active');
-    }, 1500);
   };
 
   const handleBack = () => {
@@ -238,8 +242,21 @@ export function Payment() {
               </div>
 
               <p className="payment-proof-instruction">
-                Já fez o pagamento? Envie o comprovante para ativar seu plano
+                Preencha seu e-mail, anexe o comprovante e envie para confirmar
               </p>
+
+              <div className="payment-email-field">
+                <div className="payment-email-input-wrapper">
+                  <AtSign size={16} className="payment-email-icon" />
+                  <input
+                    type="email"
+                    placeholder="Seu e-mail para contato"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="payment-email-input"
+                  />
+                </div>
+              </div>
               
               <div className="payment-upload-area">
                 <input
@@ -268,10 +285,15 @@ export function Payment() {
                 </label>
               </div>
 
+              <div className="payment-email-info">
+                <Mail size={14} />
+                <span>O comprovante será enviado para: <strong>isaiasdasilvaf52@gmail.com</strong></span>
+              </div>
+
               <button 
-                className={`payment-confirm-btn ${!proofFile ? 'disabled' : ''}`}
+                className={`payment-confirm-btn ${(!proofFile || !email || !email.includes('@')) ? 'disabled' : ''}`}
                 onClick={handlePaymentConfirmation}
-                disabled={loading || !proofFile}
+                disabled={loading || !proofFile || !email || !email.includes('@')}
               >
                 {loading ? (
                   <>
@@ -280,8 +302,8 @@ export function Payment() {
                   </>
                 ) : (
                   <>
-                    <CheckCircle size={18} />
-                    Confirmar pagamento
+                    <Send size={18} />
+                    Enviar comprovante
                   </>
                 )}
               </button>
@@ -294,7 +316,7 @@ export function Payment() {
             <div className="payment-confirmation-icon">
               <CheckCircle size={48} />
             </div>
-            <h2>Pagamento confirmado</h2>
+            <h2>Solicitação enviada!</h2>
             <p>Seu comprovante foi enviado para análise da nossa equipe</p>
             
             <div className="payment-confirmation-details">
@@ -311,22 +333,19 @@ export function Payment() {
                 <strong>R$ {order?.amount.toFixed(2)}</strong>
               </div>
               <div className="payment-confirmation-item">
+                <span>E-mail</span>
+                <strong>{email}</strong>
+              </div>
+              <div className="payment-confirmation-item">
                 <span>Status</span>
                 <span className="payment-confirmation-status">Aguardando aprovação</span>
               </div>
             </div>
 
             <div className="payment-confirmation-actions">
-              <button 
-                className="payment-approve-btn"
-                onClick={handleApprovePayment}
-              >
-                <Shield size={16} />
-                Aprovar (simulação)
-              </button>
               <p className="payment-approve-note">
                 <AlertCircle size={12} />
-                Apenas a equipe Prisma pode aprovar pagamentos
+                Aguarde a confirmação da equipe Prisma
               </p>
             </div>
           </div>
