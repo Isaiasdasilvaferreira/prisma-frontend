@@ -135,15 +135,15 @@ export function Payment() {
         total: valorFormatado,
         data_pagamento: dataFormatada,
         data_envio: dataFormatada,
-        comprovante: comprovanteUrl
+        comprovante: comprovanteUrl,
+        to_email: 'prismaanalytics80@gmail.com'
       };
 
       await emailjs.send(
         'service_5cvh0zk',
         'template_qd8jbbd',
         templateParams,
-        'lKtYPzGYWDwSXgPCg',
-        'prismaanalytics80@gmail.com'
+        'lKtYPzGYWDwSXgPCg'
       );
 
       setPaymentStatus('paid');
