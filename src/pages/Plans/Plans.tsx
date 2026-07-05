@@ -6,7 +6,7 @@ import { Button } from '../../components/Button/Button';
 import { Card } from '../../components/Card/Card';
 import { 
   Check, Star, Zap, Sparkles, Crown, Shield, ArrowRight,
-  Gift, ChevronDown, ChevronUp, HelpCircle, TrendingUp,
+  ChevronDown, ChevronUp, HelpCircle, TrendingUp,
   Lock, Headphones, MessageSquare, Building2, Clock
 } from 'lucide-react';
 import './Plans.css';
@@ -60,9 +60,7 @@ const plans = [
     ],
     cta: 'Assinar Professional',
     variant: 'primary' as const,
-    redirect: '/payment/professional',
-    annualPrice: 'R$299,90',
-    savings: 'Economize R$ 58,90 por ano'
+    redirect: '/payment/professional'
   },
   {
     id: 'enterprise',
@@ -114,32 +112,7 @@ const comparisons = [
 
 export function Plans() {
   const navigate = useNavigate();
-  const [isAnnual, setIsAnnual] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-
-  const getPrice = (plan: typeof plans[0]) => {
-    if (plan.price === 'Grátis') return 'Grátis';
-    if (plan.price === '***') return '***';
-    return plan.price;
-  };
-
-  const getPeriod = (plan: typeof plans[0]) => {
-    if (plan.price === 'Grátis') return '';
-    if (plan.price === '***') return '';
-    if (isAnnual && plan.annualPrice) {
-      return '/ano';
-    }
-    return plan.period;
-  };
-
-  const getDisplayPrice = (plan: typeof plans[0]) => {
-    if (plan.price === 'Grátis') return 'Grátis';
-    if (plan.price === '***') return '***';
-    if (isAnnual && plan.annualPrice) {
-      return plan.annualPrice;
-    }
-    return plan.price;
-  };
 
   const handlePlanClick = (plan: typeof plans[0]) => {
     if (plan.disabled) return;
@@ -167,29 +140,12 @@ export function Plans() {
               <p className="plans-hero-subtitle">
                 Comece grátis e escale conforme sua necessidade. Cancele quando quiser.
               </p>
-              
-              <div className="plans-toggle-wrapper">
-                <span className={`plans-toggle-label ${!isAnnual ? 'active' : ''}`}>Mensal</span>
-                <button 
-                  className={`plans-toggle ${isAnnual ? 'annual' : ''}`}
-                  onClick={() => setIsAnnual(!isAnnual)}
-                  aria-label="Alternar entre mensal e anual"
-                >
-                  <div className="plans-toggle-thumb" />
-                </button>
-                <span className={`plans-toggle-label ${isAnnual ? 'active' : ''}`}>
-                  Anual
-                  <span className="plans-toggle-save">-20%</span>
-                </span>
-              </div>
             </div>
           </div>
 
           <div className="plans-cards-grid">
             {plans.map((plan) => {
               const PlanIcon = plan.icon;
-              const displayPrice = getDisplayPrice(plan);
-              const period = getPeriod(plan);
               
               return (
                 <Card 
@@ -223,16 +179,10 @@ export function Plans() {
 
                   <div className="plans-card-price-row">
                     <div className="plans-card-price">
-                      <span className="plans-card-amount">{displayPrice}</span>
-                      {period && <span className="plans-card-period">{period}</span>}
+                      <span className="plans-card-amount">{plan.price}</span>
+                      {plan.period && <span className="plans-card-period">{plan.period}</span>}
                     </div>
                   </div>
-
-                  {isAnnual && plan.savings && (
-                    <div className="plans-card-savings">
-                      <span>{plan.savings}</span>
-                    </div>
-                  )}
 
                   <div className="plans-card-divider" />
 
