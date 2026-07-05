@@ -352,6 +352,45 @@
   margin: 0 0 16px 0;
 }
 
+.payment-name-field {
+  margin-bottom: 16px;
+}
+
+.payment-name-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #0a0a0a;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 0 14px;
+  transition: border-color 0.2s ease;
+}
+
+.payment-name-input-wrapper:focus-within {
+  border-color: #444;
+}
+
+.payment-name-icon {
+  color: #555;
+  flex-shrink: 0;
+}
+
+.payment-name-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 14px;
+  padding: 12px 0;
+  width: 100%;
+  font-family: inherit;
+}
+
+.payment-name-input::placeholder {
+  color: #444;
+}
+
 .payment-email-field {
   margin-bottom: 16px;
 }
