@@ -7,6 +7,7 @@ import {
   AlertCircle, Mail, User, Shield, Send,
   CreditCard, Lock, Check, AtSign
 } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 import './Payment.css';
 import qrCodeImage from '../../assets/qr-code-pix.png';
 
@@ -90,7 +91,7 @@ export function Payment() {
     }
   };
 
-  const handlePaymentConfirmation = () => {
+  const handlePaymentConfirmation = async () => {
     if (!proofFile) {
       alert('Por favor, anexe o comprovante de pagamento');
       return;
@@ -109,36 +110,53 @@ export function Payment() {
     setLoading(true);
 
     try {
+      // 1. Upload do comprovante para o Cloudinary
+      const formData = new FormData();
+      formData.append('file', proofFile);
+      formData.append('upload_preset', 'prisma_upload'); // Substitua pelo seu upload preset
+      formData.append('cloud_name', 'inif4krp');
+
+      const uploadResponse = await fetch('https://api.cloudinary.com/v1_1/inif4krp/image/upload', {
+        method: 'POST',
+        body: formData
+      });
+
+      const uploadData = await uploadResponse.json();
+      const comprovanteUrl = uploadData.secure_url;
+
+      // 2. Preparar os dados do e-mail
       const hoje = new Date();
       const dataFormatada = hoje.toLocaleDateString('pt-BR');
       const valorFormatado = selectedPlan.price.toFixed(2).replace('.', ',');
 
-      const subject = encodeURIComponent(`Pagamento Prisma - ${nome}`);
-      const body = encodeURIComponent(
-        `Olá equipe Prisma,\n\n` +
-        `Meu nome: ${nome}\n` +
-        `Meu e-mail: ${email}\n` +
-        `Plano escolhido: ${selectedPlan.name}\n` +
-        `Valor: R$ ${valorFormatado}\n` +
-        `Data do pagamento: ${dataFormatada}\n\n` +
-        `Segue em anexo o comprovante de pagamento.\n\n` +
-        `Atenciosamente,\n${nome}`
-      );
+      const templateParams = {
+        nome_cliente: nome,
+        email_cliente: email,
+        plano: selectedPlan.name,
+        valor: valorFormatado,
+        total: valorFormatado,
+        data_pagamento: dataFormatada,
+        data_envio: dataFormatada,
+        comprovante: comprovanteUrl
+      };
 
-      window.location.href = `mailto:prismaanalytics80@gmail.com?subject=${subject}&body=${body}`;
+      // 3. Enviar o e-mail via EmailJS
+      await emailjs.send(
+        'service_5cvh0zk',
+        'template_qd8jbbd',
+        templateParams,
+        'lKtYPzGYWDwSXgPCg',
+        {
+          to: 'prismaanalytics80@gmail.com'
+        }
+      );
 
       setPaymentStatus('paid');
       setShowConfirmation(true);
-      alert(
-        `E-mail aberto com sucesso!\n\n` +
-        `Pedido: ${order?.id}\n` +
-        `Plano: ${order?.planName}\n` +
-        `Valor: R$ ${selectedPlan.price.toFixed(2)}\n\n` +
-        `Agora é só enviar o e-mail com o comprovante anexado.`
-      );
+      alert(`Solicitação enviada!\n\nPedido: ${order?.id}\nPlano: ${order?.planName}\nValor: R$ ${selectedPlan.price.toFixed(2)}\n\nLink do comprovante enviado para prismaanalytics80@gmail.com.`);
     } catch (error) {
-      console.error('Erro ao abrir o e-mail:', error);
-      alert('Erro ao abrir o cliente de e-mail. Tente novamente mais tarde.');
+      console.error('Erro ao enviar:', error);
+      alert('Erro ao enviar o comprovante. Tente novamente mais tarde.');
     } finally {
       setLoading(false);
     }
