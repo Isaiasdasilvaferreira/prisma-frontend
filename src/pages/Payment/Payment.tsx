@@ -133,6 +133,7 @@ export function Payment() {
       const valorFormatado = selectedPlan.price.toFixed(2).replace('.', ',');
 
       const templateParams = {
+        to_email: 'prismaanalytics80@gmail.com',
         nome_cliente: nome,
         email_cliente: email,
         plano: selectedPlan.name,
