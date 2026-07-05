@@ -41,8 +41,8 @@ const plans = [
     id: 'professional',
     name: 'Professional',
     subtitle: 'Para designers ativos',
-    price: 'R$29,90',
-    period: '/mês',
+    price: 'R$299,90',
+    period: '/ano',
     icon: Star,
     color: '#f59e0b',
     gradientClass: 'plan-gradient-pro',
@@ -60,28 +60,29 @@ const plans = [
     ],
     cta: 'Assinar Professional',
     variant: 'primary' as const,
-    redirect: '/payment/professional'
+    redirect: '/payment/professional',
+    savings: 'Economize R$ 58,90 por ano'
   },
   {
     id: 'enterprise',
     name: 'Enterprise',
     subtitle: 'Para times e agências',
-    price: 'R$Não Definido',
-    period: '/mês',
+    price: '***',
+    period: '',
     icon: Building2,
     color: '#a855f7',
     gradientClass: 'plan-gradient-enterprise',
     popular: false,
     disabled: true,
     features: [
-      { text: 'Tudo do Professional', included: true },
-      { text: 'Até 10 usuários', included: true, highlight: true },
-      { text: 'Dashboard colaborativo', included: true, highlight: true },
-      { text: 'Suporte dedicado 24/7', included: true },
-      { text: 'Relatórios avançados', included: true },
-      { text: 'API de integração', included: true, highlight: true },
-      { text: 'Gerente de conta exclusivo', included: true, highlight: true },
-      { text: 'Treinamento da equipe', included: true },
+      { text: '***', included: true },
+      { text: '***', included: true, highlight: true },
+      { text: '***', included: true, highlight: true },
+      { text: '***', included: true },
+      { text: '***', included: true },
+      { text: '***', included: true, highlight: true },
+      { text: '***', included: true, highlight: true },
+      { text: '***', included: true },
     ],
     cta: 'Em breve',
     variant: 'outline' as const,
@@ -99,15 +100,15 @@ const faqItems = [
 ];
 
 const comparisons = [
-  { feature: 'Oportunidades', starter: '10/mês', professional: 'Ilimitadas', enterprise: 'Ilimitadas' },
-  { feature: 'Busca com IA', starter: 'Básica', professional: 'Avançada', enterprise: 'Avançada' },
-  { feature: 'Gerador de propostas', starter: '—', professional: '✓', enterprise: '✓' },
-  { feature: 'Gerador de mensagens', starter: '—', professional: '✓', enterprise: '✓' },
-  { feature: 'Usuários', starter: '1', professional: '1', enterprise: 'Até 10' },
-  { feature: 'Suporte', starter: 'Email', professional: 'Prioritário 24/7', enterprise: 'Dedicado 24/7' },
-  { feature: 'Relatórios', starter: '—', professional: 'Semanais', enterprise: 'Avançados' },
-  { feature: 'API', starter: '—', professional: '—', enterprise: '✓' },
-  { feature: 'Gerente de conta', starter: '—', professional: '—', enterprise: '✓' },
+  { feature: 'Oportunidades', starter: '10/mês', professional: 'Ilimitadas', enterprise: '***' },
+  { feature: 'Busca com IA', starter: 'Básica', professional: 'Avançada', enterprise: '***' },
+  { feature: 'Gerador de propostas', starter: '—', professional: '✓', enterprise: '***' },
+  { feature: 'Gerador de mensagens', starter: '—', professional: '✓', enterprise: '***' },
+  { feature: 'Usuários', starter: '1', professional: '1', enterprise: '***' },
+  { feature: 'Suporte', starter: 'Email', professional: 'Prioritário 24/7', enterprise: '***' },
+  { feature: 'Relatórios', starter: '—', professional: 'Semanais', enterprise: '***' },
+  { feature: 'API', starter: '—', professional: '—', enterprise: '***' },
+  { feature: 'Gerente de conta', starter: '—', professional: '—', enterprise: '***' },
 ];
 
 export function Plans() {
@@ -117,8 +118,9 @@ export function Plans() {
 
   const getPrice = (plan: typeof plans[0]) => {
     if (plan.price === 'Grátis') return 'Grátis';
+    if (plan.price === '***') return '***';
     if (isAnnual) {
-      const monthly = parseInt(plan.price.replace('R$', ''));
+      const monthly = parseInt(plan.price.replace('R$', '').replace(',', ''));
       const annual = Math.floor(monthly * 12 * 0.8);
       return `R$${Math.floor(annual / 12)}`;
     }
@@ -127,7 +129,8 @@ export function Plans() {
 
   const getAnnualPrice = (plan: typeof plans[0]) => {
     if (plan.price === 'Grátis') return '';
-    const monthly = parseInt(plan.price.replace('R$', ''));
+    if (plan.price === '***') return '';
+    const monthly = parseInt(plan.price.replace('R$', '').replace(',', ''));
     const annual = Math.floor(monthly * 12 * 0.8);
     return `R$${annual}/ano`;
   };
@@ -224,6 +227,12 @@ export function Plans() {
                       </div>
                     )}
                   </div>
+
+                  {plan.savings && (
+                    <div className="plans-card-savings">
+                      <span>{plan.savings}</span>
+                    </div>
+                  )}
 
                   <div className="plans-card-divider" />
 
