@@ -120,6 +120,11 @@ export function Payment() {
         body: formData
       });
 
+      if (!uploadResponse.ok) {
+        const errorData = await uploadResponse.json();
+        throw new Error(errorData.error?.message || 'Erro ao fazer upload do comprovante');
+      }
+
       const uploadData = await uploadResponse.json();
       const comprovanteUrl = uploadData.secure_url;
 
@@ -135,8 +140,7 @@ export function Payment() {
         total: valorFormatado,
         data_pagamento: dataFormatada,
         data_envio: dataFormatada,
-        comprovante: comprovanteUrl,
-        to_email: 'prismaanalytics80@gmail.com'
+        comprovante: comprovanteUrl
       };
 
       await emailjs.send(
@@ -148,10 +152,15 @@ export function Payment() {
 
       setPaymentStatus('paid');
       setShowConfirmation(true);
-      alert(`Solicitação enviada!\n\nPedido: ${order?.id}\nPlano: ${order?.planName}\nValor: R$ ${selectedPlan.price.toFixed(2)}\n\nLink do comprovante enviado para prismaanalytics80@gmail.com.`);
-    } catch (error) {
+      alert(`Solicitação enviada!\n\nPedido: ${order?.id}\nPlano: ${order?.planName}\nValor: R$ ${selectedPlan.price.toFixed(2)}`);
+    } catch (error: any) {
       console.error('Erro ao enviar:', error);
-      alert('Erro ao enviar o comprovante. Tente novamente mais tarde.');
+      
+      if (error.message && error.message.includes('upload_preset')) {
+        alert('Erro de configuração. O upload_preset "prisma_upload" não foi encontrado no Cloudinary.\n\nPor favor, acesse o Cloudinary e crie um upload preset com o nome "prisma_upload" no modo unsigned.');
+      } else {
+        alert('Erro ao enviar o comprovante. Tente novamente mais tarde.');
+      }
     } finally {
       setLoading(false);
     }
