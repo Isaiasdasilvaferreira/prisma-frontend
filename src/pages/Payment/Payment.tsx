@@ -69,7 +69,7 @@ export function Payment() {
       amount: selectedPlan.price,
       status: 'pending',
       createdAt: new Date(),
-      pixCode: '00020126360014BR.GOV.BCB.PIX011483c3283c-157f-4e81-8b80-e8b4851fbc2652040000530398654091.005802BR5908Empresa6009Sao Paulo62070503***6304B14E',
+      pixCode: '83c3283c-157f-4e81-8b80-e8b4851fbc26',
       qrCode: '../imagem/imagemqueeuquero'
     };
     setOrder(newOrder);
