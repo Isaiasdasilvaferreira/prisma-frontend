@@ -7,7 +7,6 @@ import {
   AlertCircle, Mail, User, Shield, Send,
   CreditCard, Lock, Check, AtSign
 } from 'lucide-react';
-import emailjs from '@emailjs/browser';
 import './Payment.css';
 import qrCodeImage from '../../assets/qr-code-pix.png';
 
@@ -91,7 +90,7 @@ export function Payment() {
     }
   };
 
-  const handlePaymentConfirmation = async () => {
+  const handlePaymentConfirmation = () => {
     if (!proofFile) {
       alert('Por favor, anexe o comprovante de pagamento');
       return;
@@ -114,33 +113,32 @@ export function Payment() {
       const dataFormatada = hoje.toLocaleDateString('pt-BR');
       const valorFormatado = selectedPlan.price.toFixed(2).replace('.', ',');
 
-      const templateParams = {
-        nome_cliente: nome,
-        email_cliente: email,
-        plano: selectedPlan.name,
-        valor: valorFormatado,
-        total: valorFormatado,
-        data_pagamento: dataFormatada,
-        data_envio: dataFormatada,
-        comprovante: `[Comprovante anexado]` // Se quiser, pode enviar uma string ou link
-      };
-
-      await emailjs.send(
-        'service_5cvh0zk',
-        'template_qd8jbbd',
-        templateParams,
-        'lKtYPzGYWDwSXgPCg',
-        {
-          to: 'prismaanalytics80@gmail.com' // E-mail fixo aqui
-        }
+      const subject = encodeURIComponent(`Pagamento Prisma - ${nome}`);
+      const body = encodeURIComponent(
+        `Olá equipe Prisma,\n\n` +
+        `Meu nome: ${nome}\n` +
+        `Meu e-mail: ${email}\n` +
+        `Plano escolhido: ${selectedPlan.name}\n` +
+        `Valor: R$ ${valorFormatado}\n` +
+        `Data do pagamento: ${dataFormatada}\n\n` +
+        `Segue em anexo o comprovante de pagamento.\n\n` +
+        `Atenciosamente,\n${nome}`
       );
+
+      window.location.href = `mailto:prismaanalytics80@gmail.com?subject=${subject}&body=${body}`;
 
       setPaymentStatus('paid');
       setShowConfirmation(true);
-      alert(`Solicitação enviada!\n\nPedido: ${order?.id}\nPlano: ${order?.planName}\nValor: R$ ${selectedPlan.price.toFixed(2)}\n\nO comprovante foi enviado para prismaanalytics80@gmail.com junto com seus dados.`);
+      alert(
+        `E-mail aberto com sucesso!\n\n` +
+        `Pedido: ${order?.id}\n` +
+        `Plano: ${order?.planName}\n` +
+        `Valor: R$ ${selectedPlan.price.toFixed(2)}\n\n` +
+        `Agora é só enviar o e-mail com o comprovante anexado.`
+      );
     } catch (error) {
-      console.error('Erro ao enviar:', error);
-      alert('Erro ao enviar o comprovante. Tente novamente mais tarde.');
+      console.error('Erro ao abrir o e-mail:', error);
+      alert('Erro ao abrir o cliente de e-mail. Tente novamente mais tarde.');
     } finally {
       setLoading(false);
     }
