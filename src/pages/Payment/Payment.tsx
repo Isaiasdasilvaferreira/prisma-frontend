@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, Copy, CheckCircle, Clock, 
   Download, FileCheck, Loader2,
-  QrCode, Sparkles, ChevronRight, Crown,
-  AlertCircle, Mail, User, Shield, Star, Send,
-  Zap, Briefcase, Filter, MessageSquare, TrendingUp,
-  Award, ShieldCheck, Rocket, Target, Users, Eye, Bell
+  QrCode, ChevronRight,
+  AlertCircle, Mail, User, Shield, Send,
+  Filter, MessageSquare, Eye, Bell, Target, Award,
+  CreditCard, Lock, Check
 } from 'lucide-react';
 import './Payment.css';
 
@@ -15,9 +15,7 @@ interface Plan {
   name: string;
   price: number;
   description: string;
-  features: { icon: React.ReactNode; text: string }[];
-  popular?: boolean;
-  icon: React.ReactNode;
+  features: string[];
 }
 
 interface Order {
@@ -39,17 +37,15 @@ export function Payment() {
     id: 'professional',
     name: 'Plano Profissional',
     price: 29.90,
-    description: 'Tudo que você precisa para alavancar sua carreira como designer',
-    icon: <Rocket size={24} />,
+    description: 'Acesso completo a todas as funcionalidades',
     features: [
-      { icon: <Target size={14} />, text: 'Oportunidades ilimitadas' },
-      { icon: <Filter size={14} />, text: 'Filtros avançados de busca' },
-      { icon: <Eye size={14} />, text: 'Visualização de contatos' },
-      { icon: <Bell size={14} />, text: 'Notificações em tempo real' },
-      { icon: <Award size={14} />, text: 'Destaque no perfil' },
-      { icon: <MessageSquare size={14} />, text: 'Suporte prioritário 24h' }
-    ],
-    popular: true
+      'Oportunidades ilimitadas',
+      'Filtros avançados de busca',
+      'Visualização de contatos',
+      'Notificações em tempo real',
+      'Destaque no perfil',
+      'Suporte prioritário 24h'
+    ]
   });
 
   const [order, setOrder] = useState<Order | null>(null);
@@ -126,129 +122,123 @@ export function Payment() {
 
   return (
     <div className="payment-page">
-      <div className="payment-bg-glow" />
-      <div className="payment-bg-grid" />
-      
       <div className="payment-container">
         <button className="payment-back-btn" onClick={handleBack}>
-          <ArrowLeft size={18} />
-          Voltar para planos
+          <ArrowLeft size={16} />
+          Voltar
         </button>
 
-        <div className="payment-main-card">
-          <div className="payment-plan-banner">
-            <div className="payment-plan-banner-icon">
-              <Sparkles size={24} />
+        <div className="payment-card payment-order-card">
+          <div className="payment-order-header">
+            <div className="payment-order-title">
+              <CreditCard size={18} />
+              <span>Resumo do pedido</span>
             </div>
-            <div>
-              <h1 className="payment-plan-banner-title">Assinar Plano Profissional</h1>
-              <p className="payment-plan-banner-sub">Acesso imediato a todas as funcionalidades</p>
-            </div>
-            <div className="payment-plan-banner-price">
-              <span className="payment-plan-banner-currency">R$</span>
-              <span className="payment-plan-banner-amount">29,90</span>
-              <span className="payment-plan-banner-period">/mês</span>
-            </div>
+            <span className="payment-order-id">{order?.id}</span>
           </div>
 
-          <div className="payment-divider" />
-
-          <div className="payment-plan-features-grid">
-            {selectedPlan.features.map((feature, index) => (
-              <div key={index} className="payment-plan-feature">
-                <div className="payment-plan-feature-icon">
-                  {feature.icon}
-                </div>
-                <span>{feature.text}</span>
+          <div className="payment-order-body">
+            <div className="payment-plan-info">
+              <div>
+                <h2 className="payment-plan-name">{selectedPlan.name}</h2>
+                <p className="payment-plan-desc">{selectedPlan.description}</p>
               </div>
-            ))}
+              <div className="payment-plan-price">
+                <span className="payment-price-currency">R$</span>
+                <span className="payment-price-amount">{selectedPlan.price.toFixed(2)}</span>
+                <span className="payment-price-period">/mês</span>
+              </div>
+            </div>
+
+            <div className="payment-features-list">
+              {selectedPlan.features.map((feature, index) => (
+                <div key={index} className="payment-feature-item">
+                  <Check size={14} className="payment-feature-check" />
+                  <span>{feature}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
         {paymentStatus === 'pending' && (
-          <div className="payment-pix-card">
-            <div className="payment-pix-header">
-              <div className="payment-pix-title">
-                <div className="payment-pix-title-icon">
+          <>
+            <div className="payment-card payment-pix-card">
+              <div className="payment-pix-header">
+                <div className="payment-pix-title">
                   <QrCode size={20} />
+                  <h2>Pagamento via Pix</h2>
                 </div>
-                <h2>Pague com Pix</h2>
+                <span className="payment-pix-badge">Instantâneo</span>
               </div>
-              <span className="payment-pix-badge">Instantâneo</span>
-            </div>
 
-            <p className="payment-pix-instruction">
-              Escaneie o QR Code ou copie o código para realizar o pagamento
-            </p>
+              <p className="payment-pix-instruction">
+                Escaneie o QR Code abaixo ou copie o código para realizar o pagamento
+              </p>
 
-            <div className="payment-pix-content">
-              <div className="payment-qr-container">
-                <div className="payment-qr-wrapper">
-                  <img 
-                    src={order?.qrCode} 
-                    alt="QR Code Pix" 
-                    className="payment-qr-code"
-                  />
-                  <div className="payment-qr-pulse" />
-                  <div className="payment-qr-overlay">
-                    <QrCode size={28} />
+              <div className="payment-pix-content">
+                <div className="payment-qr-container">
+                  <div className="payment-qr-wrapper">
+                    <img 
+                      src={order?.qrCode} 
+                      alt="QR Code Pix" 
+                      className="payment-qr-code"
+                    />
                   </div>
+                  <button 
+                    className="payment-copy-btn primary" 
+                    onClick={copyPixCode}
+                  >
+                    {copied ? (
+                      <>
+                        <CheckCircle size={16} />
+                        Copiado!
+                      </>
+                    ) : (
+                      <>
+                        <Copy size={16} />
+                        Copiar código Pix
+                      </>
+                    )}
+                  </button>
                 </div>
-                <button 
-                  className="payment-copy-btn primary" 
-                  onClick={copyPixCode}
-                >
-                  {copied ? (
-                    <>
-                      <CheckCircle size={16} />
-                      Copiado!
-                    </>
-                  ) : (
-                    <>
-                      <Copy size={16} />
-                      Copiar código Pix
-                    </>
-                  )}
-                </button>
-              </div>
 
-              <div className="payment-pix-code-container">
-                <div className="payment-pix-code-label">
-                  <span>Código para copiar e colar</span>
+                <div className="payment-pix-code-container">
+                  <span className="payment-pix-code-label">Código para copiar e colar</span>
+                  <div className="payment-pix-code-box">
+                    <p>{order?.pixCode}</p>
+                  </div>
+                  <button 
+                    className="payment-copy-btn secondary" 
+                    onClick={copyPixCode}
+                  >
+                    {copied ? (
+                      <>
+                        <CheckCircle size={16} />
+                        Copiado!
+                      </>
+                    ) : (
+                      <>
+                        <Copy size={16} />
+                        Copiar código
+                      </>
+                    )}
+                  </button>
                 </div>
-                <div className="payment-pix-code-box">
-                  <p>{order?.pixCode}</p>
-                </div>
-                <button 
-                  className="payment-copy-btn secondary" 
-                  onClick={copyPixCode}
-                >
-                  {copied ? (
-                    <>
-                      <CheckCircle size={16} />
-                      Copiado!
-                    </>
-                  ) : (
-                    <>
-                      <Copy size={16} />
-                      Copiar código
-                    </>
-                  )}
-                </button>
               </div>
             </div>
 
-            <div className="payment-proof-section">
+            <div className="payment-card payment-proof-card">
               <div className="payment-proof-header">
                 <div className="payment-proof-title">
                   <Send size={18} />
-                  <h3>Já fez o pagamento?</h3>
+                  <h3>Confirmar pagamento</h3>
                 </div>
-                <span className="payment-proof-badge">Envio obrigatório</span>
+                <span className="payment-proof-badge">Obrigatório</span>
               </div>
 
               <p className="payment-proof-instruction">
-                Envie o comprovante para confirmar o pagamento e ativar seu plano
+                Já fez o pagamento? Envie o comprovante para ativar seu plano
               </p>
               
               <div className="payment-upload-area">
@@ -296,16 +286,16 @@ export function Payment() {
                 )}
               </button>
             </div>
-          </div>
+          </>
         )}
 
         {showConfirmation && paymentStatus === 'paid' && (
-          <div className="payment-confirmation-card">
+          <div className="payment-card payment-confirmation-card">
             <div className="payment-confirmation-icon">
               <CheckCircle size={48} />
             </div>
-            <h2>Pagamento confirmado!</h2>
-            <p>Seu comprovante foi enviado para nossa equipe.</p>
+            <h2>Pagamento confirmado</h2>
+            <p>Seu comprovante foi enviado para análise da nossa equipe</p>
             
             <div className="payment-confirmation-details">
               <div className="payment-confirmation-item">
@@ -331,24 +321,24 @@ export function Payment() {
                 className="payment-approve-btn"
                 onClick={handleApprovePayment}
               >
-                <ShieldCheck size={16} />
+                <Shield size={16} />
                 Aprovar (simulação)
               </button>
               <p className="payment-approve-note">
                 <AlertCircle size={12} />
-                Na versão real, apenas a equipe Prisma pode aprovar
+                Apenas a equipe Prisma pode aprovar pagamentos
               </p>
             </div>
           </div>
         )}
 
         {paymentStatus === 'active' && (
-          <div className="payment-active-card">
+          <div className="payment-card payment-active-card">
             <div className="payment-active-icon">
-              <Sparkles size={48} />
+              <CheckCircle size={48} />
             </div>
-            <h2>Plano ativado! 🎉</h2>
-            <p>Seu plano {order?.planName} já está disponível.</p>
+            <h2>Plano ativado!</h2>
+            <p>Seu plano {order?.planName} já está disponível</p>
             
             <div className="payment-active-details">
               <div className="payment-active-item">
@@ -369,7 +359,7 @@ export function Payment() {
               className="payment-start-btn"
               onClick={() => navigate('/dashboard')}
             >
-              Acessar agora
+              Acessar dashboard
               <ChevronRight size={18} />
             </button>
           </div>
@@ -377,8 +367,8 @@ export function Payment() {
 
         <div className="payment-footer">
           <div className="payment-footer-item">
-            <Shield size={14} />
-            <span>Pagamento seguro via Pix</span>
+            <Lock size={14} />
+            <span>Pagamento seguro</span>
           </div>
           <div className="payment-footer-item">
             <Clock size={14} />
