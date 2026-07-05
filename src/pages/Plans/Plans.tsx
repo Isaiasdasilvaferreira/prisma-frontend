@@ -7,7 +7,10 @@ import { Card } from '../../components/Card/Card';
 import { 
   Check, Star, Zap, Sparkles, Crown, Shield, ArrowRight,
   ChevronDown, ChevronUp, HelpCircle, TrendingUp,
-  Lock, Headphones, MessageSquare, Building2, Clock
+  Lock, Headphones, MessageSquare, Building2, Clock,
+  Filter, Mail, LayoutDashboard, Zap as ZapIcon, 
+  Infinity, Search, Headphones as HeadphonesIcon,
+  BarChart, Send, Sliders
 } from 'lucide-react';
 import './Plans.css';
 
@@ -24,14 +27,10 @@ const plans = [
     popular: false,
     disabled: false,
     features: [
-      { text: '10 oportunidades por mês', included: true },
-      { text: 'Busca básica', included: true },
-      { text: 'Perfil profissional', included: true },
+      { text: '10 oportunidades por semana', included: true },
       { text: 'Suporte por email', included: true },
       { text: 'Dashboard básico', included: true },
-      { text: 'Gerador de propostas', included: false },
-      { text: 'Gerador de mensagens', included: false },
-      { text: 'Filtros avançados', included: false },
+      { text: 'Filtros básicos', included: true },
     ],
     cta: 'Começar grátis',
     variant: 'outline' as const,
@@ -50,11 +49,9 @@ const plans = [
     disabled: false,
     features: [
       { text: 'Oportunidades ilimitadas', included: true, highlight: true },
-      { text: 'Busca avançada com IA', included: true, highlight: true },
-      { text: 'Perfil profissional', included: true },
+      { text: 'Busca aprofundada', included: true, highlight: true },
       { text: 'Suporte prioritário 24/7', included: true },
       { text: 'Dashboard avançado', included: true },
-      { text: 'Gerador de propostas', included: true, highlight: true },
       { text: 'Gerador de mensagens', included: true, highlight: true },
       { text: 'Filtros avançados', included: true },
     ],
@@ -99,15 +96,12 @@ const faqItems = [
 ];
 
 const comparisons = [
-  { feature: 'Oportunidades', starter: '10/mês', professional: 'Ilimitadas', enterprise: '***' },
-  { feature: 'Busca com IA', starter: 'Básica', professional: 'Avançada', enterprise: '***' },
-  { feature: 'Gerador de propostas', starter: '—', professional: '✓', enterprise: '***' },
-  { feature: 'Gerador de mensagens', starter: '—', professional: '✓', enterprise: '***' },
-  { feature: 'Usuários', starter: '1', professional: '1', enterprise: '***' },
+  { feature: 'Oportunidades', starter: '10/semana', professional: 'Ilimitadas', enterprise: '***' },
+  { feature: 'Busca', starter: 'Básica', professional: 'Aprofundada', enterprise: '***' },
   { feature: 'Suporte', starter: 'Email', professional: 'Prioritário 24/7', enterprise: '***' },
-  { feature: 'Relatórios', starter: '—', professional: 'Semanais', enterprise: '***' },
-  { feature: 'API', starter: '—', professional: '—', enterprise: '***' },
-  { feature: 'Gerente de conta', starter: '—', professional: '—', enterprise: '***' },
+  { feature: 'Dashboard', starter: 'Básico', professional: 'Avançado', enterprise: '***' },
+  { feature: 'Gerador de mensagens', starter: '—', professional: '✓', enterprise: '***' },
+  { feature: 'Filtros', starter: 'Básicos', professional: 'Avançados', enterprise: '***' },
 ];
 
 export function Plans() {
