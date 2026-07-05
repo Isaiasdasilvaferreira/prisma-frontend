@@ -129,8 +129,7 @@ export function Payment() {
         total: valorFormatado,
         data_pagamento: dataFormatada,
         data_envio: dataFormatada,
-        comprovante: base64,
-        to_email: 'prismaanalytics80@gmail.com'
+        comprovante: base64
       };
 
       await emailjs.send(
