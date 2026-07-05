@@ -63,7 +63,7 @@ const plans = [
     id: 'enterprise',
     name: 'Enterprise',
     subtitle: 'Para times e agências',
-    price: '***',
+    price: 'Em breve',
     period: '',
     icon: Building2,
     color: '#a855f7',
