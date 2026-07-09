@@ -1,32 +1,35 @@
 .card {
-  background: #ffffff;
-  border: 1px solid rgba(0,0,0,0.06);
-  border-radius: 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
   padding: 28px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--transition-smooth);
+  position: relative;
 }
 
 .card-hover:hover {
-  border-color: rgba(0,0,0,0.1);
+  border-color: #333;
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+  box-shadow: var(--shadow-md);
 }
 
 .card-glow {
-  position: relative;
   overflow: hidden;
 }
 
-.card-glow::after {
+.card-glow::before {
   content: '';
   position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at center, rgba(247,56,134,0.03) 0%, transparent 70%);
-  opacity: 0;
-  transition: opacity 0.4s ease;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.02) 0%, transparent 60%);
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.6s ease;
   pointer-events: none;
 }
 
-.card-glow:hover::after {
-  opacity: 1;
+.card-glow:hover::before {
+  transform: translate(-50%, -50%) scale(1);
 }
