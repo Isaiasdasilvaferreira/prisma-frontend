@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import Landing from '../pages/Landing/Landing';
+import { Landing } from '../pages/Landing/Landing';
 import { Login } from '../pages/Login/Login';
 import { Register } from '../pages/Register/Register';
 import { Onboarding } from '../pages/Onboarding/Onboarding';
