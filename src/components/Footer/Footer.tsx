@@ -1,54 +1,63 @@
+// Footer.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight } from 'lucide-react';
 import './Footer.css';
 
 export function Footer() {
   return (
     <footer className="footer">
-      <div className="footer-grid">
-        <div className="footer-brand">
-          <div className="footer-logo">
-            <span className="footer-logo-icon">◆</span>
-            PrismA
+      <div className="footer-container">
+        <div className="footer-grid">
+          <div className="footer-brand">
+            <Link to="/" className="footer-logo">
+              <span className="footer-logo-mark">◆</span>
+              PrismA
+            </Link>
+            <p className="footer-description">
+              Inteligência artificial que conecta designers às melhores oportunidades do mercado.
+            </p>
           </div>
-          <p className="footer-tagline">
-            Inteligência artificial que encontra as melhores oportunidades para designers e agências.
-          </p>
-          <div className="footer-social">
-            <span className="footer-dot" />
-            <span className="footer-dot" />
-            <span className="footer-dot" />
+          
+          <div className="footer-links">
+            <div className="footer-column">
+              <h4 className="footer-column-title">Produto</h4>
+              <Link to="/#como-funciona" className="footer-link">Como funciona</Link>
+              <Link to="/#beneficios" className="footer-link">Funcionalidades</Link>
+              <Link to="/#planos" className="footer-link">Planos</Link>
+              <Link to="/" className="footer-link">Atualizações</Link>
+            </div>
+            
+            <div className="footer-column">
+              <h4 className="footer-column-title">Empresa</h4>
+              <Link to="/" className="footer-link">Sobre nós</Link>
+              <Link to="/" className="footer-link">Blog</Link>
+              <Link to="/" className="footer-link">Carreiras</Link>
+              <Link to="/" className="footer-link">Contato</Link>
+            </div>
+            
+            <div className="footer-column">
+              <h4 className="footer-column-title">Legal</h4>
+              <Link to="/" className="footer-link">Privacidade</Link>
+              <Link to="/" className="footer-link">Termos de uso</Link>
+              <Link to="/" className="footer-link">Política de cookies</Link>
+            </div>
+            
+            <div className="footer-column">
+              <h4 className="footer-column-title">Redes sociais</h4>
+              <Link to="/" className="footer-link">Instagram</Link>
+              <Link to="/" className="footer-link">LinkedIn</Link>
+              <Link to="/" className="footer-link">Twitter</Link>
+              <Link to="/" className="footer-link">YouTube</Link>
+            </div>
           </div>
         </div>
         
-        <div className="footer-columns">
-          <div className="footer-column">
-            <h4>Produto</h4>
-            <Link to="/#como-funciona">Como funciona</Link>
-            <Link to="/#beneficios">Benefícios</Link>
-            <Link to="/plans">Planos</Link>
-            <Link to="/">Atualizações</Link>
-          </div>
-          <div className="footer-column">
-            <h4>Empresa</h4>
-            <Link to="/">Sobre</Link>
-            <Link to="/">Blog</Link>
-            <Link to="/">Carreiras</Link>
-            <Link to="/">Contato <ArrowUpRight size={12} /></Link>
-          </div>
-          <div className="footer-column">
-            <h4>Legal</h4>
-            <Link to="/">Privacidade</Link>
-            <Link to="/">Termos de uso</Link>
-            <Link to="/">Cookies</Link>
-          </div>
+        <div className="footer-bottom">
+          <div className="footer-divider" />
+          <p className="footer-copyright">
+            © {new Date().getFullYear()} PrismA. Todos os direitos reservados.
+          </p>
         </div>
-      </div>
-      
-      <div className="footer-bottom">
-        <div className="footer-bottom-line" />
-        <p>© 2026 PrismA. Todos os direitos reservados.</p>
       </div>
     </footer>
   );
