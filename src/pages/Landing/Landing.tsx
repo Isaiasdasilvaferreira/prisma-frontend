@@ -11,7 +11,7 @@ import {
   Ruler, Droplets, Brush, Eraser, Shapes, Sliders,
   Globe, Clock, Shield, Users, Target, TrendingUp,
   CheckCircle, MessageSquare, FileText, Search,
-  Play, Pause, Building2
+  Play, Pause, Building2, Hexagon, Diamond, Circle
 } from 'lucide-react';
 import './Landing.css';
 
@@ -19,6 +19,7 @@ export function Landing() {
   const [isPlaying, setIsPlaying] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
   const [currentStatIndex, setCurrentStatIndex] = useState(0);
+  const [activeAboutFeature, setActiveAboutFeature] = useState(0);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -26,10 +27,39 @@ export function Landing() {
   const animationRef = useRef<number>(0);
   const scrollPosition = useRef(0);
   const lastTimeRef = useRef(0);
+  const cursorRef = useRef<HTMLDivElement>(null);
+  const cursorDotRef = useRef<HTMLDivElement>(null);
 
   const designIcons = [
     PenTool, Palette, Layers, Grid3X3, Figma, Scissors, 
     Type, Camera, Ruler, Droplets, Brush, Eraser, Shapes, Sliders
+  ];
+
+  const aboutFeatures = [
+    {
+      icon: Globe,
+      title: "Monitoramento Global",
+      description: "Rastreamos mais de 50 fontes diferentes simultaneamente, 24 horas por dia, 7 dias por semana.",
+      color: "#f73886"
+    },
+    {
+      icon: Target,
+      title: "Match Inteligente",
+      description: "Nossa IA analisa seu perfil e habilidades para encontrar as oportunidades com maior compatibilidade.",
+      color: "#f73886"
+    },
+    {
+      icon: Shield,
+      title: "Dados Protegidos",
+      description: "Segurança de ponta com criptografia avançada. Seus dados estão sempre seguros.",
+      color: "#f73886"
+    },
+    {
+      icon: Zap,
+      title: "Alertas em Tempo Real",
+      description: "Receba notificações instantâneas quando uma nova oportunidade compatível surgir.",
+      color: "#f73886"
+    }
   ];
 
   const testimonials = [
@@ -39,7 +69,7 @@ export function Landing() {
       text: 'A PrismA mudou completamente minha forma de encontrar clientes. Em um mês, consegui três projetos que pagaram mais do que eu ganhava em três meses.',
       avatar: 'AS',
       stats: 'Faturamento 3x maior',
-      color: '#22c55e'
+      color: '#f73886'
     },
     {
       name: 'Carlos Mendes',
@@ -47,7 +77,7 @@ export function Landing() {
       text: 'Nossa agência reduziu o tempo de prospecção em 80%. Agora focamos no que realmente importa: criar designs incríveis para nossos clientes.',
       avatar: 'CM',
       stats: '80% menos tempo',
-      color: '#3b82f6'
+      color: '#f73886'
     },
     {
       name: 'Julia Costa',
@@ -55,7 +85,7 @@ export function Landing() {
       text: 'As oportunidades que a IA encontra são extremamente relevantes. Não perco mais tempo filtrando vagas que não têm nada a ver comigo.',
       avatar: 'JC',
       stats: '95% de relevância',
-      color: '#a855f7'
+      color: '#f73886'
     },
     {
       name: 'Pedro Santos',
@@ -63,7 +93,7 @@ export function Landing() {
       text: 'Consegui clientes internacionais que eu jamais alcançaria sozinho. A plataforma expandiu meus horizontes profissionais.',
       avatar: 'PS',
       stats: 'Clientes em 5 países',
-      color: '#f59e0b'
+      color: '#f73886'
     },
     {
       name: 'Marina Lima',
@@ -71,7 +101,7 @@ export function Landing() {
       text: 'Desde que comecei a usar a PrismA, minha carteira de clientes nunca mais ficou vazia. A IA encontra projetos que realmente combinam comigo.',
       avatar: 'ML',
       stats: '100% de ocupação',
-      color: '#ec4899'
+      color: '#f73886'
     },
     {
       name: 'Lucas Ferreira',
@@ -79,7 +109,7 @@ export function Landing() {
       text: 'A melhor ferramenta de prospecção que já usei. A IA é precisa e as oportunidades são de alta qualidade. Recomendo para todo designer.',
       avatar: 'LF',
       stats: '98% de satisfação',
-      color: '#14b8a6'
+      color: '#f73886'
     }
   ];
 
@@ -113,6 +143,13 @@ export function Landing() {
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
+      if (cursorRef.current && cursorDotRef.current) {
+        cursorRef.current.style.left = e.clientX + 'px';
+        cursorRef.current.style.top = e.clientY + 'px';
+        cursorDotRef.current.style.left = e.clientX + 'px';
+        cursorDotRef.current.style.top = e.clientY + 'px';
+      }
+
       if (heroRef.current) {
         const rect = heroRef.current.getBoundingClientRect();
         mousePosition.current = {
@@ -122,13 +159,13 @@ export function Landing() {
         
         const shapes = heroRef.current.querySelectorAll('.hero-shape') as NodeListOf<HTMLElement>;
         shapes.forEach((shape, index) => {
-          const depth = (index + 1) * 15;
+          const depth = (index + 1) * 20;
           shape.style.transform = `translate(${mousePosition.current.x * depth}px, ${mousePosition.current.y * depth}px)`;
         });
 
         const mockup = heroRef.current.querySelector('.hero-mockup') as HTMLElement;
         if (mockup) {
-          mockup.style.transform = `perspective(1000px) rotateY(${mousePosition.current.x * 3}deg) rotateX(${-mousePosition.current.y * 3}deg)`;
+          mockup.style.transform = `perspective(1000px) rotateY(${mousePosition.current.x * 5}deg) rotateX(${-mousePosition.current.y * 5}deg)`;
         }
       }
     };
@@ -183,6 +220,9 @@ export function Landing() {
 
   return (
     <div className="landing">
+      <div className="custom-cursor" ref={cursorRef} />
+      <div className="custom-cursor-dot" ref={cursorDotRef} />
+      
       <Navbar />
       
       <section className="hero" ref={heroRef}>
@@ -201,7 +241,7 @@ export function Landing() {
                   left: `${10 + (i % 5) * 20}%`,
                   top: `${5 + Math.floor(i / 5) * 25}%`,
                   animationDelay: `${i * 0.3}s`,
-                  opacity: 0.03 + (i % 3) * 0.02
+                  opacity: 0.04 + (i % 3) * 0.03
                 }}
               >
                 <Icon size={24 + (i % 3) * 12} />
@@ -212,41 +252,41 @@ export function Landing() {
           <svg className="hero-shape hero-shape-1" viewBox="0 0 300 300">
             <defs>
               <linearGradient id="shapeGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="rgba(255,255,255,0.08)" />
-                <stop offset="100%" stopColor="rgba(255,255,255,0.02)" />
+                <stop offset="0%" stopColor="#f73886" stopOpacity="0.15" />
+                <stop offset="100%" stopColor="#f73886" stopOpacity="0.03" />
               </linearGradient>
             </defs>
-            <circle cx="150" cy="150" r="120" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
-            <circle cx="150" cy="150" r="90" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1.5" strokeDasharray="8 6" />
-            <circle cx="150" cy="150" r="60" fill="url(#shapeGrad1)" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" />
-            <circle cx="150" cy="150" r="25" fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="1" strokeDasharray="4 4" />
-            <circle cx="150" cy="150" r="8" fill="white" opacity="0.3" />
+            <circle cx="150" cy="150" r="120" fill="none" stroke="#f73886" strokeOpacity="0.08" strokeWidth="1" />
+            <circle cx="150" cy="150" r="90" fill="none" stroke="#f73886" strokeOpacity="0.12" strokeWidth="1.5" strokeDasharray="8 6" />
+            <circle cx="150" cy="150" r="60" fill="url(#shapeGrad1)" stroke="#f73886" strokeOpacity="0.15" strokeWidth="1.5" />
+            <circle cx="150" cy="150" r="25" fill="none" stroke="#f73886" strokeOpacity="0.18" strokeWidth="1" strokeDasharray="4 4" />
+            <circle cx="150" cy="150" r="8" fill="#f73886" opacity="0.4" />
           </svg>
           
           <svg className="hero-shape hero-shape-2" viewBox="0 0 250 250">
             <defs>
               <linearGradient id="shapeGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="rgba(255,255,255,0.06)" />
-                <stop offset="100%" stopColor="rgba(255,255,255,0.01)" />
+                <stop offset="0%" stopColor="#f73886" stopOpacity="0.1" />
+                <stop offset="100%" stopColor="#f73886" stopOpacity="0.02" />
               </linearGradient>
             </defs>
-            <rect x="25" y="25" width="200" height="200" rx="40" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="1" transform="rotate(20 125 125)" />
-            <rect x="50" y="50" width="150" height="150" rx="30" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1.5" strokeDasharray="7 5" transform="rotate(20 125 125)" />
-            <rect x="75" y="75" width="100" height="100" rx="20" fill="url(#shapeGrad2)" stroke="rgba(255,255,255,0.08)" strokeWidth="1" transform="rotate(20 125 125)" />
+            <rect x="25" y="25" width="200" height="200" rx="40" fill="none" stroke="#f73886" strokeOpacity="0.06" strokeWidth="1" transform="rotate(20 125 125)" />
+            <rect x="50" y="50" width="150" height="150" rx="30" fill="none" stroke="#f73886" strokeOpacity="0.1" strokeWidth="1.5" strokeDasharray="7 5" transform="rotate(20 125 125)" />
+            <rect x="75" y="75" width="100" height="100" rx="20" fill="url(#shapeGrad2)" stroke="#f73886" strokeOpacity="0.12" strokeWidth="1" transform="rotate(20 125 125)" />
           </svg>
           
           <svg className="hero-shape hero-shape-3" viewBox="0 0 200 200">
-            <polygon points="100,15 185,170 15,170" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="1" />
-            <polygon points="100,40 160,150 40,150" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1" strokeDasharray="6 4" />
-            <polygon points="100,65 135,130 65,130" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-            <circle cx="100" cy="100" r="4" fill="white" opacity="0.2" />
+            <polygon points="100,15 185,170 15,170" fill="none" stroke="#f73886" strokeOpacity="0.06" strokeWidth="1" />
+            <polygon points="100,40 160,150 40,150" fill="none" stroke="#f73886" strokeOpacity="0.1" strokeWidth="1" strokeDasharray="6 4" />
+            <polygon points="100,65 135,130 65,130" fill="rgba(247,56,134,0.03)" stroke="#f73886" strokeOpacity="0.12" strokeWidth="1" />
+            <circle cx="100" cy="100" r="4" fill="#f73886" opacity="0.3" />
           </svg>
         </div>
         
         <div className="hero-container">
           <div className="hero-content">
             <div className="hero-badge animate-fade-in-up">
-              <Sparkles size={14} />
+              <Sparkles size={14} color="#f73886" />
               <span>Lançamento 2024</span>
               <span className="hero-badge-dot" />
               <span>IA para designers</span>
@@ -294,7 +334,7 @@ export function Landing() {
               <div className="hero-trust-text">
                 <div className="hero-trust-stars">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} size={12} fill="#f59e0b" color="#f59e0b" />
+                    <Star key={i} size={12} fill="#f73886" color="#f73886" />
                   ))}
                   <span className="hero-trust-rating">4.9</span>
                 </div>
@@ -317,41 +357,44 @@ export function Landing() {
           </div>
           
           <div className="hero-visual animate-fade-in delay-400">
-            <div className="hero-mockup">
-              <div className="hero-mockup-header">
-                <div className="hero-mockup-dots"><span /><span /><span /></div>
-                <div className="hero-mockup-url">prisma.design</div>
-              </div>
-              <div className="hero-mockup-body">
-                <div className="hero-mockup-sidebar">
-                  {[0, 1, 2, 3].map((i) => (
-                    <div key={i} className={`hero-mockup-sidebar-item ${i === 0 ? 'active' : ''}`}>
-                      {i === 0 && <Search size={12} />}
-                    </div>
-                  ))}
+            <div className="hero-mockup-wrapper">
+              <div className="hero-mockup-glow" />
+              <div className="hero-mockup">
+                <div className="hero-mockup-header">
+                  <div className="hero-mockup-dots"><span /><span /><span /></div>
+                  <div className="hero-mockup-url">prisma.design</div>
                 </div>
-                <div className="hero-mockup-main">
-                  {[0, 1, 2].map((i) => (
-                    <div key={i} className="hero-mockup-card" style={{ opacity: 1 - i * 0.25 }}>
-                      <div className="hero-mockup-card-row">
-                        <div className="hero-mockup-avatar" />
-                        <div>
-                          <div className="hero-mockup-line" style={{width: `${70 - i * 10}px`}} />
-                          <div className="hero-mockup-line" style={{width: `${45 - i * 5}px`}} />
+                <div className="hero-mockup-body">
+                  <div className="hero-mockup-sidebar">
+                    {[0, 1, 2, 3].map((i) => (
+                      <div key={i} className={`hero-mockup-sidebar-item ${i === 0 ? 'active' : ''}`}>
+                        {i === 0 && <Search size={12} />}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="hero-mockup-main">
+                    {[0, 1, 2].map((i) => (
+                      <div key={i} className="hero-mockup-card" style={{ opacity: 1 - i * 0.25 }}>
+                        <div className="hero-mockup-card-row">
+                          <div className="hero-mockup-avatar" />
+                          <div>
+                            <div className="hero-mockup-line" style={{width: `${70 - i * 10}px`}} />
+                            <div className="hero-mockup-line" style={{width: `${45 - i * 5}px`}} />
+                          </div>
+                        </div>
+                        <div className="hero-mockup-line" style={{width: `${90 - i * 10}%`}} />
+                        <div className="hero-mockup-line" style={{width: `${65 - i * 10}%`}} />
+                        <div className="hero-mockup-tags">
+                          <span>UI Design</span>
+                          <span>Remoto</span>
+                          <span className="hero-mockup-match">{98 - i * 5}% match</span>
                         </div>
                       </div>
-                      <div className="hero-mockup-line" style={{width: `${90 - i * 10}%`}} />
-                      <div className="hero-mockup-line" style={{width: `${65 - i * 10}%`}} />
-                      <div className="hero-mockup-tags">
-                        <span>UI Design</span>
-                        <span>Remoto</span>
-                        <span className="hero-mockup-match">{98 - i * 5}% match</span>
-                      </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
+                <div className="hero-mockup-scan-line" />
               </div>
-              <div className="hero-mockup-scan-line" />
             </div>
             
             {[PenTool, Palette, Layers, Grid3X3, Type, Camera].map((Icon, i) => (
@@ -369,44 +412,82 @@ export function Landing() {
         </div>
       </section>
 
-      <section id="quem-somos" className="section">
+      <section id="quem-somos" className="section about-section">
         <div className="section-container">
           <div className="about-grid">
             <div className="about-content reveal">
-              <span className="section-label">Quem somos</span>
-              <h2 className="section-title">O que é a PrismA?</h2>
-              <p className="about-text">
-                Somos uma plataforma que <strong>inverte o processo de prospecção</strong>. 
-                Em vez de você perder horas procurando clientes, nossa IA trabalha 
-                incansavelmente para encontrar as oportunidades certas para você.
-              </p>
-              <div className="about-highlights">
-                <div className="about-highlight"><Globe size={16} /><span>+50 fontes monitoradas</span></div>
-                <div className="about-highlight"><Target size={16} /><span>Match por compatibilidade</span></div>
-                <div className="about-highlight"><Shield size={16} /><span>Dados 100% seguros</span></div>
+              <span className="section-label">
+                <Diamond size={12} color="#f73886" />
+                Quem somos
+              </span>
+              <h2 className="section-title">O que é a <span className="text-gradient">PrismA?</span></h2>
+              
+              <div className="about-interactive">
+                {aboutFeatures.map((feature, index) => (
+                  <div 
+                    key={index}
+                    className={`about-feature-card ${activeAboutFeature === index ? 'active' : ''}`}
+                    onMouseEnter={() => setActiveAboutFeature(index)}
+                    onClick={() => setActiveAboutFeature(index)}
+                  >
+                    <div className="about-feature-icon" style={{ background: `${feature.color}15` }}>
+                      <feature.icon size={20} color={feature.color} />
+                    </div>
+                    <div className="about-feature-content">
+                      <h3 className="about-feature-title">{feature.title}</h3>
+                      <p className="about-feature-desc">{feature.description}</p>
+                    </div>
+                    <div className="about-feature-indicator" style={{ background: feature.color }} />
+                  </div>
+                ))}
               </div>
+              
               <div className="about-stats">
-                <div className="about-stat"><span className="about-stat-value">24/7</span><span className="about-stat-label">Monitoramento</span></div>
-                <div className="about-stat"><span className="about-stat-value">15k+</span><span className="about-stat-label">Oportunidades/mês</span></div>
-                <div className="about-stat"><span className="about-stat-value">98%</span><span className="about-stat-label">Precisão</span></div>
+                <div className="about-stat">
+                  <span className="about-stat-value">24/7</span>
+                  <span className="about-stat-label">Monitoramento</span>
+                </div>
+                <div className="about-stat-divider" />
+                <div className="about-stat">
+                  <span className="about-stat-value">15k+</span>
+                  <span className="about-stat-label">Oportunidades/mês</span>
+                </div>
+                <div className="about-stat-divider" />
+                <div className="about-stat">
+                  <span className="about-stat-value">98%</span>
+                  <span className="about-stat-label">Precisão</span>
+                </div>
               </div>
             </div>
+            
             <div className="about-visual reveal">
-              <div className="about-geometric">
-                <svg viewBox="0 0 250 250" className="about-svg">
+              <div className="about-visual-container">
+                <div className="about-orb about-orb-1" />
+                <div className="about-orb about-orb-2" />
+                <div className="about-orb about-orb-3" />
+                
+                <svg viewBox="0 0 300 300" className="about-svg-main">
                   <defs>
-                    <linearGradient id="aboutGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="rgba(255,255,255,0.1)" />
-                      <stop offset="100%" stopColor="rgba(255,255,255,0.03)" />
+                    <linearGradient id="aboutMainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#f73886" stopOpacity="0.2" />
+                      <stop offset="100%" stopColor="#f73886" stopOpacity="0.05" />
                     </linearGradient>
                   </defs>
-                  <circle cx="125" cy="125" r="110" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
-                  <circle cx="125" cy="125" r="85" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1.5" strokeDasharray="8 6" />
-                  <circle cx="125" cy="125" r="55" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" strokeDasharray="4 4" />
-                  <circle cx="125" cy="125" r="35" fill="url(#aboutGrad1)" stroke="rgba(255,255,255,0.12)" strokeWidth="2" />
-                  <circle cx="125" cy="125" r="10" fill="white" opacity="0.4" />
+                  <circle cx="150" cy="150" r="130" fill="none" stroke="#f73886" strokeOpacity="0.08" strokeWidth="1" />
+                  <circle cx="150" cy="150" r="100" fill="none" stroke="#f73886" strokeOpacity="0.12" strokeWidth="1.5" strokeDasharray="10 8" />
+                  <circle cx="150" cy="150" r="70" fill="url(#aboutMainGrad)" stroke="#f73886" strokeOpacity="0.15" strokeWidth="2" />
+                  <circle cx="150" cy="150" r="40" fill="none" stroke="#f73886" strokeOpacity="0.2" strokeWidth="1.5" strokeDasharray="5 5" />
+                  <circle cx="150" cy="150" r="15" fill="#f73886" opacity="0.5">
+                    <animate attributeName="r" values="15;18;15" dur="3s" repeatCount="indefinite" />
+                    <animate attributeName="opacity" values="0.5;0.8;0.5" dur="3s" repeatCount="indefinite" />
+                  </circle>
                 </svg>
-                <div className="about-orb" />
+                
+                <svg viewBox="0 0 200 200" className="about-svg-secondary">
+                  <Hexagon size={80} x="60" y="60" color="#f73886" opacity="0.1" strokeWidth={1} />
+                  <Hexagon size={50} x="75" y="75" color="#f73886" opacity="0.2" strokeWidth={1.5} />
+                  <Hexagon size={25} x="87.5" y="87.5" color="#f73886" opacity="0.4" fill="rgba(247,56,134,0.1)" />
+                </svg>
               </div>
             </div>
           </div>
@@ -416,7 +497,10 @@ export function Landing() {
       <section id="como-funciona" className="section section-alt">
         <div className="section-container">
           <div className="section-header reveal">
-            <span className="section-label">Processo</span>
+            <span className="section-label">
+              <Hexagon size={12} color="#f73886" />
+              Processo
+            </span>
             <h2 className="section-title">Como funciona</h2>
             <p className="section-subtitle">Em três etapas simples, sua prospecção está automatizada</p>
           </div>
@@ -429,10 +513,12 @@ export function Landing() {
             ].map((step, i) => (
               <React.Fragment key={i}>
                 {i > 0 && (
-                  <div className="step-arrow reveal">
-                    <svg width="80" height="40" viewBox="0 0 80 40">
-                      <path d="M0 20 Q40 0 75 20" stroke="rgba(255,255,255,0.12)" strokeWidth="1.5" fill="none" strokeDasharray="3 3" />
-                      <polygon points="70,14 80,20 70,26" fill="rgba(255,255,255,0.2)" />
+                  <div className="step-connector reveal">
+                    <svg width="100%" height="40" viewBox="0 0 100 40" preserveAspectRatio="none">
+                      <path d="M0 20 Q50 0 100 20" stroke="#f73886" strokeOpacity="0.2" strokeWidth="1.5" fill="none" strokeDasharray="4 4" />
+                      <circle cx="95" cy="20" r="4" fill="#f73886" opacity="0.5">
+                        <animate attributeName="cx" from="5" to="95" dur="2s" repeatCount="indefinite" />
+                      </circle>
                     </svg>
                   </div>
                 )}
@@ -454,26 +540,32 @@ export function Landing() {
       <section id="beneficios" className="section">
         <div className="section-container">
           <div className="section-header reveal">
-            <span className="section-label">Vantagens</span>
+            <span className="section-label">
+              <Circle size={12} color="#f73886" fill="#f73886" />
+              Vantagens
+            </span>
             <h2 className="section-title">Benefícios</h2>
             <p className="section-subtitle">Por que os melhores designers escolhem a PrismA</p>
           </div>
           
           <div className="benefits-grid">
             {[
-              { icon: Zap, color: '#f59e0b', title: 'Automação total', desc: 'Nunca mais perca tempo procurando clientes manualmente.' },
-              { icon: Target, color: '#22c55e', title: 'Match inteligente', desc: 'Algoritmo que entende seu perfil e encontra as oportunidades certas.' },
-              { icon: Globe, color: '#3b82f6', title: 'Múltiplas fontes', desc: 'Redes sociais, portais de vagas e comunidades em um só lugar.' },
-              { icon: Palette, color: '#a855f7', title: 'Foco em design', desc: 'Plataforma pensada exclusivamente para profissionais criativos.' },
-              { icon: TrendingUp, color: '#ec4899', title: 'Insights valiosos', desc: 'Dados e métricas do mercado de design.' },
-              { icon: FileText, color: '#14b8a6', title: 'Propostas com IA', desc: 'Gere propostas e mensagens profissionais em segundos.' }
+              { icon: Zap, color: '#f73886', title: 'Automação total', desc: 'Nunca mais perca tempo procurando clientes manualmente.' },
+              { icon: Target, color: '#f73886', title: 'Match inteligente', desc: 'Algoritmo que entende seu perfil e encontra as oportunidades certas.' },
+              { icon: Globe, color: '#f73886', title: 'Múltiplas fontes', desc: 'Redes sociais, portais de vagas e comunidades em um só lugar.' },
+              { icon: Palette, color: '#f73886', title: 'Foco em design', desc: 'Plataforma pensada exclusivamente para profissionais criativos.' },
+              { icon: TrendingUp, color: '#f73886', title: 'Insights valiosos', desc: 'Dados e métricas do mercado de design.' },
+              { icon: FileText, color: '#f73886', title: 'Propostas com IA', desc: 'Gere propostas e mensagens profissionais em segundos.' }
             ].map((benefit, index) => (
               <Card key={index} className="benefit-card reveal" glow>
-                <div className="benefit-icon" style={{ background: `${benefit.color}15` }}>
-                  <benefit.icon size={24} style={{ color: benefit.color }} />
+                <div className="benefit-icon-wrapper">
+                  <div className="benefit-icon" style={{ background: `${benefit.color}10` }}>
+                    <benefit.icon size={24} color={benefit.color} />
+                  </div>
                 </div>
                 <h3 className="benefit-title">{benefit.title}</h3>
                 <p className="benefit-desc">{benefit.desc}</p>
+                <div className="benefit-card-accent" style={{ background: benefit.color }} />
               </Card>
             ))}
           </div>
@@ -483,7 +575,10 @@ export function Landing() {
       <section id="depoimentos" className="section section-alt">
         <div className="section-container">
           <div className="section-header reveal">
-            <span className="section-label">Social proof</span>
+            <span className="section-label">
+              <Star size={12} color="#f73886" fill="#f73886" />
+              Social proof
+            </span>
             <h2 className="section-title">O que eles dizem</h2>
             <p className="section-subtitle">Designers reais, resultados reais</p>
           </div>
@@ -506,14 +601,14 @@ export function Landing() {
                     </div>
                     <p className="testimonial-infinite-text">{t.text}</p>
                     <div className="testimonial-infinite-author">
-                      <div className="testimonial-infinite-avatar">{t.avatar}</div>
+                      <div className="testimonial-infinite-avatar" style={{ background: `linear-gradient(135deg, ${t.color}30, ${t.color}10)` }}>{t.avatar}</div>
                       <div>
                         <div className="testimonial-infinite-name">{t.name}</div>
                         <div className="testimonial-infinite-role">{t.role}</div>
                       </div>
                       <div className="testimonial-infinite-stars">
                         {[...Array(5)].map((_, j) => (
-                          <Star key={j} size={13} fill="#f59e0b" color="#f59e0b" />
+                          <Star key={j} size={13} fill="#f73886" color="#f73886" />
                         ))}
                       </div>
                     </div>
@@ -531,7 +626,10 @@ export function Landing() {
       <section id="planos" className="section">
         <div className="section-container">
           <div className="section-header reveal">
-            <span className="section-label">Preços</span>
+            <span className="section-label">
+              <Diamond size={12} color="#f73886" />
+              Preços
+            </span>
             <h2 className="section-title">Planos</h2>
             <p className="section-subtitle">Comece grátis e escale conforme sua necessidade</p>
           </div>
@@ -544,7 +642,7 @@ export function Landing() {
                 period: '', 
                 desc: 'Para começar a explorar', 
                 icon: Zap, 
-                color: '#888', 
+                color: '#f73886', 
                 gradientClass: 'plan-gradient-starter', 
                 popular: false, 
                 disabled: false, 
@@ -563,7 +661,7 @@ export function Landing() {
                 period: '/mês', 
                 desc: 'Para designers ativos', 
                 icon: Star, 
-                color: '#f59e0b', 
+                color: '#f73886', 
                 gradientClass: 'plan-gradient-pro', 
                 popular: true, 
                 disabled: false, 
@@ -584,7 +682,7 @@ export function Landing() {
                 period: '', 
                 desc: 'Para times e agências', 
                 icon: Building2, 
-                color: '#a855f7', 
+                color: '#f73886', 
                 gradientClass: 'plan-gradient-enterprise', 
                 popular: false, 
                 disabled: true, 
@@ -600,15 +698,15 @@ export function Landing() {
               }
             ].map((plan, i) => (
               <Card key={i} className={`plan-card ${plan.gradientClass} ${plan.popular ? 'plan-card-featured' : ''} ${plan.disabled ? 'plan-card-disabled' : ''} reveal`} glow={plan.popular}>
-                {plan.popular && <div className="plan-badge"><Star size={12} fill="#050505" />Mais popular</div>}
+                {plan.popular && <div className="plan-badge"><Star size={12} fill="#fff" />Mais popular</div>}
                 {plan.disabled && <div className="plan-overlay"><Clock size={20} /><span>Em breve</span></div>}
                 <div className="plan-card-top">
-                  <div className="plan-card-icon" style={{ background: `${plan.color}15` }}><plan.icon size={22} style={{ color: plan.color }} /></div>
+                  <div className="plan-card-icon" style={{ background: `${plan.color}15` }}><plan.icon size={22} color={plan.color} /></div>
                   <div className="plan-card-header"><h3 className="plan-card-name">{plan.name}</h3><p className="plan-card-desc">{plan.desc}</p></div>
                 </div>
                 <div className="plan-card-price"><span className="plan-card-amount">{plan.price}</span>{plan.period && <span className="plan-card-period">{plan.period}</span>}</div>
                 <div className="plan-card-divider" />
-                <ul className="plan-card-features">{plan.features.map((f, j) => <li key={j}><CheckCircle size={14} />{f}</li>)}</ul>
+                <ul className="plan-card-features">{plan.features.map((f, j) => <li key={j}><CheckCircle size={14} color="#f73886" />{f}</li>)}</ul>
                 <Link to={plan.disabled ? '#' : '/register'}><Button variant={plan.variant} fullWidth size="lg" disabled={plan.disabled}>{plan.cta}</Button></Link>
               </Card>
             ))}
@@ -620,7 +718,18 @@ export function Landing() {
         <div className="section-container">
           <div className="cta reveal">
             <div className="cta-glow" />
-            <Sparkles size={32} className="cta-sparkle" />
+            <div className="cta-particles">
+              {[...Array(20)].map((_, i) => (
+                <div key={i} className="cta-particle" style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 3}s`,
+                  width: `${Math.random() * 4 + 2}px`,
+                  height: `${Math.random() * 4 + 2}px`
+                }} />
+              ))}
+            </div>
+            <Sparkles size={32} className="cta-sparkle" color="#f73886" />
             <h2 className="cta-title">Pronto para parar de procurar?</h2>
             <p className="cta-subtitle">Deixe a IA encontrar as melhores oportunidades para você.</p>
             <div className="cta-actions">
