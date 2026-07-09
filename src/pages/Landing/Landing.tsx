@@ -6,12 +6,12 @@ import { Button } from '../../components/Button/Button';
 import { Card } from '../../components/Card/Card';
 import { 
   ArrowRight, Sparkles, Star, Quote, 
-  PenTool, Palette, Layers, Grid3X3, MousePointer2,
-  MoveUpRight, Zap, Figma, Scissors, Type, Camera, 
-  Ruler, Droplets, Brush, Eraser, Shapes, Sliders,
-  Globe, Clock, Shield, Users, Target, TrendingUp,
-  CheckCircle, MessageSquare, FileText, Search,
-  Play, Pause, Building2, Hexagon, Diamond, Circle
+  MousePointer2, MoveUpRight, Zap, 
+  Globe, Clock, Shield, Target, TrendingUp,
+  CheckCircle, FileText, Search,
+  Play, Pause, Building2, Monitor, Smartphone,
+  Bell, BarChart3, Users, MessageSquare,
+  Sliders, Palette, Lightbulb, Send
 } from 'lucide-react';
 import './Landing.css';
 
@@ -19,48 +19,13 @@ export function Landing() {
   const [isPlaying, setIsPlaying] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
   const [currentStatIndex, setCurrentStatIndex] = useState(0);
-  const [activeAboutFeature, setActiveAboutFeature] = useState(0);
+  const [activeDeviceView, setActiveDeviceView] = useState<'desktop' | 'mobile'>('desktop');
   const observerRef = useRef<IntersectionObserver | null>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const mousePosition = useRef({ x: 0, y: 0 });
   const animationRef = useRef<number>(0);
   const scrollPosition = useRef(0);
   const lastTimeRef = useRef(0);
-  const cursorRef = useRef<HTMLDivElement>(null);
-  const cursorDotRef = useRef<HTMLDivElement>(null);
-
-  const designIcons = [
-    PenTool, Palette, Layers, Grid3X3, Figma, Scissors, 
-    Type, Camera, Ruler, Droplets, Brush, Eraser, Shapes, Sliders
-  ];
-
-  const aboutFeatures = [
-    {
-      icon: Globe,
-      title: "Monitoramento Global",
-      description: "Rastreamos mais de 50 fontes diferentes simultaneamente, 24 horas por dia, 7 dias por semana.",
-      color: "#f73886"
-    },
-    {
-      icon: Target,
-      title: "Match Inteligente",
-      description: "Nossa IA analisa seu perfil e habilidades para encontrar as oportunidades com maior compatibilidade.",
-      color: "#f73886"
-    },
-    {
-      icon: Shield,
-      title: "Dados Protegidos",
-      description: "Segurança de ponta com criptografia avançada. Seus dados estão sempre seguros.",
-      color: "#f73886"
-    },
-    {
-      icon: Zap,
-      title: "Alertas em Tempo Real",
-      description: "Receba notificações instantâneas quando uma nova oportunidade compatível surgir.",
-      color: "#f73886"
-    }
-  ];
 
   const testimonials = [
     {
@@ -122,6 +87,17 @@ export function Landing() {
     { value: '3.2min', label: 'Tempo médio de match', icon: TrendingUp }
   ];
 
+  const platformImages = {
+    desktop: {
+      main: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjUwMCIgdmlld0JveD0iMCAwIDgwMCA1MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHJlY3Qgd2lkdGg9IjgwMCIgaGVpZ2h0PSI1MDAiIHJ4PSIxMiIgZmlsbD0iI2ZmZiIvPgogIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSI4MDAiIGhlaWdodD0iNDgiIHJ4PSIxMiIgZmlsbD0iI2ZhZmFmYSIvPgogIDxyZWN0IHg9IjI0IiB5PSIxNiIgd2lkdGg9IjgiIGhlaWdodD0iOCIgcng9IjQiIGZpbGw9IiNmNzM4ODYiLz4KICA8cmVjdCB4PSIzNiIgeT0iMTYiIHdpZHRoPSI4IiBoZWlnaHQ9IjgiIHJ4PSI0IiBmaWxsPSIjZjczODg2IiBvcGFjaXR5PSIwLjYiLz4KICA8cmVjdCB4PSI0OCIgeT0iMTYiIHdpZHRoPSI4IiBoZWlnaHQ9IjgiIHJ4PSI0IiBmaWxsPSIjZjczODg2IiBvcGFjaXR5PSIwLjQiLz4KICA8cmVjdCB4PSI2OCIgeT0iMTYiIHdpZHRoPSIxNjAiIGhlaWdodD0iMTYiIHJ4PSI4IiBmaWxsPSIjZjVmNWY1Ii8+CiAgPHJlY3QgeD0iMjQiIHk9IjcyIiB3aWR0aD0iMjQwIiBoZWlnaHQ9IjE2MCIgcng9IjEwIiBmaWxsPSIjZmFmYWZhIiBzdHJva2U9IiNmMGYwZjAiIHN0cm9rZS13aWR0aD0iMSIvPgogIDxyZWN0IHg9IjQ4IiB5PSI5NiIgd2lkdGg9IjE5MiIgaGVpZ2h0PSI4IiByeD0iNCIgZmlsbD0iI2Y3Mzg4NiIgb3BhY2l0eT0iMC4xNSIvPgogIDxyZWN0IHg9IjQ4IiB5PSIxMTYiIHdpZHRoPSIxMjAiIGhlaWdodD0iNiIgcng9IjMiIGZpbGw9IiNlOGU4ZTgiLz4KICA8cmVjdCB4PSI0OCIgeT0iMTM0IiB3aWR0aD0iMTYwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjZjBmMGYwIi8+CiAgPHJlY3QgeD0iNDgiIHk9IjE1MiIgd2lkdGg9IjEwMCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iI2YwZjBmMCIvPgogIDxyZWN0IHg9IjQ4IiB5PSIxNzYiIHdpZHRoPSI4MCIgaGVpZ2h0PSIyNCIgcng9IjYiIGZpbGw9IiNmNzM4ODYiIG9wYWNpdHk9IjAuMSIvPgogIDxyZWN0IHg9IjEzNiIgeT0iMTc2IiB3aWR0aD0iODAiIGhlaWdodD0iMjQiIHJ4PSI2IiBmaWxsPSIjZjBmMGYwIi8+CiAgPHJlY3QgeD0iMjg4IiB5PSI3MiIgd2lkdGg9IjQ4OCIgaGVpZ2h0PSIxNjAiIHJ4PSIxMCIgZmlsbD0iI2ZhZmFmYSIgc3Ryb2tlPSIjZjBmMGYwIiBzdHJva2Utd2lkdGg9IjEiLz4KICA8cmVjdCB4PSIzMTIiIHk9Ijk2IiB3aWR0aD0iNDQwIiBoZWlnaHQ9IjgiIHJ4PSI0IiBmaWxsPSIjZjczODg2IiBvcGFjaXR5PSIwLjIiLz4KICA8cmVjdCB4PSIzMTIiIHk9IjExNiIgd2lkdGg9IjMyMCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iI2U4ZThlOCIvPgogIDxyZWN0IHg9IjMxMiIgeT0iMTM0IiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjZjBmMGYwIi8+CiAgPHJlY3QgeD0iMzEyIiB5PSIxNTIiIHdpZHRoPSIyODAiIGhlaWdodD0iNiIgcng9IjMiIGZpbGw9IiNmMGYwZjAiLz4KICA8cmVjdCB4PSIzMTIiIHk9IjE3NiIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIyNCIgcng9IjYiIGZpbGw9IiNmNzM4ODYiIG9wYWNpdHk9IjAuMSIvPgogIDxyZWN0IHg9IjQyMCIgeT0iMTc2IiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjI0IiByeD0iNiIgZmlsbD0iI2YwZjBmMCIvPgogIDxyZWN0IHg9IjI0IiB5PSIyNTYiIHdpZHRoPSI3NTIiIGhlaWdodD0iMjIwIiByeD0iMTAiIGZpbGw9IiNmYWZhZmEiIHN0cm9rZT0iI2YwZjBmMCIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgPGNpcmNsZSBjeD0iNDAwIiBjeT0iMzY2IiByPSI0MCIgZmlsbD0iI2Y3Mzg4NiIgb3BhY2l0eT0iMC4wOCIvPgogIDxjaXJjbGUgY3g9IjQwMCIgY3k9IjM2NiIgcj0iMjUiIGZpbGw9IiNmNzM4ODYiIG9wYWNpdHk9IjAuMTUiLz4KICA8Y2lyY2xlIGN4PSI0MDAiIGN5PSIzNjYiIHI9IjEwIiBmaWxsPSIjZjczODg2IiBvcGFjaXR5PSIwLjQiLz4KPC9zdmc+',
+      dashboard: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI0MCIgdmlld0JveD0iMCAwIDQwMCAyNDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIyNDAiIHJ4PSI4IiBmaWxsPSIjZmZmIi8+CiAgPHJlY3QgeT0iMCIgd2lkdGg9IjQwMCIgaGVpZ2h0PSIzNiIgcng9IjgiIGZpbGw9IiNmYWZhZmEiLz4KICA8Y2lyY2xlIGN4PSIxNiIgY3k9IjE4IiByPSI0IiBmaWxsPSIjZjczODg2Ii8+CiAgPHJlY3QgeD0iMjgiIHk9IjE0IiB3aWR0aD0iODAiIGhlaWdodD0iOCIgcng9IjQiIGZpbGw9IiNmNWY1ZjUiLz4KICA8cmVjdCB4PSIxNiIgeT0iNTIiIHdpZHRoPSIzNjgiIGhlaWdodD0iNDgiIHJ4PSI2IiBmaWxsPSIjZmFmYWZhIiBzdHJva2U9IiNmMGYwZjAiIHN0cm9rZS13aWR0aD0iMSIvPgogIDxyZWN0IHg9IjMyIiB5PSI2NCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjZjczODg2IiBvcGFjaXR5PSIwLjIiLz4KICA8cmVjdCB4PSIzMiIgeT0iNzgiIHdpZHRoPSIxMjAiIGhlaWdodD0iNCIgcng9IjIiIGZpbGw9IiNlOGU4ZTgiLz4KICA8cmVjdCB4PSIxNiIgeT0iMTE2IiB3aWR0aD0iMzY4IiBoZWlnaHQ9IjQ4IiByeD0iNiIgZmlsbD0iI2ZhZmFmYSIgc3Ryb2tlPSIjZjBmMGYwIiBzdHJva2Utd2lkdGg9IjEiLz4KICA8cmVjdCB4PSIzMiIgeT0iMTI4IiB3aWR0aD0iNjAiIGhlaWdodD0iNiIgcng9IjMiIGZpbGw9IiNmNzM4ODYiIG9wYWNpdHk9IjAuMiIvPgogIDxyZWN0IHg9IjMyIiB5PSIxNDIiIHdpZHRoPSIxMjAiIGhlaWdodD0iNCIgcng9IjIiIGZpbGw9IiNlOGU4ZTgiLz4KICA8cmVjdCB4PSIxNiIgeT0iMTgwIiB3aWR0aD0iMzY4IiBoZWlnaHQ9IjQ4IiByeD0iNiIgZmlsbD0iI2Y3Mzg4NiIgZmlsbC1vcGFjaXR5PSIwLjA0IiBzdHJva2U9IiNmNzM4ODYiIHN0cm9rZS1vcGFjaXR5PSIwLjE1IiBzdHJva2Utd2lkdGg9IjEiLz4KICA8cmVjdCB4PSIzMiIgeT0iMTkyIiB3aWR0aD0iNjAiIGhlaWdodD0iNiIgcng9IjMiIGZpbGw9IiNmNzM4ODYiIG9wYWNpdHk9IjAuMyIvPgogIDxyZWN0IHg9IjMyIiB5PSIyMDYiIHdpZHRoPSIxMjAiIGhlaWdodD0iNCIgcng9IjIiIGZpbGw9IiNmNzM4ODYiIG9wYWNpdHk9IjAuMTUiLz4KPC9zdmc+'
+    },
+    mobile: {
+      main: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQwIiBoZWlnaHQ9IjQ4MCIgdmlld0JveD0iMCAwIDI0MCA0ODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHJlY3Qgd2lkdGg9IjI0MCIgaGVpZ2h0PSI0ODAiIHJ4PSIyNCIgZmlsbD0iI2ZmZiIvPgogIDxyZWN0IHk9IjAiIHdpZHRoPSIyNDAiIGhlaWdodD0iNTYiIHJ4PSIyNCIgZmlsbD0iI2ZhZmFmYSIvPgogIDxyZWN0IHg9IjE2IiB5PSIyMCIgd2lkdGg9IjIwOCIgaGVpZ2h0PSIxNiIgcng9IjgiIGZpbGw9IiNmNWY1ZjUiLz4KICA8cmVjdCB4PSIxNiIgeT0iODAiIHdpZHRoPSIyMDgiIGhlaWdodD0iMTIwIiByeD0iMTIiIGZpbGw9IiNmYWZhZmEiIHN0cm9rZT0iI2YwZjBmMCIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgPHJlY3QgeD0iMzIiIHk9Ijk2IiB3aWR0aD0iMTYwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjZjczODg2IiBvcGFjaXR5PSIwLjIiLz4KICA8cmVjdCB4PSIzMiIgeT0iMTE0IiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjQiIHJ4PSIyIiBmaWxsPSIjZThlOGU4Ii8+CiAgPHJlY3QgeD0iMzIiIHk9IjEzMCIgd2lkdGg9IjE2MCIgaGVpZ2h0PSI0IiByeD0iMiIgZmlsbD0iI2YwZjBmMCIvPgogIDxyZWN0IHg9IjMyIiB5PSIxNDYiIHdpZHRoPSI4MCIgaGVpZ2h0PSIyMCIgcng9IjYiIGZpbGw9IiNmNzM4ODYiIG9wYWNpdHk9IjAuMTIiLz4KICA8cmVjdCB4PSIxMjAiIHk9IjE0NiIgd2lkdGg9IjcyIiBoZWlnaHQ9IjIwIiByeD0iNiIgZmlsbD0iI2YwZjBmMCIvPgogIDxyZWN0IHg9IjE2IiB5PSIyMjQiIHdpZHRoPSIyMDgiIGhlaWdodD0iMTAwIiByeD0iMTIiIGZpbGw9IiNmYWZhZmEiIHN0cm9rZT0iI2YwZjBmMCIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgPHJlY3QgeD0iMzIiIHk9IjI0MCIgd2lkdGg9IjE2MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iI2Y3Mzg4NiIgb3BhY2l0eT0iMC4yIi8+CiAgPHJlY3QgeD0iMzIiIHk9IjI1OCIgd2lkdGg9IjEyMCIgaGVpZ2h0PSI0IiByeD0iMiIgZmlsbD0iI2U4ZThlOCIvPgogIDxyZWN0IHg9IjMyIiB5PSIyNzQiIHdpZHRoPSIxNjAiIGhlaWdodD0iNCIgcng9IjIiIGZpbGw9IiNmMGYwZjAiLz4KICA8cmVjdCB4PSIxNiIgeT0iMzQ4IiB3aWR0aD0iMjA4IiBoZWlnaHQ9IjYwIiByeD0iMTIiIGZpbGw9IiNmNzM4ODYiIGZpbGwtb3BhY2l0eT0iMC4wNSIgc3Ryb2tlPSIjZjczODg2IiBzdHJva2Utb3BhY2l0eT0iMC4xNSIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgPGNpcmNsZSBjeD0iNDAiIGN5PSIzNzgiIHI9IjE2IiBmaWxsPSIjZjczODg2IiBvcGFjaXR5PSIwLjE1Ii8+CiAgPHJlY3QgeD0iNjgiIHk9IjM3MiIgd2lkdGg9IjgwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjZjczODg2IiBvcGFjaXR5PSIwLjIiLz4KICA8cmVjdCB4PSI2OCIgeT0iMzg0IiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjQiIHJ4PSIyIiBmaWxsPSIjZjczODg2IiBvcGFjaXR5PSIwLjEiLz4KPC9zdmc+',
+      dashboard: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDI0MCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHJlY3Qgd2lkdGg9IjI0MCIgaGVpZ2h0PSI0MDAiIHJ4PSIxNiIgZmlsbD0iI2ZmZiIvPgogIDxyZWN0IHk9IjAiIHdpZHRoPSIyNDAiIGhlaWdodD0iNDQiIHJ4PSIxNiIgZmlsbD0iI2ZhZmFmYSIvPgogIDxjaXJjbGUgY3g9IjE2IiBjeT0iMjIiIHI9IjQiIGZpbGw9IiNmNzM4ODYiLz4KICA8cmVjdCB4PSIyOCIgeT0iMTgiIHdpZHRoPSI2MCIgaGVpZ2h0PSI4IiByeD0iNCIgZmlsbD0iI2Y1ZjVmNSIvPgogIDxyZWN0IHg9IjEyIiB5PSI2MCIgd2lkdGg9IjIxNiIgaGVpZ2h0PSI2NCIgcng9IjgiIGZpbGw9IiNmYWZhZmEiIHN0cm9rZT0iI2YwZjBmMCIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgPHJlY3QgeD0iMjgiIHk9Ijc2IiB3aWR0aD0iNjAiIGhlaWdodD0iNiIgcng9IjMiIGZpbGw9IiNmNzM4ODYiIG9wYWNpdHk9IjAuMiIvPgogIDxyZWN0IHg9IjI4IiB5PSI5MCIgd2lkdGg9IjEyMCIgaGVpZ2h0PSI0IiByeD0iMiIgZmlsbD0iI2U4ZThlOCIvPgogIDxyZWN0IHg9IjEyIiB5PSIxNDAiIHdpZHRoPSIyMTYiIGhlaWdodD0iNjQiIHJ4PSI4IiBmaWxsPSIjZmFmYWZhIiBzdHJva2U9IiNmMGYwZjAiIHN0cm9rZS13aWR0aD0iMSIvPgogIDxyZWN0IHg9IjI4IiB5PSIxNTYiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iI2Y3Mzg4NiIgb3BhY2l0eT0iMC4yIi8+CiAgPHJlY3QgeD0iMjgiIHk9IjE3MCIgd2lkdGg9IjEyMCIgaGVpZ2h0PSI0IiByeD0iMiIgZmlsbD0iI2U4ZThlOCIvPgogIDxyZWN0IHg9IjEyIiB5PSIyMjAiIHdpZHRoPSIyMTYiIGhlaWdodD0iNjQiIHJ4PSI4IiBmaWxsPSIjZjczODg2IiBmaWxsLW9wYWNpdHk9IjAuMDQiIHN0cm9rZT0iI2Y3Mzg4NiIgc3Ryb2tlLW9wYWNpdHk9IjAuMTUiIHN0cm9rZS13aWR0aD0iMSIvPgogIDxyZWN0IHg9IjI4IiB5PSIyMzYiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2IiByeD0iMyIgZmlsbD0iI2Y3Mzg4NiIgb3BhY2l0eT0iMC4zIi8+CiAgPHJlY3QgeD0iMjgiIHk9IjI1MCIgd2lkdGg9IjEyMCIgaGVpZ2h0PSI0IiByeD0iMiIgZmlsbD0iI2Y3Mzg4NiIgb3BhY2l0eT0iMC4xNSIvPgogIDxyZWN0IHg9IjEyIiB5PSIzMDgiIHdpZHRoPSIyMTYiIGhlaWdodD0iODAiIHJ4PSI4IiBmaWxsPSIjZmFmYWZhIiBzdHJva2U9IiNmMGYwZjAiIHN0cm9rZS13aWR0aD0iMSIvPgogIDxjaXJjbGUgY3g9IjM2IiBjeT0iMzQ4IiByPSIxMiIgZmlsbD0iI2Y3Mzg4NiIgb3BhY2l0eT0iMC4xIi8+CiAgPHJlY3QgeD0iNjAiIHk9IjM0MiIgd2lkdGg9IjYwIiBoZWlnaHQ9IjYiIHJ4PSIzIiBmaWxsPSIjZjBmMGYwIi8+CiAgPHJlY3QgeD0iNjAiIHk9IjM1NCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSI0IiByeD0iMiIgZmlsbD0iI2YwZjBmMCIvPgogIDxyZWN0IHg9IjYwIiB5PSIzNjYiIHdpZHRoPSI4MCIgaGVpZ2h0PSI0IiByeD0iMiIgZmlsbD0iI2YwZjBmMCIvPgo8L3N2Zz4='
+    }
+  };
+
   useEffect(() => {
     observerRef.current = new IntersectionObserver(
       (entries) => {
@@ -143,29 +119,17 @@ export function Landing() {
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (cursorRef.current && cursorDotRef.current) {
-        cursorRef.current.style.left = e.clientX + 'px';
-        cursorRef.current.style.top = e.clientY + 'px';
-        cursorDotRef.current.style.left = e.clientX + 'px';
-        cursorDotRef.current.style.top = e.clientY + 'px';
-      }
-
       if (heroRef.current) {
-        const rect = heroRef.current.getBoundingClientRect();
-        mousePosition.current = {
-          x: ((e.clientX - rect.left) / rect.width - 0.5) * 2,
-          y: ((e.clientY - rect.top) / rect.height - 0.5) * 2
-        };
+        const mockupDesktop = heroRef.current.querySelector('.hero-device-desktop') as HTMLElement;
+        const mockupMobile = heroRef.current.querySelector('.hero-device-mobile') as HTMLElement;
         
-        const shapes = heroRef.current.querySelectorAll('.hero-shape') as NodeListOf<HTMLElement>;
-        shapes.forEach((shape, index) => {
-          const depth = (index + 1) * 20;
-          shape.style.transform = `translate(${mousePosition.current.x * depth}px, ${mousePosition.current.y * depth}px)`;
-        });
-
-        const mockup = heroRef.current.querySelector('.hero-mockup') as HTMLElement;
-        if (mockup) {
-          mockup.style.transform = `perspective(1000px) rotateY(${mousePosition.current.x * 5}deg) rotateX(${-mousePosition.current.y * 5}deg)`;
+        if (mockupDesktop && mockupMobile) {
+          const rect = heroRef.current.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width - 0.5;
+          const y = (e.clientY - rect.top) / rect.height - 0.5;
+          
+          mockupDesktop.style.transform = `perspective(1000px) rotateY(${x * 2}deg) rotateX(${-y * 2}deg) translateY(${-y * 5}px)`;
+          mockupMobile.style.transform = `perspective(1000px) rotateY(${x * 3}deg) rotateX(${-y * 3}deg) translateY(${y * 5}px)`;
         }
       }
     };
@@ -220,9 +184,6 @@ export function Landing() {
 
   return (
     <div className="landing">
-      <div className="custom-cursor" ref={cursorRef} />
-      <div className="custom-cursor-dot" ref={cursorDotRef} />
-      
       <Navbar />
       
       <section className="hero" ref={heroRef}>
@@ -230,79 +191,25 @@ export function Landing() {
           <div className="hero-grid-bg" />
           <div className="hero-gradient hero-grad-1" />
           <div className="hero-gradient hero-grad-2" />
-          <div className="hero-gradient hero-grad-3" />
-          
-          <div className="hero-design-elements">
-            {designIcons.map((Icon, i) => (
-              <div
-                key={i}
-                className="hero-design-icon"
-                style={{
-                  left: `${10 + (i % 5) * 20}%`,
-                  top: `${5 + Math.floor(i / 5) * 25}%`,
-                  animationDelay: `${i * 0.3}s`,
-                  opacity: 0.04 + (i % 3) * 0.03
-                }}
-              >
-                <Icon size={24 + (i % 3) * 12} />
-              </div>
-            ))}
-          </div>
-          
-          <svg className="hero-shape hero-shape-1" viewBox="0 0 300 300">
-            <defs>
-              <linearGradient id="shapeGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#f73886" stopOpacity="0.15" />
-                <stop offset="100%" stopColor="#f73886" stopOpacity="0.03" />
-              </linearGradient>
-            </defs>
-            <circle cx="150" cy="150" r="120" fill="none" stroke="#f73886" strokeOpacity="0.08" strokeWidth="1" />
-            <circle cx="150" cy="150" r="90" fill="none" stroke="#f73886" strokeOpacity="0.12" strokeWidth="1.5" strokeDasharray="8 6" />
-            <circle cx="150" cy="150" r="60" fill="url(#shapeGrad1)" stroke="#f73886" strokeOpacity="0.15" strokeWidth="1.5" />
-            <circle cx="150" cy="150" r="25" fill="none" stroke="#f73886" strokeOpacity="0.18" strokeWidth="1" strokeDasharray="4 4" />
-            <circle cx="150" cy="150" r="8" fill="#f73886" opacity="0.4" />
-          </svg>
-          
-          <svg className="hero-shape hero-shape-2" viewBox="0 0 250 250">
-            <defs>
-              <linearGradient id="shapeGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#f73886" stopOpacity="0.1" />
-                <stop offset="100%" stopColor="#f73886" stopOpacity="0.02" />
-              </linearGradient>
-            </defs>
-            <rect x="25" y="25" width="200" height="200" rx="40" fill="none" stroke="#f73886" strokeOpacity="0.06" strokeWidth="1" transform="rotate(20 125 125)" />
-            <rect x="50" y="50" width="150" height="150" rx="30" fill="none" stroke="#f73886" strokeOpacity="0.1" strokeWidth="1.5" strokeDasharray="7 5" transform="rotate(20 125 125)" />
-            <rect x="75" y="75" width="100" height="100" rx="20" fill="url(#shapeGrad2)" stroke="#f73886" strokeOpacity="0.12" strokeWidth="1" transform="rotate(20 125 125)" />
-          </svg>
-          
-          <svg className="hero-shape hero-shape-3" viewBox="0 0 200 200">
-            <polygon points="100,15 185,170 15,170" fill="none" stroke="#f73886" strokeOpacity="0.06" strokeWidth="1" />
-            <polygon points="100,40 160,150 40,150" fill="none" stroke="#f73886" strokeOpacity="0.1" strokeWidth="1" strokeDasharray="6 4" />
-            <polygon points="100,65 135,130 65,130" fill="rgba(247,56,134,0.03)" stroke="#f73886" strokeOpacity="0.12" strokeWidth="1" />
-            <circle cx="100" cy="100" r="4" fill="#f73886" opacity="0.3" />
-          </svg>
         </div>
         
         <div className="hero-container">
           <div className="hero-content">
             <div className="hero-badge animate-fade-in-up">
               <Sparkles size={14} color="#f73886" />
-              <span>Lançamento 2024</span>
-              <span className="hero-badge-dot" />
-              <span>IA para designers</span>
+              <span>Inteligência artificial para designers</span>
             </div>
             
             <h1 className="hero-title animate-fade-in-up delay-100">
-              Designers não deveriam
+              Encontre os melhores
               <br />
-              perder tempo
-              <span className="hero-title-accent"> procurando clientes</span>
+              clientes enquanto você
+              <span className="hero-title-accent"> cria</span>
             </h1>
             
             <p className="hero-subtitle animate-fade-in-up delay-200">
-              A PrismA usa inteligência artificial para monitorar a internet 24/7 e 
-              encontrar as melhores oportunidades de trabalho para você. 
-              Automático, inteligente e personalizado.
+              A PrismA monitora a internet 24 horas por dia e conecta você 
+              diretamente com oportunidades que combinam com seu estilo e habilidades.
             </p>
             
             <div className="hero-actions animate-fade-in-up delay-300">
@@ -318,7 +225,7 @@ export function Landing() {
                 <span className="hero-demo-icon">
                   {isPlaying ? <Pause size={14} /> : <Play size={14} />}
                 </span>
-                Ver demonstração
+                Ver plataforma
               </button>
             </div>
             
@@ -338,7 +245,7 @@ export function Landing() {
                   ))}
                   <span className="hero-trust-rating">4.9</span>
                 </div>
-                <span>+2.400 designers já usam</span>
+                <span>+2.400 designers confiam</span>
               </div>
             </div>
 
@@ -357,137 +264,119 @@ export function Landing() {
           </div>
           
           <div className="hero-visual animate-fade-in delay-400">
-            <div className="hero-mockup-wrapper">
-              <div className="hero-mockup-glow" />
-              <div className="hero-mockup">
-                <div className="hero-mockup-header">
-                  <div className="hero-mockup-dots"><span /><span /><span /></div>
-                  <div className="hero-mockup-url">prisma.design</div>
-                </div>
-                <div className="hero-mockup-body">
-                  <div className="hero-mockup-sidebar">
-                    {[0, 1, 2, 3].map((i) => (
-                      <div key={i} className={`hero-mockup-sidebar-item ${i === 0 ? 'active' : ''}`}>
-                        {i === 0 && <Search size={12} />}
-                      </div>
-                    ))}
-                  </div>
-                  <div className="hero-mockup-main">
-                    {[0, 1, 2].map((i) => (
-                      <div key={i} className="hero-mockup-card" style={{ opacity: 1 - i * 0.25 }}>
-                        <div className="hero-mockup-card-row">
-                          <div className="hero-mockup-avatar" />
-                          <div>
-                            <div className="hero-mockup-line" style={{width: `${70 - i * 10}px`}} />
-                            <div className="hero-mockup-line" style={{width: `${45 - i * 5}px`}} />
-                          </div>
-                        </div>
-                        <div className="hero-mockup-line" style={{width: `${90 - i * 10}%`}} />
-                        <div className="hero-mockup-line" style={{width: `${65 - i * 10}%`}} />
-                        <div className="hero-mockup-tags">
-                          <span>UI Design</span>
-                          <span>Remoto</span>
-                          <span className="hero-mockup-match">{98 - i * 5}% match</span>
-                        </div>
-                      </div>
-                    ))}
+            <div className="hero-devices-container">
+              <div className="hero-device-toggle">
+                <button 
+                  className={`hero-device-toggle-btn ${activeDeviceView === 'desktop' ? 'active' : ''}`}
+                  onClick={() => setActiveDeviceView('desktop')}
+                >
+                  <Monitor size={16} />
+                  Desktop
+                </button>
+                <button 
+                  className={`hero-device-toggle-btn ${activeDeviceView === 'mobile' ? 'active' : ''}`}
+                  onClick={() => setActiveDeviceView('mobile')}
+                >
+                  <Smartphone size={16} />
+                  Mobile
+                </button>
+              </div>
+              
+              <div className="hero-device-mockup hero-device-desktop">
+                <div className="hero-device-frame">
+                  <div className="hero-device-screen">
+                    <img 
+                      src={platformImages.desktop.dashboard} 
+                      alt="Dashboard PrismA" 
+                      className="hero-device-img"
+                    />
                   </div>
                 </div>
-                <div className="hero-mockup-scan-line" />
+              </div>
+              
+              <div className="hero-device-mockup hero-device-mobile">
+                <div className="hero-device-frame hero-device-frame-mobile">
+                  <div className="hero-device-screen">
+                    <img 
+                      src={platformImages.mobile.dashboard} 
+                      alt="Dashboard Mobile PrismA" 
+                      className="hero-device-img"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
-            
-            {[PenTool, Palette, Layers, Grid3X3, Type, Camera].map((Icon, i) => (
-              <div key={i} className={`hero-floating-icon hero-floating-${i + 1}`}>
-                <Icon size={16 + (i % 2) * 6} />
-              </div>
-            ))}
           </div>
-        </div>
-        
-        <div className="hero-scroll-indicator">
-          <MousePointer2 size={16} />
-          <span>Role para descobrir</span>
-          <div className="hero-scroll-line" />
         </div>
       </section>
 
       <section id="quem-somos" className="section about-section">
         <div className="section-container">
-          <div className="about-grid">
-            <div className="about-content reveal">
-              <span className="section-label">
-                <Diamond size={12} color="#f73886" />
-                Quem somos
-              </span>
-              <h2 className="section-title">O que é a <span className="text-gradient">PrismA?</span></h2>
-              
-              <div className="about-interactive">
-                {aboutFeatures.map((feature, index) => (
-                  <div 
-                    key={index}
-                    className={`about-feature-card ${activeAboutFeature === index ? 'active' : ''}`}
-                    onMouseEnter={() => setActiveAboutFeature(index)}
-                    onClick={() => setActiveAboutFeature(index)}
-                  >
-                    <div className="about-feature-icon" style={{ background: `${feature.color}15` }}>
-                      <feature.icon size={20} color={feature.color} />
-                    </div>
-                    <div className="about-feature-content">
-                      <h3 className="about-feature-title">{feature.title}</h3>
-                      <p className="about-feature-desc">{feature.description}</p>
-                    </div>
-                    <div className="about-feature-indicator" style={{ background: feature.color }} />
-                  </div>
-                ))}
+          <div className="about-content reveal">
+            <span className="section-label">Plataforma</span>
+            <h2 className="section-title">Sua central de <span className="text-gradient">oportunidades</span></h2>
+            <p className="about-description">
+              A PrismA centraliza e filtra automaticamente projetos, vagas e propostas de trabalho 
+              para designers. Nossa IA entende seu perfil e prioriza o que realmente importa 
+              para sua carreira.
+            </p>
+            
+            <div className="about-grid-cards">
+              <div className="about-card">
+                <div className="about-card-icon">
+                  <Search size={20} color="#f73886" />
+                </div>
+                <div className="about-card-content">
+                  <h3 className="about-card-title">Busca inteligente</h3>
+                  <p className="about-card-desc">Monitoramos +50 fontes em tempo real e entregamos apenas o que combina com você.</p>
+                </div>
               </div>
               
-              <div className="about-stats">
-                <div className="about-stat">
-                  <span className="about-stat-value">24/7</span>
-                  <span className="about-stat-label">Monitoramento</span>
+              <div className="about-card">
+                <div className="about-card-icon">
+                  <Bell size={20} color="#f73886" />
                 </div>
-                <div className="about-stat-divider" />
-                <div className="about-stat">
-                  <span className="about-stat-value">15k+</span>
-                  <span className="about-stat-label">Oportunidades/mês</span>
+                <div className="about-card-content">
+                  <h3 className="about-card-title">Alertas personalizados</h3>
+                  <p className="about-card-desc">Receba notificações quando surgir uma oportunidade com alta compatibilidade.</p>
                 </div>
-                <div className="about-stat-divider" />
-                <div className="about-stat">
-                  <span className="about-stat-value">98%</span>
-                  <span className="about-stat-label">Precisão</span>
+              </div>
+              
+              <div className="about-card">
+                <div className="about-card-icon">
+                  <BarChart3 size={20} color="#f73886" />
+                </div>
+                <div className="about-card-content">
+                  <h3 className="about-card-title">Dashboard completo</h3>
+                  <p className="about-card-desc">Acompanhe métricas, gerencie propostas e organize seus projetos em um só lugar.</p>
+                </div>
+              </div>
+              
+              <div className="about-card">
+                <div className="about-card-icon">
+                  <Send size={20} color="#f73886" />
+                </div>
+                <div className="about-card-content">
+                  <h3 className="about-card-title">Propostas automáticas</h3>
+                  <p className="about-card-desc">Gere propostas profissionais com IA em segundos e envie diretamente pela plataforma.</p>
                 </div>
               </div>
             </div>
             
-            <div className="about-visual reveal">
-              <div className="about-visual-container">
-                <div className="about-orb about-orb-1" />
-                <div className="about-orb about-orb-2" />
-                <div className="about-orb about-orb-3" />
-                
-                <svg viewBox="0 0 300 300" className="about-svg-main">
-                  <defs>
-                    <linearGradient id="aboutMainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#f73886" stopOpacity="0.2" />
-                      <stop offset="100%" stopColor="#f73886" stopOpacity="0.05" />
-                    </linearGradient>
-                  </defs>
-                  <circle cx="150" cy="150" r="130" fill="none" stroke="#f73886" strokeOpacity="0.08" strokeWidth="1" />
-                  <circle cx="150" cy="150" r="100" fill="none" stroke="#f73886" strokeOpacity="0.12" strokeWidth="1.5" strokeDasharray="10 8" />
-                  <circle cx="150" cy="150" r="70" fill="url(#aboutMainGrad)" stroke="#f73886" strokeOpacity="0.15" strokeWidth="2" />
-                  <circle cx="150" cy="150" r="40" fill="none" stroke="#f73886" strokeOpacity="0.2" strokeWidth="1.5" strokeDasharray="5 5" />
-                  <circle cx="150" cy="150" r="15" fill="#f73886" opacity="0.5">
-                    <animate attributeName="r" values="15;18;15" dur="3s" repeatCount="indefinite" />
-                    <animate attributeName="opacity" values="0.5;0.8;0.5" dur="3s" repeatCount="indefinite" />
-                  </circle>
-                </svg>
-                
-                <svg viewBox="0 0 200 200" className="about-svg-secondary">
-                  <Hexagon size={80} x="60" y="60" color="#f73886" opacity="0.1" strokeWidth={1} />
-                  <Hexagon size={50} x="75" y="75" color="#f73886" opacity="0.2" strokeWidth={1.5} />
-                  <Hexagon size={25} x="87.5" y="87.5" color="#f73886" opacity="0.4" fill="rgba(247,56,134,0.1)" />
-                </svg>
+            <div className="about-stats">
+              <div className="about-stat">
+                <span className="about-stat-value">24/7</span>
+                <span className="about-stat-label">Monitoramento contínuo</span>
+              </div>
+              <div className="about-stat-divider" />
+              <div className="about-stat">
+                <span className="about-stat-value">15k+</span>
+                <span className="about-stat-label">Oportunidades mensais</span>
+              </div>
+              <div className="about-stat-divider" />
+              <div className="about-stat">
+                <span className="about-stat-value">98%</span>
+                <span className="about-stat-label">De precisão da IA</span>
               </div>
             </div>
           </div>
@@ -497,41 +386,25 @@ export function Landing() {
       <section id="como-funciona" className="section section-alt">
         <div className="section-container">
           <div className="section-header reveal">
-            <span className="section-label">
-              <Hexagon size={12} color="#f73886" />
-              Processo
-            </span>
+            <span className="section-label">Processo</span>
             <h2 className="section-title">Como funciona</h2>
-            <p className="section-subtitle">Em três etapas simples, sua prospecção está automatizada</p>
+            <p className="section-subtitle">Três passos para transformar sua prospecção</p>
           </div>
           
           <div className="steps-grid">
             {[
-              { num: '01', icon: MousePointer2, title: 'Configure seu perfil', desc: 'Defina seus serviços, habilidades e preferências.' },
-              { num: '02', icon: Zap, title: 'IA monitora 24/7', desc: 'Monitoramos milhares de fontes simultaneamente.' },
-              { num: '03', icon: MoveUpRight, title: 'Receba no dashboard', desc: 'Oportunidades ranqueadas por compatibilidade.' }
+              { num: '01', icon: Sliders, title: 'Configure seu perfil', desc: 'Defina suas habilidades, preferências e disponibilidade.' },
+              { num: '02', icon: Zap, title: 'IA encontra oportunidades', desc: 'Monitoramos milhares de fontes e filtramos por compatibilidade.' },
+              { num: '03', icon: Send, title: 'Conecte-se com clientes', desc: 'Receba matches e envie propostas profissionais em minutos.' }
             ].map((step, i) => (
-              <React.Fragment key={i}>
-                {i > 0 && (
-                  <div className="step-connector reveal">
-                    <svg width="100%" height="40" viewBox="0 0 100 40" preserveAspectRatio="none">
-                      <path d="M0 20 Q50 0 100 20" stroke="#f73886" strokeOpacity="0.2" strokeWidth="1.5" fill="none" strokeDasharray="4 4" />
-                      <circle cx="95" cy="20" r="4" fill="#f73886" opacity="0.5">
-                        <animate attributeName="cx" from="5" to="95" dur="2s" repeatCount="indefinite" />
-                      </circle>
-                    </svg>
-                  </div>
-                )}
-                <Card key={i} className="step-card reveal" glow>
-                  <div className="step-number">{step.num}</div>
-                  <div className="step-icon-wrapper">
-                    <div className="step-icon"><step.icon size={28} /></div>
-                    <div className="step-icon-ring" />
-                  </div>
-                  <h3 className="step-title">{step.title}</h3>
-                  <p className="step-desc">{step.desc}</p>
-                </Card>
-              </React.Fragment>
+              <Card key={i} className="step-card reveal" glow>
+                <div className="step-number">{step.num}</div>
+                <div className="step-icon-wrapper">
+                  <div className="step-icon"><step.icon size={24} /></div>
+                </div>
+                <h3 className="step-title">{step.title}</h3>
+                <p className="step-desc">{step.desc}</p>
+              </Card>
             ))}
           </div>
         </div>
@@ -540,47 +413,83 @@ export function Landing() {
       <section id="beneficios" className="section">
         <div className="section-container">
           <div className="section-header reveal">
-            <span className="section-label">
-              <Circle size={12} color="#f73886" fill="#f73886" />
-              Vantagens
-            </span>
-            <h2 className="section-title">Benefícios</h2>
-            <p className="section-subtitle">Por que os melhores designers escolhem a PrismA</p>
+            <span className="section-label">Vantagens</span>
+            <h2 className="section-title">Por que escolher a PrismA</h2>
+            <p className="section-subtitle">Ferramentas pensadas para designers que querem mais resultados</p>
           </div>
           
           <div className="benefits-grid">
             {[
-              { icon: Zap, color: '#f73886', title: 'Automação total', desc: 'Nunca mais perca tempo procurando clientes manualmente.' },
-              { icon: Target, color: '#f73886', title: 'Match inteligente', desc: 'Algoritmo que entende seu perfil e encontra as oportunidades certas.' },
-              { icon: Globe, color: '#f73886', title: 'Múltiplas fontes', desc: 'Redes sociais, portais de vagas e comunidades em um só lugar.' },
-              { icon: Palette, color: '#f73886', title: 'Foco em design', desc: 'Plataforma pensada exclusivamente para profissionais criativos.' },
-              { icon: TrendingUp, color: '#f73886', title: 'Insights valiosos', desc: 'Dados e métricas do mercado de design.' },
-              { icon: FileText, color: '#f73886', title: 'Propostas com IA', desc: 'Gere propostas e mensagens profissionais em segundos.' }
+              { icon: Zap, title: 'Automação inteligente', desc: 'Nunca mais perca tempo procurando clientes manualmente. A IA trabalha por você.' },
+              { icon: Target, title: 'Match por compatibilidade', desc: 'Algoritmo que entende seu perfil e encontra as oportunidades com maior potencial.' },
+              { icon: Globe, title: '+50 fontes monitoradas', desc: 'Redes sociais, portais de vagas, comunidades e muito mais em um único lugar.' },
+              { icon: Palette, title: 'Foco em criativos', desc: 'Plataforma desenvolvida exclusivamente para designers e profissionais criativos.' },
+              { icon: MessageSquare, title: 'Propostas com IA', desc: 'Gere mensagens e propostas personalizadas com inteligência artificial.' },
+              { icon: Shield, title: 'Dados protegidos', desc: 'Segurança e privacidade com criptografia de ponta em todos os seus dados.' }
             ].map((benefit, index) => (
               <Card key={index} className="benefit-card reveal" glow>
-                <div className="benefit-icon-wrapper">
-                  <div className="benefit-icon" style={{ background: `${benefit.color}10` }}>
-                    <benefit.icon size={24} color={benefit.color} />
-                  </div>
+                <div className="benefit-icon" style={{ background: 'rgba(247,56,134,0.08)' }}>
+                  <benefit.icon size={22} color="#f73886" />
                 </div>
                 <h3 className="benefit-title">{benefit.title}</h3>
                 <p className="benefit-desc">{benefit.desc}</p>
-                <div className="benefit-card-accent" style={{ background: benefit.color }} />
               </Card>
             ))}
           </div>
         </div>
       </section>
 
-      <section id="depoimentos" className="section section-alt">
+      <section className="section section-alt">
         <div className="section-container">
           <div className="section-header reveal">
-            <span className="section-label">
-              <Star size={12} color="#f73886" fill="#f73886" />
-              Social proof
-            </span>
+            <span className="section-label">Visualize</span>
+            <h2 className="section-title">Conheça a plataforma</h2>
+            <p className="section-subtitle">Interface pensada para sua produtividade</p>
+          </div>
+          
+          <div className="platform-showcase reveal">
+            <div className="platform-showcase-main">
+              <img 
+                src={platformImages.desktop.main} 
+                alt="Plataforma PrismA" 
+                className="platform-showcase-img"
+              />
+            </div>
+            <div className="platform-showcase-info">
+              <div className="platform-showcase-features">
+                <div className="platform-feature">
+                  <Lightbulb size={18} color="#f73886" />
+                  <div>
+                    <h4>Dashboard intuitivo</h4>
+                    <p>Visualize todas as oportunidades em um painel limpo e organizado</p>
+                  </div>
+                </div>
+                <div className="platform-feature">
+                  <Target size={18} color="#f73886" />
+                  <div>
+                    <h4>Match score</h4>
+                    <p>Cada oportunidade recebe uma pontuação de compatibilidade com seu perfil</p>
+                  </div>
+                </div>
+                <div className="platform-feature">
+                  <Users size={18} color="#f73886" />
+                  <div>
+                    <h4>Gestão de clientes</h4>
+                    <p>Acompanhe propostas enviadas e organize seus projetos ativos</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="depoimentos" className="section">
+        <div className="section-container">
+          <div className="section-header reveal">
+            <span className="section-label">Depoimentos</span>
             <h2 className="section-title">O que eles dizem</h2>
-            <p className="section-subtitle">Designers reais, resultados reais</p>
+            <p className="section-subtitle">Designers reais que transformaram sua prospecção</p>
           </div>
           
           <div 
@@ -593,7 +502,7 @@ export function Landing() {
                 <div key={i} className="testimonials-infinite-slide">
                   <Card className="testimonial-infinite-card" glow>
                     <div className="testimonial-infinite-top">
-                      <div className="testimonial-infinite-stats" style={{ background: `${t.color}12`, color: t.color }}>
+                      <div className="testimonial-infinite-stats" style={{ background: 'rgba(247,56,134,0.08)', color: '#f73886' }}>
                         <TrendingUp size={14} />
                         {t.stats}
                       </div>
@@ -601,7 +510,7 @@ export function Landing() {
                     </div>
                     <p className="testimonial-infinite-text">{t.text}</p>
                     <div className="testimonial-infinite-author">
-                      <div className="testimonial-infinite-avatar" style={{ background: `linear-gradient(135deg, ${t.color}30, ${t.color}10)` }}>{t.avatar}</div>
+                      <div className="testimonial-infinite-avatar">{t.avatar}</div>
                       <div>
                         <div className="testimonial-infinite-name">{t.name}</div>
                         <div className="testimonial-infinite-role">{t.role}</div>
@@ -623,15 +532,12 @@ export function Landing() {
         </div>
       </section>
 
-      <section id="planos" className="section">
+      <section id="planos" className="section section-alt">
         <div className="section-container">
           <div className="section-header reveal">
-            <span className="section-label">
-              <Diamond size={12} color="#f73886" />
-              Preços
-            </span>
-            <h2 className="section-title">Planos</h2>
-            <p className="section-subtitle">Comece grátis e escale conforme sua necessidade</p>
+            <span className="section-label">Planos</span>
+            <h2 className="section-title">Escolha o plano ideal</h2>
+            <p className="section-subtitle">Comece gratuitamente e evolua conforme sua demanda</p>
           </div>
           
           <div className="plans-grid">
@@ -642,8 +548,9 @@ export function Landing() {
                 period: '', 
                 desc: 'Para começar a explorar', 
                 icon: Zap, 
-                color: '#f73886', 
-                gradientClass: 'plan-gradient-starter', 
+                accentColor: '#8b8b8b',
+                bgGradient: 'linear-gradient(180deg, #fafafa 0%, #f5f5f5 100%)',
+                borderColor: 'rgba(139,139,139,0.15)',
                 popular: false, 
                 disabled: false, 
                 features: [
@@ -661,17 +568,18 @@ export function Landing() {
                 period: '/mês', 
                 desc: 'Para designers ativos', 
                 icon: Star, 
-                color: '#f73886', 
-                gradientClass: 'plan-gradient-pro', 
+                accentColor: '#f73886',
+                bgGradient: 'linear-gradient(180deg, rgba(247,56,134,0.04) 0%, rgba(247,56,134,0.01) 100%)',
+                borderColor: 'rgba(247,56,134,0.25)',
                 popular: true, 
                 disabled: false, 
                 features: [
                   'Oportunidades ilimitadas',
-                  'Busca aprofundada',
+                  'Busca aprofundada com IA',
                   'Suporte prioritário 24/7',
                   'Dashboard avançado',
-                  'Gerador de mensagens',
-                  'Filtros avançados'
+                  'Gerador de propostas com IA',
+                  'Filtros avançados e alertas'
                 ], 
                 cta: 'Assinar Professional', 
                 variant: 'primary' as const 
@@ -682,33 +590,78 @@ export function Landing() {
                 period: '', 
                 desc: 'Para times e agências', 
                 icon: Building2, 
-                color: '#f73886', 
-                gradientClass: 'plan-gradient-enterprise', 
+                accentColor: '#a855f7',
+                bgGradient: 'linear-gradient(180deg, rgba(168,85,247,0.03) 0%, rgba(168,85,247,0.01) 100%)',
+                borderColor: 'rgba(168,85,247,0.15)',
                 popular: false, 
                 disabled: true, 
                 features: [
-                  '***',
-                  '***',
-                  '***',
-                  '***',
-                  '***'
+                  'Tudo do Professional',
+                  'Gestão de equipe',
+                  'Relatórios personalizados',
+                  'API de integração',
+                  'Onboarding dedicado'
                 ], 
-                cta: 'Em breve', 
+                cta: 'Lista de espera', 
                 variant: 'outline' as const 
               }
             ].map((plan, i) => (
-              <Card key={i} className={`plan-card ${plan.gradientClass} ${plan.popular ? 'plan-card-featured' : ''} ${plan.disabled ? 'plan-card-disabled' : ''} reveal`} glow={plan.popular}>
-                {plan.popular && <div className="plan-badge"><Star size={12} fill="#fff" />Mais popular</div>}
-                {plan.disabled && <div className="plan-overlay"><Clock size={20} /><span>Em breve</span></div>}
-                <div className="plan-card-top">
-                  <div className="plan-card-icon" style={{ background: `${plan.color}15` }}><plan.icon size={22} color={plan.color} /></div>
-                  <div className="plan-card-header"><h3 className="plan-card-name">{plan.name}</h3><p className="plan-card-desc">{plan.desc}</p></div>
+              <div 
+                key={i} 
+                className={`plan-card-wrapper ${plan.popular ? 'plan-card-wrapper-featured' : ''} ${plan.disabled ? 'plan-card-wrapper-disabled' : ''} reveal`}
+              >
+                <div 
+                  className="plan-card-new" 
+                  style={{ 
+                    background: plan.bgGradient, 
+                    borderColor: plan.borderColor 
+                  }}
+                >
+                  {plan.popular && (
+                    <div className="plan-badge-new">
+                      <Star size={12} fill="#fff" />
+                      Mais popular
+                    </div>
+                  )}
+                  
+                  <div className="plan-card-header-new">
+                    <div className="plan-card-icon-new" style={{ background: `${plan.accentColor}12` }}>
+                      <plan.icon size={20} color={plan.accentColor} />
+                    </div>
+                    <div>
+                      <h3 className="plan-card-name-new" style={{ color: plan.accentColor }}>{plan.name}</h3>
+                      <p className="plan-card-desc-new">{plan.desc}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="plan-card-price-new">
+                    <span className="plan-card-amount-new" style={{ color: plan.accentColor }}>{plan.price}</span>
+                    {plan.period && <span className="plan-card-period-new">{plan.period}</span>}
+                  </div>
+                  
+                  <div className="plan-card-divider-new" style={{ background: plan.borderColor }} />
+                  
+                  <ul className="plan-card-features-new">
+                    {plan.features.map((f, j) => (
+                      <li key={j}>
+                        <CheckCircle size={14} color={plan.accentColor} />
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                  
+                  <Link to={plan.disabled ? '#' : '/register'} style={{ width: '100%' }}>
+                    <Button 
+                      variant={plan.variant} 
+                      fullWidth 
+                      size="lg" 
+                      disabled={plan.disabled}
+                    >
+                      {plan.cta}
+                    </Button>
+                  </Link>
                 </div>
-                <div className="plan-card-price"><span className="plan-card-amount">{plan.price}</span>{plan.period && <span className="plan-card-period">{plan.period}</span>}</div>
-                <div className="plan-card-divider" />
-                <ul className="plan-card-features">{plan.features.map((f, j) => <li key={j}><CheckCircle size={14} color="#f73886" />{f}</li>)}</ul>
-                <Link to={plan.disabled ? '#' : '/register'}><Button variant={plan.variant} fullWidth size="lg" disabled={plan.disabled}>{plan.cta}</Button></Link>
-              </Card>
+              </div>
             ))}
           </div>
         </div>
@@ -717,24 +670,23 @@ export function Landing() {
       <section className="section cta-section">
         <div className="section-container">
           <div className="cta reveal">
-            <div className="cta-glow" />
-            <div className="cta-particles">
-              {[...Array(20)].map((_, i) => (
-                <div key={i} className="cta-particle" style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 3}s`,
-                  width: `${Math.random() * 4 + 2}px`,
-                  height: `${Math.random() * 4 + 2}px`
-                }} />
-              ))}
-            </div>
-            <Sparkles size={32} className="cta-sparkle" color="#f73886" />
-            <h2 className="cta-title">Pronto para parar de procurar?</h2>
-            <p className="cta-subtitle">Deixe a IA encontrar as melhores oportunidades para você.</p>
-            <div className="cta-actions">
-              <Link to="/register"><Button size="lg" icon={<ArrowRight size={18} />}>Criar conta gratuita</Button></Link>
-              <Link to="/login"><Button variant="outline" size="lg">Já tenho conta</Button></Link>
+            <div className="cta-bg-pattern" />
+            <div className="cta-content">
+              <Sparkles size={28} className="cta-sparkle" color="#f73886" />
+              <h2 className="cta-title">Pronto para encontrar os melhores clientes?</h2>
+              <p className="cta-subtitle">Junte-se a mais de 2.400 designers que já transformaram sua prospecção com a PrismA.</p>
+              <div className="cta-actions">
+                <Link to="/register">
+                  <Button size="lg" icon={<ArrowRight size={18} />}>
+                    Criar conta gratuita
+                  </Button>
+                </Link>
+                <Link to="/login">
+                  <Button variant="outline" size="lg">
+                    Já tenho conta
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
