@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './Landing.css';
 
-const Landing = () => {
-  const [isAnnual, setIsAnnual] = useState(false);
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
+const Landing: React.FC = () => {
+  const [isAnnual, setIsAnnual] = useState<boolean>(false);
 
   const testimonials = [
     { name: 'Ana Silva', role: 'Engenheira Frontend', text: 'A Prisma transformou minha busca por vagas. As recomendações são extremamente precisas e me ajudaram a encontrar meu emprego ideal em menos de 2 semanas.' },
@@ -11,10 +10,12 @@ const Landing = () => {
     { name: 'Mariana Costa', role: 'Product Designer', text: 'A interface é intuitiva e elegante. Finalmente uma ferramenta que entende as necessidades de quem está construindo carreira.' }
   ];
 
-  const getPrice = (monthly, yearly) => isAnnual ? yearly : monthly;
+  const getPrice = (monthly: number, yearly: number): number => {
+    return isAnnual ? yearly : monthly;
+  };
 
   useEffect(() => {
-    const handleScroll = () => {
+    const handleScroll = (): void => {
       const reveals = document.querySelectorAll('.reveal');
       for (let i = 0; i < reveals.length; i++) {
         const windowHeight = window.innerHeight;
