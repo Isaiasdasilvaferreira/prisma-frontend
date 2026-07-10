@@ -90,7 +90,7 @@ export function Login() {
         
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = rgba(255, 255, 255, ${alpha});
+        ctx.fillStyle = 'rgba(255, 255, 255, ' + alpha + ')';
         ctx.fill();
       }
       
@@ -105,7 +105,7 @@ export function Login() {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = rgba(255, 255, 255, ${alpha});
+            ctx.strokeStyle = 'rgba(255, 255, 255, ' + alpha + ')';
             ctx.lineWidth = 0.3;
             ctx.stroke();
           }
