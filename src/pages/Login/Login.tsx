@@ -90,7 +90,7 @@ export function Login() {
         
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = rgba(255, 255, 255, ${alpha});
+        ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
         ctx.fill();
       }
       
@@ -105,7 +105,7 @@ export function Login() {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = rgba(255, 255, 255, ${alpha});
+            ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
             ctx.lineWidth = 0.3;
             ctx.stroke();
           }
@@ -179,7 +179,14 @@ export function Login() {
               <label className="login-label">Email</label>
               <div className="login-input-wrapper">
                 <Mail size={16} className="login-input-icon" />
-                <input type="email" placeholder="seu@email.com" value={email} onChange={(e) => setEmail(e.target.value)} className="login-input" required />
+                <input 
+                  type="email" 
+                  placeholder="seu@email.com" 
+                  value={email} 
+                  onChange={(e) => setEmail(e.target.value)} 
+                  className="login-input" 
+                  required 
+                />
               </div>
             </div>
             
@@ -187,8 +194,20 @@ export function Login() {
               <label className="login-label">Senha</label>
               <div className="login-input-wrapper">
                 <Lock size={16} className="login-input-icon" />
-                <input type={showPassword ? "text" : "password"} placeholder="Sua senha" value={password} onChange={(e) => setPassword(e.target.value)} className="login-input" required />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="login-input-toggle" tabIndex={-1}>
+                <input 
+                  type={showPassword ? "text" : "password"} 
+                  placeholder="Sua senha" 
+                  value={password} 
+                  onChange={(e) => setPassword(e.target.value)} 
+                  className="login-input" 
+                  required 
+                />
+                <button 
+                  type="button" 
+                  onClick={() => setShowPassword(!showPassword)} 
+                  className="login-input-toggle" 
+                  tabIndex={-1}
+                >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
