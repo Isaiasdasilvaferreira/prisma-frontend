@@ -107,6 +107,9 @@ const comparisons = [
 export function Plans() {
   const navigate = useNavigate();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   const handlePlanClick = (plan: typeof plans[0]) => {
     if (plan.disabled) return;
@@ -115,9 +118,9 @@ export function Plans() {
 
   return (
     <div className="plans-page">
-      <Sidebar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="plans-main">
-        <Header />
+        <Header onMenuClick={toggleSidebar} />
         <div className="plans-content">
           <div className="plans-hero">
             <div className="plans-hero-bg">
