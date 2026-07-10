@@ -7,11 +7,15 @@ import { Send, MessageSquare, Sparkles, ArrowRight } from 'lucide-react';
 import './Messages.css';
 
 export function Messages() {
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
+
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+
   return (
     <div className="dashboard-page">
-      <Sidebar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="dashboard-main">
-        <Header />
+        <Header onMenuClick={toggleSidebar} />
         <div className="dashboard-content messages-content">
           <div className="messages-header">
             <h1 className="messages-title">Mensagens</h1>
