@@ -4,7 +4,7 @@ import { LogOut, ChevronDown, Menu } from 'lucide-react';
 import './Header.css';
 
 interface HeaderProps {
-  onMenuClick: () => void;
+  onMenuClick?: () => void;
 }
 
 export function Header({ onMenuClick }: HeaderProps) {
