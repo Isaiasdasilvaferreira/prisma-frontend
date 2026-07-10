@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Sidebar } from '../../components/Sidebar/Sidebar';
 import { Header } from '../../components/Header/Header';
 import { Card } from '../../components/Card/Card';
@@ -7,11 +7,15 @@ import { GraduationCap, Play, BookOpen, CheckCircle, ArrowRight } from 'lucide-r
 import './Tutorial.css';
 
 export function Tutorial() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+
   return (
     <div className="dashboard-page">
-      <Sidebar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="dashboard-main">
-        <Header />
+        <Header onMenuClick={toggleSidebar} />
         <div className="dashboard-content tutorial-content">
           <div className="tutorial-header">
             <h1 className="tutorial-title">Tutorial</h1>
