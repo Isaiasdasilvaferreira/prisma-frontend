@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center;
   padding: 32px;
-  background: #fafafa;
+  background: #fdf2f8;
   position: relative;
   overflow: hidden;
 }
@@ -27,8 +27,8 @@
   position: absolute;
   inset: 0;
   background-image: 
-    linear-gradient(rgba(236, 72, 153, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(236, 72, 153, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(236, 72, 153, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(236, 72, 153, 0.12) 1px, transparent 1px);
   background-size: 60px 60px;
   animation: gridMove 25s linear infinite;
 }
@@ -41,24 +41,24 @@
 .login-orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(100px);
+  filter: blur(120px);
 }
 
 .login-orb-1 {
-  width: 600px;
-  height: 600px;
-  background: rgba(236, 72, 153, 0.08);
-  top: -200px;
-  right: -150px;
+  width: 700px;
+  height: 700px;
+  background: rgba(236, 72, 153, 0.25);
+  top: -250px;
+  right: -200px;
   animation: floatOrb1 20s ease-in-out infinite;
 }
 
 .login-orb-2 {
-  width: 500px;
-  height: 500px;
-  background: rgba(244, 114, 182, 0.06);
-  bottom: -150px;
-  left: -100px;
+  width: 600px;
+  height: 600px;
+  background: rgba(244, 114, 182, 0.2);
+  bottom: -200px;
+  left: -150px;
   animation: floatOrb2 25s ease-in-out infinite;
 }
 
@@ -72,12 +72,12 @@
   width: 280px;
   height: 280px;
   animation: spinSlow 35s linear infinite;
-  opacity: 0.4;
+  opacity: 0.6;
 }
 
 .login-geo-1 rect,
 .login-geo-1 circle {
-  stroke: rgba(236, 72, 153, 0.15);
+  stroke: rgba(236, 72, 153, 0.3);
 }
 
 .login-geo-2 {
@@ -86,11 +86,11 @@
   width: 180px;
   height: 180px;
   animation: spinSlow 40s linear infinite reverse;
-  opacity: 0.3;
+  opacity: 0.5;
 }
 
 .login-geo-2 polygon {
-  stroke: rgba(236, 72, 153, 0.12);
+  stroke: rgba(236, 72, 153, 0.25);
 }
 
 .login-container {
@@ -101,18 +101,18 @@
 }
 
 .login-card {
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(40px) saturate(180%);
   -webkit-backdrop-filter: blur(40px) saturate(180%);
-  border: 1px solid rgba(236, 72, 153, 0.1);
+  border: 1px solid rgba(236, 72, 153, 0.2);
   border-radius: 20px;
   padding: 48px 44px;
   display: flex;
   flex-direction: column;
   gap: 28px;
   box-shadow: 
-    0 8px 32px rgba(236, 72, 153, 0.08),
-    0 0 0 1px rgba(236, 72, 153, 0.04) inset;
+    0 8px 32px rgba(236, 72, 153, 0.15),
+    0 0 0 1px rgba(236, 72, 153, 0.08) inset;
 }
 
 .login-logo {
@@ -207,8 +207,8 @@
 .login-input {
   width: 100%;
   padding: 14px 48px 14px 44px;
-  background: #f8fafc;
-  border: 1px solid rgba(236, 72, 153, 0.08);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(236, 72, 153, 0.15);
   border-radius: 10px;
   color: #1a1a2e;
   font-size: 15px;
@@ -218,9 +218,9 @@
 
 .login-input:focus {
   outline: none;
-  border-color: rgba(236, 72, 153, 0.25);
+  border-color: rgba(236, 72, 153, 0.4);
   background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.05);
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
 }
 
 .login-input::placeholder {
@@ -238,8 +238,8 @@
 }
 
 .login-input-toggle:hover {
-  color: #1a1a2e;
-  background: rgba(236, 72, 153, 0.06);
+  color: #ec4899;
+  background: rgba(236, 72, 153, 0.08);
 }
 
 .login-options {
@@ -265,7 +265,7 @@
 .login-checkbox {
   width: 18px;
   height: 18px;
-  border: 1.5px solid rgba(236, 72, 153, 0.15);
+  border: 1.5px solid rgba(236, 72, 153, 0.25);
   border-radius: 5px;
   display: flex;
   align-items: center;
@@ -338,7 +338,7 @@
   content: '';
   flex: 1;
   height: 1px;
-  background: rgba(236, 72, 153, 0.08);
+  background: rgba(236, 72, 153, 0.15);
 }
 
 .login-divider span {
@@ -357,8 +357,8 @@
   gap: 12px;
   width: 100%;
   padding: 14px;
-  background: #f8fafc;
-  border: 1px solid rgba(236, 72, 153, 0.08);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(236, 72, 153, 0.15);
   border-radius: 10px;
   color: #1a1a2e;
   font-size: 15px;
@@ -370,8 +370,8 @@
 
 .login-google-btn:hover {
   background: #ffffff;
-  border-color: rgba(236, 72, 153, 0.15);
-  box-shadow: 0 2px 8px rgba(236, 72, 153, 0.06);
+  border-color: rgba(236, 72, 153, 0.3);
+  box-shadow: 0 2px 8px rgba(236, 72, 153, 0.1);
 }
 
 .login-register {
