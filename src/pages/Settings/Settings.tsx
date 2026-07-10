@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Sidebar } from '../../components/Sidebar/Sidebar';
 import { Header } from '../../components/Header/Header';
 import { Card } from '../../components/Card/Card';
@@ -6,11 +6,15 @@ import { User, Shield, ChevronRight } from 'lucide-react';
 import './Settings.css';
 
 export function Settings() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+
   return (
     <div className="dashboard-page">
-      <Sidebar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="dashboard-main">
-        <Header />
+        <Header onMenuClick={toggleSidebar} />
         <div className="dashboard-content settings-content">
           <div className="settings-header">
             <h1 className="settings-title">Configurações</h1>
