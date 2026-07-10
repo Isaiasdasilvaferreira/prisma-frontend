@@ -538,6 +538,11 @@ export function Landing() {
                     variant="outline"
                     size="lg"
                     className="cta-button-outline"
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.95)',
+                      color: '#1a1a2e',
+                      border: '1px solid rgba(255, 255, 255, 0.3)'
+                    }}
                   >
                     Já tenho conta
                   </Button>
