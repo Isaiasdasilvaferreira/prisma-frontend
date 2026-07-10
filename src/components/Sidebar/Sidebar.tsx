@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { 
   Briefcase, BarChart3, Send, GraduationCap, Settings, 
@@ -6,6 +6,11 @@ import {
 } from 'lucide-react';
 import logoImage from '../../assets/losango - prisma.png';
 import './Sidebar.css';
+
+interface SidebarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
 
 const menuItems = [
   { icon: Briefcase, label: 'Oportunidades', path: '/dashboard' },
@@ -15,24 +20,28 @@ const menuItems = [
   { icon: Settings, label: 'Configurações', path: '/settings' },
 ];
 
-export function Sidebar() {
-  const [isOpen, setIsOpen] = useState(false);
+export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
+  const handleClose = () => {
+    if (onClose) onClose();
+  };
 
-  const toggleSidebar = () => setIsOpen(!isOpen);
+  const handleLinkClick = () => {
+    if (onClose) onClose();
+  };
 
   return (
     <>
-      <button className="sidebar-hamburger" onClick={toggleSidebar}>
+      <button className="sidebar-hamburger" onClick={handleClose}>
         {isOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
       <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
-          <NavLink to="/dashboard" className="sidebar-logo-link">
+          <NavLink to="/dashboard" className="sidebar-logo-link" onClick={handleLinkClick}>
             <img src={logoImage} alt="Prisma" className="sidebar-logo-image" />
             Prisma
           </NavLink>
-          <button className="sidebar-close" onClick={toggleSidebar}>
+          <button className="sidebar-close" onClick={handleClose}>
             <X size={20} />
           </button>
         </div>
@@ -42,7 +51,7 @@ export function Sidebar() {
             <NavLink
               key={item.path}
               to={item.path}
-              onClick={() => setIsOpen(false)}
+              onClick={handleLinkClick}
               className={({ isActive }) =>
                 `sidebar-item ${isActive ? 'active' : ''}`
               }
@@ -56,7 +65,7 @@ export function Sidebar() {
         </nav>
 
         <div className="sidebar-footer">
-          <NavLink to="/plans" className="sidebar-upgrade">
+          <NavLink to="/plans" className="sidebar-upgrade" onClick={handleLinkClick}>
             <div className="sidebar-upgrade-content">
               <div className="sidebar-upgrade-icon">
                 <Crown size={18} />
@@ -71,7 +80,7 @@ export function Sidebar() {
         </div>
       </aside>
 
-      <div className={`sidebar-overlay ${isOpen ? 'visible' : ''}`} onClick={toggleSidebar} />
+      <div className={`sidebar-overlay ${isOpen ? 'visible' : ''}`} onClick={handleClose} />
     </>
   );
 }
