@@ -22,16 +22,11 @@ export function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login, loginTest } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
   const animationFrameRef = useRef<number>(0);
-
-  const TEST_CREDENTIALS = {
-    email: 'teste@prisma.com',
-    password: '123456'
-  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -95,7 +90,7 @@ export function Login() {
         
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+        ctx.fillStyle = rgba(255, 255, 255, ${alpha});
         ctx.fill();
       }
       
@@ -110,7 +105,7 @@ export function Login() {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+            ctx.strokeStyle = rgba(255, 255, 255, ${alpha});
             ctx.lineWidth = 0.3;
             ctx.stroke();
           }
@@ -128,24 +123,13 @@ export function Login() {
     };
   }, []);
 
-  const fillTestCredentials = () => {
-    setEmail(TEST_CREDENTIALS.email);
-    setPassword(TEST_CREDENTIALS.password);
-    setError('');
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-    
     try {
-      if (email === TEST_CREDENTIALS.email && password === TEST_CREDENTIALS.password) {
-        loginTest();
-      } else {
-        await login(email, password);
-        navigate('/dashboard');
-      }
+      await login(email, password);
+      navigate('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Email ou senha inválidos');
     } finally {
@@ -188,74 +172,6 @@ export function Login() {
           <div className="login-header">
             <h1 className="login-title">Bem-vindo de volta</h1>
             <p className="login-subtitle">Entre na sua conta e continue de onde parou</p>
-          </div>
-
-          <button
-            onClick={loginTest}
-            style={{
-              width: '100%',
-              padding: '16px',
-              marginBottom: '16px',
-              backgroundColor: '#10B981',
-              color: 'white',
-              border: 'none',
-              borderRadius: '8px',
-              fontSize: '16px',
-              fontWeight: 'bold',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '10px',
-              transition: 'all 0.3s'
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#059669'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#10B981'}
-            type="button"
-          >
-            <span>⚡</span>
-            Acessar Dashboard (Pular Login)
-          </button>
-
-          <div style={{
-            backgroundColor: 'rgba(108, 99, 255, 0.1)',
-            border: '1px solid rgba(108, 99, 255, 0.3)',
-            borderRadius: '8px',
-            padding: '12px 16px',
-            marginBottom: '20px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: '8px'
-          }}>
-            <div>
-              <div style={{ color: '#6C63FF', fontSize: '12px', fontWeight: '600', marginBottom: '4px' }}>
-                🔑 Credenciais de teste
-              </div>
-              <div style={{ color: '#ccc', fontSize: '12px', fontFamily: 'monospace' }}>
-                {TEST_CREDENTIALS.email} / {TEST_CREDENTIALS.password}
-              </div>
-            </div>
-            <button
-              onClick={fillTestCredentials}
-              style={{
-                backgroundColor: '#6C63FF',
-                color: 'white',
-                border: 'none',
-                borderRadius: '6px',
-                padding: '6px 12px',
-                fontSize: '12px',
-                fontWeight: '600',
-                cursor: 'pointer',
-                transition: 'background-color 0.3s'
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#5a52d5'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#6C63FF'}
-              type="button"
-            >
-              Preencher
-            </button>
           </div>
 
           <form onSubmit={handleSubmit} className="login-form">
