@@ -10,15 +10,17 @@ interface ButtonProps {
   disabled?: boolean;
   fullWidth?: boolean;
   icon?: React.ReactNode;
+  className?: string;
 }
 
 export function Button({
   children, variant = 'primary', size = 'md', onClick,
-  type = 'button', disabled = false, fullWidth = false, icon
+  type = 'button', disabled = false, fullWidth = false, icon,
+  className = ''
 }: ButtonProps) {
   return (
     <button
-      className={`btn btn-${variant} btn-${size} ${fullWidth ? 'btn-full' : ''}`}
+      className={`btn btn-${variant} btn-${size} ${fullWidth ? 'btn-full' : ''} ${className}`}
       onClick={onClick} type={type} disabled={disabled}
     >
       {icon && <span className="btn-icon">{icon}</span>}
