@@ -90,7 +90,7 @@ export function Login() {
         
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(255, 255, 255, ' + alpha + ')';
+        ctx.fillStyle = 'rgba(236, 72, 153, ' + alpha + ')';
         ctx.fill();
       }
       
@@ -105,7 +105,7 @@ export function Login() {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = 'rgba(255, 255, 255, ' + alpha + ')';
+            ctx.strokeStyle = 'rgba(236, 72, 153, ' + alpha + ')';
             ctx.lineWidth = 0.3;
             ctx.stroke();
           }
@@ -148,13 +148,13 @@ export function Login() {
           <div className="login-orb login-orb-2" />
         </div>
         <svg className="login-geo login-geo-1" viewBox="0 0 300 300">
-          <rect x="40" y="40" width="220" height="220" rx="40" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-          <circle cx="150" cy="150" r="80" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1" strokeDasharray="6 4" />
-          <circle cx="150" cy="150" r="8" fill="white" opacity="0.15" />
+          <rect x="40" y="40" width="220" height="220" rx="40" fill="none" stroke="rgba(236, 72, 153, 0.3)" strokeWidth="1" />
+          <circle cx="150" cy="150" r="80" fill="none" stroke="rgba(236, 72, 153, 0.2)" strokeWidth="1" strokeDasharray="6 4" />
+          <circle cx="150" cy="150" r="8" fill="rgba(236, 72, 153, 0.3)" />
         </svg>
         <svg className="login-geo login-geo-2" viewBox="0 0 200 200">
-          <polygon points="100,25 175,160 25,160" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
-          <polygon points="100,50 150,140 50,140" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="1" strokeDasharray="5 3" />
+          <polygon points="100,25 175,160 25,160" fill="none" stroke="rgba(236, 72, 153, 0.2)" strokeWidth="1" />
+          <polygon points="100,50 150,140 50,140" fill="none" stroke="rgba(236, 72, 153, 0.15)" strokeWidth="1" strokeDasharray="5 3" />
         </svg>
       </div>
       
@@ -162,9 +162,9 @@ export function Login() {
         <div className="login-card">
           <Link to="/" className="login-logo">
             <svg width="32" height="32" viewBox="0 0 28 28" fill="none" className="login-logo-svg">
-              <rect x="2" y="2" width="24" height="24" rx="6" stroke="white" strokeWidth="1.5" />
-              <path d="M8 20L14 8L20 20" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              <circle cx="14" cy="14" r="2" fill="white" />
+              <rect x="2" y="2" width="24" height="24" rx="6" stroke="#ec4899" strokeWidth="1.5" />
+              <path d="M8 20L14 8L20 20" stroke="#ec4899" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              <circle cx="14" cy="14" r="2" fill="#ec4899" />
             </svg>
             <span>PrismA</span>
           </Link>
