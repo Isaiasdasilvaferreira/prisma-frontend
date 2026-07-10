@@ -1,0 +1,56 @@
+
+@import './reset.css';
+
+body {
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+#root {
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #ffffff;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-track:hover {
+  background: #fafafa;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ec4899;
+  border-radius: 8px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #db2777;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: #be185d;
+}
+
+::-webkit-scrollbar-corner {
+  background: #ffffff;
+}
+
+::selection {
+  background: #ec4899;
+  color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+}
