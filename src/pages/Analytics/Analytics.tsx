@@ -4,7 +4,8 @@ import { Header } from '../../components/Header/Header';
 import { Card } from '../../components/Card/Card';
 import { 
   Briefcase, TrendingUp, Target, Globe, 
-  ArrowUpRight, Building2, Star, BarChart3
+  ArrowUpRight, Building2, Star, BarChart3,
+  AlertCircle
 } from 'lucide-react';
 import {
   ComposableMap,
@@ -24,60 +25,6 @@ import {
 } from 'recharts';
 import './Analytics.css';
 
-const mapData = [
-  { country: 'USA', name: 'Estados Unidos', value: 324 },
-  { country: 'BRA', name: 'Brasil', value: 187 },
-  { country: 'CAN', name: 'Canadá', value: 98 },
-  { country: 'GBR', name: 'Reino Unido', value: 156 },
-  { country: 'DEU', name: 'Alemanha', value: 142 },
-  { country: 'FRA', name: 'França', value: 120 },
-  { country: 'AUS', name: 'Austrália', value: 85 },
-  { country: 'IND', name: 'Índia', value: 210 },
-  { country: 'CHN', name: 'China', value: 175 },
-  { country: 'MEX', name: 'México', value: 67 },
-  { country: 'ARG', name: 'Argentina', value: 43 },
-  { country: 'COL', name: 'Colômbia', value: 52 },
-  { country: 'PER', name: 'Peru', value: 31 },
-  { country: 'CHL', name: 'Chile', value: 28 },
-  { country: 'ESP', name: 'Espanha', value: 94 },
-  { country: 'ITA', name: 'Itália', value: 76 },
-  { country: 'NLD', name: 'Holanda', value: 55 },
-  { country: 'SWE', name: 'Suécia', value: 44 },
-  { country: 'JPN', name: 'Japão', value: 112 },
-  { country: 'KOR', name: 'Coreia do Sul', value: 89 },
-  { country: 'ZAF', name: 'África do Sul', value: 33 },
-  { country: 'NGA', name: 'Nigéria', value: 27 },
-  { country: 'EGY', name: 'Egito', value: 22 },
-];
-
-const barData = [
-  { name: 'UI Design', value: 142 },
-  { name: 'UX Design', value: 128 },
-  { name: 'Motion Design', value: 76 },
-  { name: 'Social Media', value: 94 },
-  { name: 'Identidade Visual', value: 112 },
-  { name: 'Branding', value: 65 },
-  { name: 'Landing Pages', value: 88 },
-  { name: 'Carrosséis', value: 53 },
-];
-
-const topCompanies = [
-  { name: 'TechCorp Brasil', jobs: 24, match: 96 },
-  { name: 'Creative Studio SP', jobs: 18, match: 92 },
-  { name: 'StartupXYZ', jobs: 15, match: 89 },
-  { name: 'Agência Nova', jobs: 12, match: 85 },
-  { name: 'E-commerce Top', jobs: 10, match: 82 },
-];
-
-const colorScale = (value: number) => {
-  if (value > 200) return '#4a0d26';
-  if (value > 150) return '#6b1438';
-  if (value > 100) return '#8c1a4a';
-  if (value > 50) return '#ad205c';
-  if (value > 20) return '#ce266e';
-  return '#e8b4c8';
-};
-
 const geoUrl = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json';
 
 export function Analytics() {
@@ -90,30 +37,30 @@ export function Analytics() {
   const stats = [
     { 
       icon: Briefcase, 
-      value: '1.424', 
+      value: '0', 
       label: 'Vagas ativas', 
-      change: '+12% este mês',
+      change: 'Aguardando dados',
       color: '#3b82f6'
     },
     { 
       icon: Target, 
-      value: '87,6%', 
+      value: '0%', 
       label: 'Match médio', 
-      change: '+2,1% esta semana',
+      change: 'Aguardando dados',
       color: '#22c55e'
     },
     { 
       icon: Building2, 
-      value: '324', 
+      value: '0', 
       label: 'Empresas ativas', 
-      change: '+8 esta semana',
+      change: 'Aguardando dados',
       color: '#a855f7'
     },
     { 
       icon: Globe, 
-      value: '22', 
+      value: '0', 
       label: 'Países alcançados', 
-      change: '+3 novos',
+      change: 'Aguardando dados',
       color: '#f59e0b'
     },
   ];
@@ -130,7 +77,7 @@ export function Analytics() {
               <p className="analytics-subtitle">Visão geral do mercado de design e oportunidades.</p>
             </div>
             <div className="analytics-header-actions">
-              <span className="analytics-badge">Atualizado há 2 min</span>
+              <span className="analytics-badge">Aguardando dados</span>
             </div>
           </div>
 
@@ -159,7 +106,7 @@ export function Analytics() {
                 <div className="analytics-card-actions">
                   {selectedCountry && (
                     <span className="analytics-tag">
-                      {mapData.find(d => d.country === selectedCountry)?.name}
+                      País selecionado
                     </span>
                   )}
                 </div>
@@ -177,20 +124,16 @@ export function Analytics() {
                     <Geographies geography={geoUrl}>
                       {({ geographies }: any) =>
                         geographies.map((geo: any) => {
-                          const countryData = mapData.find(
-                            (d) => d.country === geo.properties.iso_a3 || d.country === geo.properties.iso_a2
-                          );
-                          const value = countryData?.value || 0;
                           return (
                             <Geography
                               key={geo.rsmKey}
                               geography={geo}
-                              fill={colorScale(value)}
+                              fill="#e8b4c8"
                               stroke="#0a0a0a"
                               strokeWidth={0.5}
                               style={{
                                 default: { outline: 'none' },
-                                hover: { fill: '#e8b4c8', outline: 'none', cursor: 'pointer' },
+                                hover: { fill: '#ce266e', outline: 'none', cursor: 'pointer' },
                                 pressed: { outline: 'none' },
                               }}
                               onClick={() => {
@@ -208,7 +151,7 @@ export function Analytics() {
               <div className="analytics-map-footer">
                 <span className="analytics-map-note">
                   {selectedCountry 
-                    ? `${mapData.find(d => d.country === selectedCountry)?.name} — ${mapData.find(d => d.country === selectedCountry)?.value} vagas`
+                    ? 'Aguardando dados do país selecionado'
                     : 'Clique em um país para ver detalhes'
                   }
                 </span>
@@ -230,7 +173,7 @@ export function Analytics() {
               </div>
               <div className="analytics-chart-container">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={barData} layout="vertical" margin={{ left: 80, right: 20, top: 10, bottom: 10 }}>
+                  <BarChart data={[]} layout="vertical" margin={{ left: 80, right: 20, top: 10, bottom: 10 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#222" />
                     <XAxis type="number" stroke="#444" tick={{ fill: '#444', fontSize: 11 }} />
                     <YAxis 
@@ -245,9 +188,7 @@ export function Analytics() {
                       itemStyle={{ color: '#fff', fontSize: 12 }}
                     />
                     <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={18}>
-                      {barData.map((_, index) => (
-                        <Cell key={`cell-${index}`} fill={['#3b82f6', '#22c55e', '#a855f7', '#f59e0b', '#ec4899', '#14b8a6', '#f97316', '#8b5cf6'][index % 8]} />
-                      ))}
+                      {[]}
                     </Bar>
                   </BarChart>
                 </ResponsiveContainer>
@@ -273,27 +214,11 @@ export function Analytics() {
                   </tr>
                 </thead>
                 <tbody>
-                  {topCompanies.map((company, index) => (
-                    <tr key={index}>
-                      <td>
-                        <div className="analytics-company">
-                          <span className="analytics-rank">#{index + 1}</span>
-                          {company.name}
-                        </div>
-                      </td>
-                      <td>{company.jobs}</td>
-                      <td>
-                        <span className="analytics-match" style={{ 
-                          color: company.match >= 90 ? '#22c55e' : company.match >= 85 ? '#f59e0b' : '#3b82f6'
-                        }}>
-                          {company.match}%
-                        </span>
-                      </td>
-                      <td>
-                        <span className="analytics-status">Ativa</span>
-                      </td>
-                    </tr>
-                  ))}
+                  <tr>
+                    <td colSpan={4} style={{ textAlign: 'center', color: '#94a3b8', padding: '40px 0' }}>
+                      Nenhuma empresa encontrada
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
