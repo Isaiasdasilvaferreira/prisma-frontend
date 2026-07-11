@@ -18,102 +18,39 @@ import {
 } from 'lucide-react';
 import './Dashboard.css';
 
-const mockOpportunities = [
-  {
-    id: '1',
-    title: 'Senior Product Designer',
-    company: 'TechCorp Brasil',
-    logo: 'TC',
-    type: 'CLT',
-    modality: 'Remoto',
-    level: 'Sênior',
-    budget: 'R$ 15.000 - 18.000',
-    match: 95,
-    isNew: true,
-    isUrgent: false,
-    location: 'São Paulo, SP',
-    postedAt: '2 horas atrás'
-  },
-  {
-    id: '2',
-    title: 'UI Designer Freelancer',
-    company: 'Agência Creativa',
-    logo: 'AC',
-    type: 'Freelancer',
-    modality: 'Remoto',
-    level: 'Pleno',
-    budget: 'R$ 8.000 - 12.000',
-    match: 88,
-    isNew: true,
-    isUrgent: true,
-    location: 'Remoto',
-    postedAt: '5 horas atrás'
-  },
-  {
-    id: '3',
-    title: 'Brand Designer',
-    company: 'Studio Design Co.',
-    logo: 'SD',
-    type: 'Freelancer',
-    modality: 'Híbrido',
-    level: 'Pleno',
-    budget: 'R$ 6.500 - 9.000',
-    match: 82,
-    isNew: false,
-    isUrgent: false,
-    location: 'Rio de Janeiro, RJ',
-    postedAt: '1 dia atrás'
-  },
-  {
-    id: '4',
-    title: 'UX Designer Júnior',
-    company: 'Startup Inovadora',
-    logo: 'SI',
-    type: 'CLT',
-    modality: 'Presencial',
-    level: 'Júnior',
-    budget: 'R$ 4.500 - 6.000',
-    match: 76,
-    isNew: false,
-    isUrgent: false,
-    location: 'Belo Horizonte, MG',
-    postedAt: '2 dias atrás'
-  }
-];
-
 const statsCards = [
   { 
     icon: TrendingUp, 
-    value: '24', 
+    value: '0', 
     label: 'Oportunidades',
-    change: '+12%',
+    change: '+0%',
     trend: 'up',
     color: '#ec4899',
     bgColor: 'rgba(236, 72, 153, 0.08)'
   },
   { 
     icon: Star, 
-    value: '8', 
+    value: '0', 
     label: 'Novas esta semana',
-    change: '+3',
+    change: '+0',
     trend: 'up',
     color: '#f472b6',
     bgColor: 'rgba(244, 114, 182, 0.08)'
   },
   { 
     icon: MessageSquare, 
-    value: '5', 
+    value: '0', 
     label: 'Mensagens',
-    change: '+2',
+    change: '+0',
     trend: 'up',
     color: '#db2777',
     bgColor: 'rgba(219, 39, 119, 0.08)'
   },
   { 
     icon: Target, 
-    value: '85%', 
+    value: '0%', 
     label: 'Taxa de match',
-    change: '+5%',
+    change: '+0%',
     trend: 'up',
     color: '#be185d',
     bgColor: 'rgba(190, 24, 93, 0.08)'
@@ -250,17 +187,6 @@ export function Dashboard() {
     return [];
   };
 
-  const filteredOpportunities = mockOpportunities.filter(opp => {
-    if (searchTerm && !opp.title.toLowerCase().includes(searchTerm.toLowerCase()) && !opp.company.toLowerCase().includes(searchTerm.toLowerCase())) {
-      return false;
-    }
-    if (selectedContractType === 'clt' && opp.type !== 'CLT') return false;
-    if (selectedContractType === 'freelancer' && opp.type !== 'Freelancer') return false;
-    if (filters.modalidades.length > 0 && !filters.modalidades.includes(opp.modality)) return false;
-    if (filters.niveis.length > 0 && !filters.niveis.includes(opp.level)) return false;
-    return true;
-  });
-
   return (
     <div className="dashboard-page">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -349,67 +275,23 @@ export function Dashboard() {
                 </div>
                 <div className="dashboard-section-header-left">
                   <h2 className="dashboard-section-title">Oportunidades</h2>
-                  <span className="dashboard-section-badge pulse">{filteredOpportunities.length} disponíveis</span>
+                  <span className="dashboard-section-badge pulse">0 disponíveis</span>
                 </div>
               </div>
               
               <div className="dashboard-opportunities-container">
-                {filteredOpportunities.map((opp) => (
-                  <div key={opp.id} className={`dashboard-opportunity-card ${opp.isNew ? 'card-new' : ''}`}>
-                    <div className="dashboard-opportunity-card-left">
-                      <div className="dashboard-opportunity-company-logo">
-                        {opp.logo}
-                      </div>
-                      <div className="dashboard-opportunity-card-badges">
-                        {opp.isNew && <span className="badge badge-new">Novo</span>}
-                        {opp.isUrgent && <span className="badge badge-urgent">Urgente</span>}
-                      </div>
-                    </div>
-                    <div className="dashboard-opportunity-card-body">
-                      <div className="dashboard-opportunity-card-header">
-                        <div>
-                          <h3 className="dashboard-opportunity-card-title">{opp.title}</h3>
-                          <p className="dashboard-opportunity-card-company">
-                            <Building2 size={12} />
-                            {opp.company}
-                          </p>
-                        </div>
-                        <div 
-                          className={`dashboard-opportunity-save ${savedOpps.includes(opp.id) ? 'saved' : ''}`}
-                          onClick={() => toggleSave(opp.id)}
-                        >
-                          <Heart size={16} fill={savedOpps.includes(opp.id) ? '#ec4899' : 'none'} />
-                        </div>
-                      </div>
-                      <div className="dashboard-opportunity-card-meta">
-                        <span className="meta-type">{opp.type}</span>
-                        <span><MapPin size={12} />{opp.location}</span>
-                        <span><Clock size={12} />{opp.postedAt}</span>
-                      </div>
-                      <div className="dashboard-opportunity-card-footer">
-                        <div className="dashboard-opportunity-budget">
-                          <DollarSign size={14} />
-                          {opp.budget}
-                        </div>
-                        <div className="dashboard-opportunity-card-actions">
-                          <div 
-                            className="dashboard-opportunity-match"
-                            style={{ 
-                              background: `rgba(236, 72, 153, ${opp.match / 100 * 0.15})`,
-                              color: '#ec4899'
-                            }}
-                          >
-                            <Target size={12} />
-                            {opp.match}% match
-                          </div>
-                          <Button size="sm" variant="primary" icon={<ArrowRight size={14} />}>
-                            Ver detalhes
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
+                <div className="dashboard-empty-state">
+                  <div className="dashboard-empty-state-icon">
+                    <Search size={48} />
                   </div>
-                ))}
+                  <h3>Nenhuma oportunidade encontrada</h3>
+                  <p>As oportunidades aparecerão aqui assim que começarmos a coletar vagas para você.</p>
+                  <Link to="/tutorial">
+                    <Button variant="primary" size="md" icon={<GraduationCap size={16} />}>
+                      Ver tutorial
+                    </Button>
+                  </Link>
+                </div>
               </div>
             </Card>
 
