@@ -70,10 +70,6 @@ class Api {
           localStorage.removeItem('user');
           currentToken = null;
           currentUser = null;
-          if (!window.location.pathname.includes('/login') && 
-              !window.location.pathname.includes('/register')) {
-            window.location.href = '/login';
-          }
         }
         return Promise.reject(error);
       }
@@ -174,7 +170,6 @@ class Api {
       currentUser = null;
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      window.location.href = '/login';
     }
   }
 
