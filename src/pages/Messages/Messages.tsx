@@ -132,10 +132,6 @@ export function Messages() {
             <Card className="messages-form-card">
               <div className="messages-form-header">
                 <h3>Gerar mensagem personalizada</h3>
-                <span className="messages-form-badge">
-                  <Sparkles size={14} />
-                  IA
-                </span>
               </div>
 
               <form className="messages-form" onSubmit={(e) => { e.preventDefault(); generateMessage(); }}>
