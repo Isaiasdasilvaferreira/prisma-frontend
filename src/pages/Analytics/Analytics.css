@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   gap: 28px;
-  background: #ffffff;
+  background: #faf5f8;
   min-height: 100vh;
 }
 
@@ -174,7 +174,7 @@
 .analytics-map-container {
   flex: 1;
   min-height: 280px;
-  background: rgba(236, 72, 153, 0.02);
+  background: #faf5f8;
   border-radius: 12px;
   overflow: hidden;
 }
