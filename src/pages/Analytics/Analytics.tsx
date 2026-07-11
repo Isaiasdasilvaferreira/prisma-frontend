@@ -71,12 +71,12 @@ const topCompanies = [
 ];
 
 const colorScale = (value: number) => {
-  if (value > 200) return '#9d174d';
-  if (value > 150) return '#be185d';
-  if (value > 100) return '#db2777';
-  if (value > 50) return '#ec4899';
-  if (value > 20) return '#f472b6';
-  return '#fbcfe8';
+  if (value > 200) return '#831843';
+  if (value > 150) return '#9d174d';
+  if (value > 100) return '#be185d';
+  if (value > 50) return '#db2777';
+  if (value > 20) return '#ec4899';
+  return '#f472b6';
 };
 
 const geoUrl = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json';
@@ -130,7 +130,7 @@ export function Analytics() {
             <div className="analytics-header-actions">
               <span className="analytics-badge">
                 <Sparkles size={12} />
-                Atualizado há 2 min
+                Atualizado há 2 dias
               </span>
             </div>
           </div>
@@ -187,11 +187,11 @@ export function Analytics() {
                               key={geo.rsmKey}
                               geography={geo}
                               fill={colorScale(value)}
-                              stroke="#fafafa"
-                              strokeWidth={0.5}
+                              stroke="#ffffff"
+                              strokeWidth={0.8}
                               style={{
                                 default: { outline: 'none' },
-                                hover: { fill: '#be185d', outline: 'none', cursor: 'pointer' },
+                                hover: { fill: '#831843', outline: 'none', cursor: 'pointer' },
                                 pressed: { outline: 'none' },
                               }}
                               onClick={() => {
@@ -214,10 +214,10 @@ export function Analytics() {
                   }
                 </span>
                 <div className="analytics-legend">
-                  <div className="analytics-legend-item"><span style={{ background: '#9d174d' }} />200+</div>
-                  <div className="analytics-legend-item"><span style={{ background: '#db2777' }} />100+</div>
-                  <div className="analytics-legend-item"><span style={{ background: '#f472b6' }} />20+</div>
-                  <div className="analytics-legend-item"><span style={{ background: '#fbcfe8' }} />0</div>
+                  <div className="analytics-legend-item"><span style={{ background: '#831843' }} />200+</div>
+                  <div className="analytics-legend-item"><span style={{ background: '#be185d' }} />100+</div>
+                  <div className="analytics-legend-item"><span style={{ background: '#ec4899' }} />20+</div>
+                  <div className="analytics-legend-item"><span style={{ background: '#f472b6' }} />0</div>
                 </div>
               </div>
             </Card>
