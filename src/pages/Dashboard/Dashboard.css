@@ -1057,3 +1057,73 @@
     font-size: 15px;
   }
 }
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.dashboard-scrape-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid rgba(236, 72, 153, 0.2);
+  background: rgba(236, 72, 153, 0.05);
+  color: #ec4899;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dashboard-scrape-button:hover:not(:disabled) {
+  background: rgba(236, 72, 153, 0.1);
+  border-color: rgba(236, 72, 153, 0.3);
+}
+
+.dashboard-scrape-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.dashboard-plan-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  background: rgba(236, 72, 153, 0.1);
+  color: #ec4899;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.dashboard-plan-limit {
+  background: rgba(236, 72, 153, 0.15);
+  padding: 0.1rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.65rem;
+}
+
+.dashboard-loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  gap: 1rem;
+  color: #6b7280;
+}
+
+.dashboard-loading-state .spinning {
+  color: #ec4899;
+}
