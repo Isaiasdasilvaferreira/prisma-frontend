@@ -81,8 +81,11 @@ const colorScale = (value: number) => {
 const geoUrl = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json';
 
 export function Analytics() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [position, setPosition] = useState({ coordinates: [0, 20], zoom: 1.2 });
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   const stats = [
     { 
@@ -117,9 +120,9 @@ export function Analytics() {
 
   return (
     <div className="dashboard-page">
-      <Sidebar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="dashboard-main">
-        <Header />
+        <Header onMenuClick={toggleSidebar} />
         <div className="dashboard-content analytics-content">
           <div className="analytics-header">
             <div>
