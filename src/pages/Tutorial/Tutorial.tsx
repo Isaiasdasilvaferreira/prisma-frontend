@@ -8,11 +8,21 @@ import './Tutorial.css';
 export function Tutorial() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isVideoFullscreen, setIsVideoFullscreen] = useState(false);
+  const [isDocOpen, setIsDocOpen] = useState(false);
+  const [isDocFullscreen, setIsDocFullscreen] = useState(false);
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
-  const toggleVideo = () => setIsVideoOpen(!isVideoOpen);
-  const toggleFullscreen = () => setIsFullscreen(!isFullscreen);
+  const toggleVideo = () => {
+    setIsVideoOpen(!isVideoOpen);
+    if (isVideoOpen) setIsVideoFullscreen(false);
+  };
+  const toggleVideoFullscreen = () => setIsVideoFullscreen(!isVideoFullscreen);
+  const toggleDoc = () => {
+    setIsDocOpen(!isDocOpen);
+    if (isDocOpen) setIsDocFullscreen(false);
+  };
+  const toggleDocFullscreen = () => setIsDocFullscreen(!isDocFullscreen);
 
   return (
     <div className="dashboard-page">
@@ -53,7 +63,7 @@ export function Tutorial() {
                 size="lg" 
                 icon={<BookOpen size={16} />} 
                 variant="outline"
-                onClick={() => window.open('/docs', '_blank')}
+                onClick={toggleDoc}
               >
                 Abrir documentação
               </Button>
@@ -61,20 +71,20 @@ export function Tutorial() {
           </div>
 
           {isVideoOpen && (
-            <div className={`video-overlay ${isFullscreen ? 'fullscreen' : ''}`}>
-              <div className="video-container">
-                <div className="video-header">
+            <div className={`overlay ${isVideoFullscreen ? 'fullscreen' : ''}`}>
+              <div className="modal-container video-modal">
+                <div className="modal-header">
                   <h3>Vídeo Introdução - PrismA</h3>
-                  <div className="video-controls">
+                  <div className="modal-controls">
                     <button 
-                      className="video-control-btn"
-                      onClick={toggleFullscreen}
-                      title={isFullscreen ? 'Sair da tela cheia' : 'Tela cheia'}
+                      className="modal-control-btn"
+                      onClick={toggleVideoFullscreen}
+                      title={isVideoFullscreen ? 'Sair da tela cheia' : 'Tela cheia'}
                     >
-                      {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
+                      {isVideoFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
                     </button>
                     <button 
-                      className="video-control-btn close-btn"
+                      className="modal-control-btn close-btn"
                       onClick={toggleVideo}
                       title="Fechar"
                     >
@@ -82,7 +92,7 @@ export function Tutorial() {
                     </button>
                   </div>
                 </div>
-                <div className="video-wrapper">
+                <div className="modal-body video-body">
                   <iframe
                     width="100%"
                     height="100%"
@@ -92,6 +102,124 @@ export function Tutorial() {
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                   ></iframe>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {isDocOpen && (
+            <div className={`overlay ${isDocFullscreen ? 'fullscreen' : ''}`}>
+              <div className="modal-container doc-modal">
+                <div className="modal-header">
+                  <h3>Documentação - PrismA</h3>
+                  <div className="modal-controls">
+                    <button 
+                      className="modal-control-btn"
+                      onClick={toggleDocFullscreen}
+                      title={isDocFullscreen ? 'Sair da tela cheia' : 'Tela cheia'}
+                    >
+                      {isDocFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
+                    </button>
+                    <button 
+                      className="modal-control-btn close-btn"
+                      onClick={toggleDoc}
+                      title="Fechar"
+                    >
+                      <X size={24} />
+                    </button>
+                  </div>
+                </div>
+                <div className="modal-body doc-body">
+                  <div className="doc-content">
+                    <h1>Bem-vindo à Documentação da PrismA</h1>
+                    
+                    <section>
+                      <h2>O que é a PrismA?</h2>
+                      <p>
+                        A PrismA é uma plataforma inovadora que conecta profissionais a oportunidades 
+                        únicas no mercado de trabalho. Utilizando inteligência artificial avançada, 
+                        a PrismA analisa seu perfil, habilidades e experiências para encontrar as 
+                        melhores vagas e projetos que se alinham com seus objetivos profissionais.
+                      </p>
+                    </section>
+
+                    <section>
+                      <h2>Recursos Principais</h2>
+                      <ul>
+                        <li>
+                          <strong>Match Inteligente:</strong> Algoritmos de IA que conectam você às 
+                          oportunidades mais relevantes.
+                        </li>
+                        <li>
+                          <strong>Perfil Detalhado:</strong> Crie um perfil completo com suas 
+                          habilidades, experiências e objetivos.
+                        </li>
+                        <li>
+                          <strong>Dashboard Personalizado:</strong> Acompanhe suas candidaturas, 
+                          entrevistas e recomendações em um só lugar.
+                        </li>
+                        <li>
+                          <strong>Insights de Mercado:</strong> Receba análises e tendências do 
+                          mercado de trabalho para sua área.
+                        </li>
+                      </ul>
+                    </section>
+
+                    <section>
+                      <h2>Como Começar</h2>
+                      <ol>
+                        <li>
+                          <strong>Crie seu perfil:</strong> Preencha todas as informações sobre 
+                          sua experiência profissional e habilidades.
+                        </li>
+                        <li>
+                          <strong>Configure preferências:</strong> Defina o tipo de oportunidade, 
+                          localização e área de atuação que você busca.
+                        </li>
+                        <li>
+                          <strong>Explore recomendações:</strong> Acesse o dashboard para ver as 
+                          vagas recomendadas especialmente para você.
+                        </li>
+                        <li>
+                          <strong>Candidature-se:</strong> Candidate-se às vagas com um clique e 
+                          acompanhe o processo em tempo real.
+                        </li>
+                      </ol>
+                    </section>
+
+                    <section>
+                      <h2>Dicas para Melhor Aproveitamento</h2>
+                      <ul>
+                        <li>
+                          Mantenha seu perfil sempre atualizado com novas habilidades e 
+                          experiências.
+                        </li>
+                        <li>
+                          Utilize os filtros avançados para refinar suas buscas e encontrar 
+                          oportunidades mais específicas.
+                        </li>
+                        <li>
+                          Ative as notificações para não perder nenhuma oportunidade relevante.
+                        </li>
+                        <li>
+                          Participe dos webinars e eventos exclusivos para usuários da PrismA.
+                        </li>
+                      </ul>
+                    </section>
+
+                    <section>
+                      <h2>Suporte e Comunidade</h2>
+                      <p>
+                        Nossa equipe de suporte está disponível 24/7 para ajudá-lo em qualquer 
+                        dúvida. Além disso, faça parte da nossa comunidade de profissionais e 
+                        compartilhe experiências, dicas e networking.
+                      </p>
+                      <p>
+                        Para mais informações, entre em contato pelo e-mail: 
+                        <strong> suporte@prisma.com</strong>
+                      </p>
+                    </section>
+                  </div>
                 </div>
               </div>
             </div>
