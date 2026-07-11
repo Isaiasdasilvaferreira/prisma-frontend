@@ -1,20 +1,31 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://prisma-backend-z37q.onrender.com/api';
 
 export interface UserData {
   id: string;
   email: string;
-  role: string;
+  role?: string;
   name?: string;
 }
-
-let currentUser: UserData | null = null;
 
 interface ApiResponse<T> {
   data: T | null;
   error?: string;
+  token?: string;
 }
+
+interface LoginResponse {
+  success: boolean;
+  data?: {
+    token: string;
+    user: UserData;
+  };
+  error?: string;
+}
+
+let currentUser: UserData | null = null;
+let currentToken: string | null = null;
 
 class Api {
   private client: AxiosInstance;
@@ -29,13 +40,32 @@ class Api {
       withCredentials: true,
     });
 
+    this.client.interceptors.request.use(
+      (config) => {
+        const token = localStorage.getItem('token');
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
+
     this.client.interceptors.response.use(
-      (response: AxiosResponse) => response,
+      (response: AxiosResponse) => {
+        if (response.data?.success && response.data?.data?.token) {
+          const token = response.data.data.token;
+          localStorage.setItem('token', token);
+          currentToken = token;
+        }
+        return response;
+      },
       (error: AxiosError) => {
         if (error.response?.status === 401) {
-          if (window.location.pathname === '/') {
-            return Promise.reject(error);
-          }
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          currentToken = null;
+          currentUser = null;
           if (!window.location.pathname.includes('/login') && 
               !window.location.pathname.includes('/register')) {
             window.location.href = '/login';
@@ -60,7 +90,8 @@ class Api {
       return { data: response.data };
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const errorMessage = error.response?.data?.error || error.message || 'Erro na requisição';
+        const errorData = error.response?.data as any;
+        const errorMessage = errorData?.error || errorData?.message || error.message || 'Erro na requisição';
         return {
           data: null as T,
           error: errorMessage,
@@ -74,42 +105,94 @@ class Api {
   }
 
   async login(email: string, password: string): Promise<ApiResponse<UserData>> {
-    const response = await this.post<UserData>('/auth/login', { email, password });
-    if (response.data) {
-      currentUser = response.data;
+    try {
+      const response = await this.client.post<LoginResponse>('/auth/login', { email, password });
+      
+      if (response.data.success && response.data.data) {
+        const { token, user } = response.data.data;
+        currentToken = token;
+        currentUser = user;
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
+        return { data: user, token };
+      }
+      
+      return { data: null, error: 'Erro ao fazer login' };
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorData = error.response?.data as any;
+        return { 
+          data: null, 
+          error: errorData?.error || errorData?.message || 'Erro ao fazer login' 
+        };
+      }
+      return { data: null, error: 'Erro ao fazer login' };
     }
-    return response;
   }
 
   async signup(email: string, password: string, metadata: any): Promise<ApiResponse<UserData>> {
-    const response = await this.post<UserData>('/auth/signup', {
-      email,
-      password,
-      metadata,
-    });
-    if (response.data) {
-      currentUser = response.data;
+    try {
+      const response = await this.client.post<LoginResponse>('/auth/signup', {
+        email,
+        password,
+        metadata,
+      });
+      
+      if (response.data.success && response.data.data) {
+        const { token, user } = response.data.data;
+        currentToken = token;
+        currentUser = user;
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
+        return { data: user, token };
+      }
+      
+      return { data: null, error: 'Erro ao criar conta' };
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorData = error.response?.data as any;
+        return { 
+          data: null, 
+          error: errorData?.error || errorData?.message || 'Erro ao criar conta' 
+        };
+      }
+      return { data: null, error: 'Erro ao criar conta' };
     }
-    return response;
   }
 
   async logout(): Promise<void> {
     try {
-      await this.post('/auth/logout', {});
+      await this.client.post('/auth/logout', {});
     } catch (error) {
       console.error('Erro ao fazer logout:', error);
     } finally {
+      currentToken = null;
       currentUser = null;
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
       window.location.href = '/login';
     }
   }
 
   getCurrentUser(): UserData | null {
+    if (!currentUser) {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        currentUser = JSON.parse(storedUser);
+      }
+    }
     return currentUser;
   }
 
+  getToken(): string | null {
+    if (!currentToken) {
+      currentToken = localStorage.getItem('token');
+    }
+    return currentToken;
+  }
+
   isAuthenticated(): boolean {
-    return !!currentUser;
+    return !!this.getToken() && !!this.getCurrentUser();
   }
 
   async get<T>(endpoint: string): Promise<ApiResponse<T>> {
@@ -157,6 +240,8 @@ class Api {
     });
     return response.data;
   }
+
+  defaults = this.client.defaults;
 }
 
 export const api = new Api();
