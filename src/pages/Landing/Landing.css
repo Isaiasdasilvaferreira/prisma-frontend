@@ -1344,9 +1344,9 @@
   .cta-title {
     font-size: 28px;
   }
-  .cta-with-bg {
-    background-size: contain !important;
-    background-position: bottom center !important;
+ .cta-with-bg {
+    background-size: 100% !important;
+    background-position: center calc(100% + 30px) !important;
     min-height: 420px !important;
     padding: 30px 30px !important;
     flex-direction: column;
@@ -1358,6 +1358,7 @@
     align-items: center;
     text-align: center !important;
     padding-right: 0;
+    margin-top: -35px;
   }
   .cta-card-title {
     font-size: 22px;
