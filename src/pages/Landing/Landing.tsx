@@ -64,7 +64,7 @@ export function Landing() {
     {
       name: 'Ana Silva',
       role: 'UI Designer Freelancer',
-      text: 'A PrismA mudou completamente minha forma de encontrar clientes. Em um mês, consegui três projetos que pagaram mais do que eu ganhava em três meses.',
+      text: 'A Prisma mudou completamente minha forma de encontrar clientes. Em um mês, consegui três projetos que pagaram mais do que eu ganhava em três meses.',
       avatar: 'AS',
       stats: 'Faturamento 3x maior',
       color: '#ec4899'
@@ -96,7 +96,7 @@ export function Landing() {
     {
       name: 'Marina Lima',
       role: 'UX Designer Pleno',
-      text: 'Desde que comecei a usar a PrismA, minha carteira de clientes nunca mais ficou vazia. A IA encontra projetos que realmente combinam comigo.',
+      text: 'Desde que comecei a usar a Prisma, minha carteira de clientes nunca mais ficou vazia. A IA encontra projetos que realmente combinam comigo.',
       avatar: 'ML',
       stats: '100% de ocupação',
       color: '#be185d'
@@ -311,7 +311,7 @@ export function Landing() {
           <div className="section-header reveal">
             <span className="section-label">Vantagens</span>
             <h2 className="section-title">Benefícios</h2>
-            <p className="section-subtitle">Por que os melhores designers escolhem a PrismA</p>
+            <p className="section-subtitle">Por que os melhores designers escolhem a Prisma</p>
           </div>
 
           <div className="benefits-grid">
