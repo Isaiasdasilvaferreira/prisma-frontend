@@ -2,27 +2,17 @@ import React, { useState } from 'react';
 import { Sidebar } from '../../components/Sidebar/Sidebar';
 import { Header } from '../../components/Header/Header';
 import { Button } from '../../components/Button/Button';
-import { Play, BookOpen, X, Maximize2, Minimize2 } from 'lucide-react';
+import { Play, BookOpen, X } from 'lucide-react';
 import './Tutorial.css';
 
 export function Tutorial() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
-  const [isVideoFullscreen, setIsVideoFullscreen] = useState(false);
   const [isDocOpen, setIsDocOpen] = useState(false);
-  const [isDocFullscreen, setIsDocFullscreen] = useState(false);
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
-  const toggleVideo = () => {
-    setIsVideoOpen(!isVideoOpen);
-    if (isVideoOpen) setIsVideoFullscreen(false);
-  };
-  const toggleVideoFullscreen = () => setIsVideoFullscreen(!isVideoFullscreen);
-  const toggleDoc = () => {
-    setIsDocOpen(!isDocOpen);
-    if (isDocOpen) setIsDocFullscreen(false);
-  };
-  const toggleDocFullscreen = () => setIsDocFullscreen(!isDocFullscreen);
+  const toggleVideo = () => setIsVideoOpen(!isVideoOpen);
+  const toggleDoc = () => setIsDocOpen(!isDocOpen);
 
   return (
     <div className="dashboard-page">
@@ -33,7 +23,7 @@ export function Tutorial() {
           <div className="tutorial-header">
             <h1 className="tutorial-title">Tutorial</h1>
             <p className="tutorial-subtitle">
-              Aprenda a usar todos os recursos da PrismA para encontrar as melhores oportunidades.
+              Aprenda a usar todos os recursos da Prisma para encontrar as melhores oportunidades.
             </p>
           </div>
 
@@ -44,7 +34,7 @@ export function Tutorial() {
               </div>
               <h3 className="tutorial-card-title">Vídeo Introdução</h3>
               <p className="tutorial-card-text">
-                Assista a um guia rápido sobre como a PrismA funciona.
+                Assista a um guia rápido sobre como a Prisma funciona.
               </p>
               <Button size="lg" icon={<Play size={16} />} onClick={toggleVideo}>
                 Assistir
@@ -71,33 +61,24 @@ export function Tutorial() {
           </div>
 
           {isVideoOpen && (
-            <div className={`overlay ${isVideoFullscreen ? 'fullscreen' : ''}`}>
+            <div className="overlay">
               <div className="modal-container video-modal">
                 <div className="modal-header">
-                  <h3>Vídeo Introdução - PrismA</h3>
-                  <div className="modal-controls">
-                    <button 
-                      className="modal-control-btn"
-                      onClick={toggleVideoFullscreen}
-                      title={isVideoFullscreen ? 'Sair da tela cheia' : 'Tela cheia'}
-                    >
-                      {isVideoFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
-                    </button>
-                    <button 
-                      className="modal-control-btn close-btn"
-                      onClick={toggleVideo}
-                      title="Fechar"
-                    >
-                      <X size={24} />
-                    </button>
-                  </div>
+                  <h3>Vídeo Introdução - Prisma</h3>
+                  <button 
+                    className="modal-control-btn close-btn"
+                    onClick={toggleVideo}
+                    title="Fechar"
+                  >
+                    <X size={24} />
+                  </button>
                 </div>
                 <div className="modal-body video-body">
                   <iframe
                     width="100%"
                     height="100%"
                     src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                    title="PrismA Tutorial"
+                    title="Prisma Tutorial"
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
@@ -108,115 +89,146 @@ export function Tutorial() {
           )}
 
           {isDocOpen && (
-            <div className={`overlay ${isDocFullscreen ? 'fullscreen' : ''}`}>
+            <div className="overlay">
               <div className="modal-container doc-modal">
                 <div className="modal-header">
-                  <h3>Documentação - PrismA</h3>
-                  <div className="modal-controls">
-                    <button 
-                      className="modal-control-btn"
-                      onClick={toggleDocFullscreen}
-                      title={isDocFullscreen ? 'Sair da tela cheia' : 'Tela cheia'}
-                    >
-                      {isDocFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
-                    </button>
-                    <button 
-                      className="modal-control-btn close-btn"
-                      onClick={toggleDoc}
-                      title="Fechar"
-                    >
-                      <X size={24} />
-                    </button>
-                  </div>
+                  <h3>Documentação - Prisma</h3>
+                  <button 
+                    className="modal-control-btn close-btn"
+                    onClick={toggleDoc}
+                    title="Fechar"
+                  >
+                    <X size={24} />
+                  </button>
                 </div>
                 <div className="modal-body doc-body">
                   <div className="doc-content">
-                    <h1>Bem-vindo à Documentação da PrismA</h1>
+                    <h1>Documentação da Prisma</h1>
                     
                     <section>
-                      <h2>O que é a PrismA?</h2>
+                      <h2>O que é a Prisma?</h2>
                       <p>
-                        A PrismA é uma plataforma inovadora que conecta profissionais a oportunidades 
-                        únicas no mercado de trabalho. Utilizando inteligência artificial avançada, 
-                        a PrismA analisa seu perfil, habilidades e experiências para encontrar as 
-                        melhores vagas e projetos que se alinham com seus objetivos profissionais.
+                        A Prisma é uma plataforma de prospecção inteligente que realiza scraping 
+                        em tempo real em múltiplas plataformas de recrutamento para identificar 
+                        oportunidades de trabalho. O sistema coleta, normaliza e estrutura dados 
+                        de vagas provenientes de diferentes fontes, consolidando-as em um único 
+                        dashboard para facilitar a busca e análise por parte dos usuários.
                       </p>
-                    </section>
-
-                    <section>
-                      <h2>Recursos Principais</h2>
+                      <p>
+                        Atualmente, a Prisma integra dados das seguintes plataformas:
+                      </p>
                       <ul>
-                        <li>
-                          <strong>Match Inteligente:</strong> Algoritmos de IA que conectam você às 
-                          oportunidades mais relevantes.
-                        </li>
-                        <li>
-                          <strong>Perfil Detalhado:</strong> Crie um perfil completo com suas 
-                          habilidades, experiências e objetivos.
-                        </li>
-                        <li>
-                          <strong>Dashboard Personalizado:</strong> Acompanhe suas candidaturas, 
-                          entrevistas e recomendações em um só lugar.
-                        </li>
-                        <li>
-                          <strong>Insights de Mercado:</strong> Receba análises e tendências do 
-                          mercado de trabalho para sua área.
-                        </li>
+                        <li><strong>Greenhouse</strong></li>
+                        <li><strong>Ashby</strong></li>
+                        <li><strong>Lever</strong></li>
+                        <li><strong>Workable</strong></li>
+                        <li><strong>BambooHR</strong></li>
                       </ul>
                     </section>
 
                     <section>
-                      <h2>Como Começar</h2>
+                      <h2>Como Funciona a Prospecção</h2>
+                      <p>
+                        O sistema utiliza scrapers dedicados para cada plataforma, que operam em 
+                        intervalos regulares para garantir dados sempre atualizados. O processo 
+                        de prospecção segue estas etapas:
+                      </p>
                       <ol>
                         <li>
-                          <strong>Crie seu perfil:</strong> Preencha todas as informações sobre 
-                          sua experiência profissional e habilidades.
+                          <strong>Coleta Estruturada:</strong> Cada scraper é otimizado para a 
+                          estrutura específica da plataforma alvo, utilizando técnicas como 
+                          parsing de HTML, consumo de APIs públicas e navegação simulada quando 
+                          necessário.
                         </li>
                         <li>
-                          <strong>Configure preferências:</strong> Defina o tipo de oportunidade, 
-                          localização e área de atuação que você busca.
+                          <strong>Extração de Dados:</strong> Informações como título da vaga, 
+                          descrição completa, requisitos, localização, tipo de contrato, 
+                          faixa salarial e data de publicação são extraídas de forma precisa.
                         </li>
                         <li>
-                          <strong>Explore recomendações:</strong> Acesse o dashboard para ver as 
-                          vagas recomendadas especialmente para você.
+                          <strong>Normalização:</strong> Os dados coletados passam por um processo 
+                          de padronização onde campos como localização, nível de senioridade e 
+                          tecnologias são uniformizados para facilitar buscas e filtros.
                         </li>
                         <li>
-                          <strong>Candidature-se:</strong> Candidate-se às vagas com um clique e 
-                          acompanhe o processo em tempo real.
+                          <strong>Deduplicação:</strong> Algoritmos de similaridade identificam e 
+                          removem vagas duplicadas que possam aparecer em múltiplas plataformas, 
+                          evitando redundância no dashboard.
+                        </li>
+                        <li>
+                          <strong>Indexação:</strong> As vagas são indexadas com metadados 
+                          enriquecidos, permitindo buscas avançadas por palavras-chave, 
+                          tecnologias específicas, localização e outros critérios.
+                        </li>
+                        <li>
+                          <strong>Atualização Contínua:</strong> O sistema monitora constantemente 
+                          as plataformas para identificar novas vagas, remover vagas expiradas e 
+                          atualizar status de processos seletivos.
                         </li>
                       </ol>
                     </section>
 
                     <section>
-                      <h2>Dicas para Melhor Aproveitamento</h2>
+                      <h2>Recursos da Plataforma</h2>
                       <ul>
                         <li>
-                          Mantenha seu perfil sempre atualizado com novas habilidades e 
-                          experiências.
+                          <strong>Monitoramento em Tempo Real:</strong> Atualizações frequentes 
+                          garantindo que você nunca perca uma oportunidade.
                         </li>
                         <li>
-                          Utilize os filtros avançados para refinar suas buscas e encontrar 
-                          oportunidades mais específicas.
+                          <strong>Filtros Avançados:</strong> Busque por tecnologias, nível de 
+                          experiência, modelo de trabalho (remoto, híbrido, presencial), localização 
+                          e faixa salarial.
                         </li>
                         <li>
-                          Ative as notificações para não perder nenhuma oportunidade relevante.
+                          <strong>Dashboard Personalizado:</strong> Visualize estatísticas de mercado, 
+                          tendências de contratação e oportunidades por categoria.
                         </li>
                         <li>
-                          Participe dos webinars e eventos exclusivos para usuários da PrismA.
+                          <strong>Alertas Automáticos:</strong> Configure notificações para receber 
+                          vagas que correspondam ao seu perfil.
+                        </li>
+                        <li>
+                          <strong>Análise de Mercado:</strong> Acesse dados agregados sobre o mercado 
+                          de trabalho, incluindo distribuição de salários, tecnologias mais requisitadas 
+                          e crescimento por segmento.
                         </li>
                       </ul>
                     </section>
 
                     <section>
-                      <h2>Suporte e Comunidade</h2>
+                      <h2>Como Utilizar</h2>
+                      <ol>
+                        <li>
+                          <strong>Cadastro:</strong> Crie sua conta com email e senha ou utilize 
+                          autenticação via Google/LinkedIn.
+                        </li>
+                        <li>
+                          <strong>Configuração de Perfil:</strong> Defina suas preferências de busca 
+                          incluindo tecnologias de interesse, nível de senioridade e localização.
+                        </li>
+                        <li>
+                          <strong>Exploração:</strong> Navegue pelas vagas utilizando os filtros 
+                          disponíveis ou visualize recomendações personalizadas.
+                        </li>
+                        <li>
+                          <strong>Favoritos e Alertas:</strong> Salve vagas de interesse e configure 
+                          alertas para ser notificado quando novas vagas compatíveis surgirem.
+                        </li>
+                        <li>
+                          <strong>Aplicação:</strong> Acesse a vaga diretamente na plataforma de 
+                          origem através do link fornecido e candidate-se.
+                        </li>
+                      </ol>
+                    </section>
+
+                    <section>
+                      <h2>Suporte</h2>
                       <p>
-                        Nossa equipe de suporte está disponível 24/7 para ajudá-lo em qualquer 
-                        dúvida. Além disso, faça parte da nossa comunidade de profissionais e 
-                        compartilhe experiências, dicas e networking.
+                        Para dúvidas, sugestões ou reportar problemas, entre em contato pelo e-mail:
                       </p>
                       <p>
-                        Para mais informações, entre em contato pelo e-mail: 
-                        <strong> suporte@prisma.com</strong>
+                        <strong>suporte@prisma.com</strong>
                       </p>
                     </section>
                   </div>
