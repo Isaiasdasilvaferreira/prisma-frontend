@@ -17,9 +17,9 @@ export function Header({ onMenuClick }: HeaderProps) {
     
     if (path === '/dashboard' || path === '/') {
       return 'Oportunidades';
-    } else if (path === '/analises') {
+    } else if (path === '/analytics') {
       return 'Análises';
-    } else if (path === '/mensagens') {
+    } else if (path === '/messages') {
       return 'Enviar Mensagens';
     } else if (path === '/tutorial') {
       return 'Tutorial';
