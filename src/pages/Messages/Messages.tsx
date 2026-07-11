@@ -11,6 +11,7 @@ import messagesData from '../../data/messages.json';
 import './Messages.css';
 
 export function Messages() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [formData, setFormData] = useState({
     companyName: '',
     contactName: '',
@@ -26,6 +27,8 @@ export function Messages() {
   const [generatedMessage, setGeneratedMessage] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -115,9 +118,9 @@ export function Messages() {
 
   return (
     <div className="dashboard-page">
-      <Sidebar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="dashboard-main">
-        <Header />
+        <Header onMenuClick={toggleSidebar} />
         <div className="dashboard-content messages-content">
           <div className="messages-header">
             <div>
