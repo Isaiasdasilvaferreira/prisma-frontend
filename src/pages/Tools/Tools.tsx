@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Sidebar } from '../../components/Sidebar/Sidebar';
 import { Header } from '../../components/Header/Header';
@@ -78,15 +78,18 @@ const toolsConfig = {
 };
 
 export function Tools() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const { toolId } = useParams<{ toolId: string }>();
   const tool = toolId ? toolsConfig[toolId as keyof typeof toolsConfig] : undefined;
+
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   if (!tool) {
     return (
       <div className="tools-page">
-        <Sidebar />
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         <div className="tools-main">
-          <Header />
+          <Header onMenuClick={toggleSidebar} />
           <div className="tools-content">
             <div className="tools-empty">
               <Search size={48} />
@@ -103,9 +106,9 @@ export function Tools() {
 
   return (
     <div className="tools-page">
-      <Sidebar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="tools-main">
-        <Header />
+        <Header onMenuClick={toggleSidebar} />
         <div className="tools-content">
           <div className="tools-hero" style={{ background: tool.gradient }}>
             <div className="tools-hero-bg">
