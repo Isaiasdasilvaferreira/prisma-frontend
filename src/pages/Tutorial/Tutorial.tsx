@@ -23,7 +23,7 @@ export function Tutorial() {
           <div className="tutorial-header">
             <h1 className="tutorial-title">Tutorial</h1>
             <p className="tutorial-subtitle">
-              Aprenda a usar todos os recursos da Prisma para encontrar as melhores oportunidades.
+              Aprenda a usar todos os recursos da PrismA para encontrar as melhores oportunidades.
             </p>
           </div>
 
@@ -34,7 +34,7 @@ export function Tutorial() {
               </div>
               <h3 className="tutorial-card-title">Vídeo Introdução</h3>
               <p className="tutorial-card-text">
-                Assista a um guia rápido sobre como a Prisma funciona.
+                Assista a um guia rápido sobre como a PrismA funciona.
               </p>
               <Button size="lg" icon={<Play size={16} />} onClick={toggleVideo}>
                 Assistir
@@ -64,7 +64,7 @@ export function Tutorial() {
             <div className={`video-overlay ${isFullscreen ? 'fullscreen' : ''}`}>
               <div className="video-container">
                 <div className="video-header">
-                  <h3>Vídeo Introdução - Prisma</h3>
+                  <h3>Vídeo Introdução - PrismA</h3>
                   <div className="video-controls">
                     <button 
                       className="video-control-btn"
