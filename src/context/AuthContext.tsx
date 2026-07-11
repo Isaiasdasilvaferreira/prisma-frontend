@@ -49,7 +49,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const storedToken = localStorage.getItem('token');
         if (storedToken) {
           setToken(storedToken);
-          api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
         }
 
         const response = await api.get<UserData>('/auth/me');
@@ -92,7 +91,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (response.token) {
         setToken(response.token);
         localStorage.setItem('token', response.token);
-        api.defaults.headers.common['Authorization'] = `Bearer ${response.token}`;
       }
     }
   };
@@ -115,7 +113,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (response.token) {
         setToken(response.token);
         localStorage.setItem('token', response.token);
-        api.defaults.headers.common['Authorization'] = `Bearer ${response.token}`;
       }
     }
   };
@@ -125,7 +122,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
     setToken(null);
     localStorage.removeItem('token');
-    delete api.defaults.headers.common['Authorization'];
   };
 
   const updateProfile = async (profile: Partial<UserProfile>, onboardingCompleted?: boolean) => {
