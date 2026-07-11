@@ -282,15 +282,21 @@ export function Dashboard() {
               <div className="dashboard-opportunities-container">
                 <div className="dashboard-empty-state">
                   <div className="dashboard-empty-state-icon">
-                    <Search size={48} />
+                    <Briefcase size={48} />
                   </div>
-                  <h3>Nenhuma oportunidade encontrada</h3>
-                  <p>As oportunidades aparecerão aqui assim que começarmos a coletar vagas para você.</p>
-                  <Link to="/tutorial">
-                    <Button variant="primary" size="md" icon={<GraduationCap size={16} />}>
-                      Ver tutorial
+                  <h3>Nenhuma oportunidade disponível</h3>
+                  <p>Estamos buscando as melhores vagas para você. 
+                  <br />Volte em breve ou comece explorando nosso tutorial.</p>
+                  <div className="dashboard-empty-state-actions">
+                    <Link to="/tutorial">
+                      <Button variant="primary" size="md" icon={<GraduationCap size={16} />}>
+                        Ver tutorial
+                      </Button>
+                    </Link>
+                    <Button variant="outline" size="md" icon={<RefreshCw size={16} />}>
+                      Atualizar
                     </Button>
-                  </Link>
+                  </div>
                 </div>
               </div>
             </Card>
