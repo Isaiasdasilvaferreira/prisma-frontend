@@ -17,7 +17,6 @@ const menuItems = [
   { icon: BarChart3, label: 'Análises', path: '/analytics' },
   { icon: Send, label: 'Enviar Mensagem', path: '/messages' },
   { icon: GraduationCap, label: 'Tutorial', path: '/tutorial' },
-  { icon: Settings, label: 'Configurações', path: '/settings' },
 ];
 
 export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
