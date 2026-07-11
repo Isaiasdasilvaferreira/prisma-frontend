@@ -22,7 +22,7 @@ const plans = [
     price: 'Grátis',
     period: '',
     icon: Zap,
-    color: '#888',
+    color: '#64748b',
     gradientClass: 'plan-gradient-starter',
     popular: false,
     disabled: false,
@@ -43,7 +43,7 @@ const plans = [
     price: 'R$29,90',
     period: '/mês',
     icon: Star,
-    color: '#f59e0b',
+    color: '#d97706',
     gradientClass: 'plan-gradient-pro',
     popular: true,
     disabled: false,
@@ -66,7 +66,7 @@ const plans = [
     price: 'Em breve',
     period: '',
     icon: Building2,
-    color: '#a855f7',
+    color: '#7c3aed',
     gradientClass: 'plan-gradient-enterprise',
     popular: false,
     disabled: true,
@@ -145,77 +145,78 @@ export function Plans() {
               const PlanIcon = plan.icon;
               
               return (
-                <Card 
+                <div 
                   key={plan.name} 
-                  className={`plans-card ${plan.gradientClass} ${plan.popular ? 'plans-card-popular' : ''} ${plan.disabled ? 'plans-card-disabled' : ''}`}
-                  glow={plan.popular}
+                  className={`plans-card-wrapper ${plan.popular ? 'popular' : ''} ${plan.disabled ? 'disabled' : ''}`}
                 >
-                  {plan.popular && (
-                    <div className="plans-card-badge">
-                      <Star size={12} fill="#050505" />
-                      Mais popular
+                  <div className={`plans-card ${plan.gradientClass}`}>
+                    {plan.popular && (
+                      <div className="plans-card-badge">
+                        <Star size={12} fill="#0a0a0a" />
+                        Mais popular
+                      </div>
+                    )}
+                    
+                    {plan.disabled && (
+                      <div className="plans-card-overlay">
+                        <Clock size={20} />
+                        <span>Em breve</span>
+                      </div>
+                    )}
+                    
+                    <div className="plans-card-top">
+                      <div className="plans-card-icon" style={{ background: `${plan.color}15`, color: plan.color }}>
+                        <PlanIcon size={24} />
+                      </div>
+                      <div className="plans-card-header">
+                        <h3 className="plans-card-name">{plan.name}</h3>
+                        <p className="plans-card-subtitle">{plan.subtitle}</p>
+                      </div>
                     </div>
-                  )}
-                  
-                  {plan.disabled && (
-                    <div className="plans-card-overlay">
-                      <Clock size={20} />
-                      <span>Em breve</span>
-                    </div>
-                  )}
-                  
-                  <div className="plans-card-top">
-                    <div className="plans-card-icon" style={{ background: `${plan.color}15` }}>
-                      <PlanIcon size={24} style={{ color: plan.color }} />
-                    </div>
-                    <div className="plans-card-header">
-                      <h3 className="plans-card-name">{plan.name}</h3>
-                      <p className="plans-card-subtitle">{plan.subtitle}</p>
-                    </div>
-                  </div>
 
-                  <div className="plans-card-price-row">
-                    <div className="plans-card-price">
-                      <span className="plans-card-amount">{plan.price}</span>
-                      {plan.period && <span className="plans-card-period">{plan.period}</span>}
+                    <div className="plans-card-price-row">
+                      <div className="plans-card-price">
+                        <span className="plans-card-amount">{plan.price}</span>
+                        {plan.period && <span className="plans-card-period">{plan.period}</span>}
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="plans-card-divider" />
+                    <div className="plans-card-divider" />
 
-                  <ul className="plans-card-features">
-                    {plan.features.map((feature, i) => (
-                      <li 
-                        key={i} 
-                        className={`plans-card-feature ${!feature.included ? 'disabled' : ''} ${feature.highlight ? 'highlight' : ''}`}
-                      >
-                        {feature.included ? (
-                          <Check size={14} className="plans-card-feature-check" />
-                        ) : (
-                          <span className="plans-card-feature-x">×</span>
-                        )}
-                        <span>{feature.text}</span>
-                        {feature.highlight && <Sparkles size={10} className="plans-card-feature-sparkle" />}
-                      </li>
-                    ))}
-                  </ul>
+                    <ul className="plans-card-features">
+                      {plan.features.map((feature, i) => (
+                        <li 
+                          key={i} 
+                          className={`plans-card-feature ${!feature.included ? 'disabled' : ''} ${feature.highlight ? 'highlight' : ''}`}
+                        >
+                          {feature.included ? (
+                            <Check size={14} className="plans-card-feature-check" />
+                          ) : (
+                            <span className="plans-card-feature-x">×</span>
+                          )}
+                          <span>{feature.text}</span>
+                          {feature.highlight && <Sparkles size={10} className="plans-card-feature-sparkle" />}
+                        </li>
+                      ))}
+                    </ul>
 
-                  <button 
-                    className={`plans-card-cta ${plan.disabled ? 'disabled' : ''}`}
-                    onClick={() => handlePlanClick(plan)}
-                    disabled={plan.disabled}
-                  >
-                    <Button 
-                      variant={plan.popular ? 'primary' : 'outline'} 
-                      fullWidth 
-                      size="lg"
-                      icon={!plan.disabled && plan.popular ? <ArrowRight size={16} /> : undefined}
+                    <button 
+                      className={`plans-card-cta ${plan.disabled ? 'disabled' : ''}`}
+                      onClick={() => handlePlanClick(plan)}
                       disabled={plan.disabled}
                     >
-                      {plan.cta}
-                    </Button>
-                  </button>
-                </Card>
+                      <Button 
+                        variant={plan.popular ? 'primary' : 'outline'} 
+                        fullWidth 
+                        size="lg"
+                        icon={!plan.disabled && plan.popular ? <ArrowRight size={16} /> : undefined}
+                        disabled={plan.disabled}
+                      >
+                        {plan.cta}
+                      </Button>
+                    </button>
+                  </div>
+                </div>
               );
             })}
           </div>
