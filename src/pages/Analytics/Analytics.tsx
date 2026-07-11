@@ -2,304 +2,331 @@ import React, { useState } from 'react';
 import { Sidebar } from '../../components/Sidebar/Sidebar';
 import { Header } from '../../components/Header/Header';
 import { Card } from '../../components/Card/Card';
+import { Button } from '../../components/Button/Button';
 import { 
-  Briefcase, TrendingUp, Target, Globe, 
-  ArrowUpRight, Building2, Star, BarChart3,
-  Sparkles
+  Send, MessageSquare, Sparkles, ArrowRight, 
+  Copy, CheckCircle, Building2, User, Mail, 
+  Globe, Briefcase, FileText, Zap
 } from 'lucide-react';
-import {
-  ComposableMap,
-  Geographies,
-  Geography,
-  ZoomableGroup
-} from 'react-simple-maps';
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Cell
-} from 'recharts';
-import './Analytics.css';
+import './Messages.css';
 
-const mapData = [
-  { country: 'USA', name: 'Estados Unidos', value: 324 },
-  { country: 'BRA', name: 'Brasil', value: 187 },
-  { country: 'CAN', name: 'Canadá', value: 98 },
-  { country: 'GBR', name: 'Reino Unido', value: 156 },
-  { country: 'DEU', name: 'Alemanha', value: 142 },
-  { country: 'FRA', name: 'França', value: 120 },
-  { country: 'AUS', name: 'Austrália', value: 85 },
-  { country: 'IND', name: 'Índia', value: 210 },
-  { country: 'CHN', name: 'China', value: 175 },
-  { country: 'MEX', name: 'México', value: 67 },
-  { country: 'ARG', name: 'Argentina', value: 43 },
-  { country: 'COL', name: 'Colômbia', value: 52 },
-  { country: 'PER', name: 'Peru', value: 31 },
-  { country: 'CHL', name: 'Chile', value: 28 },
-  { country: 'ESP', name: 'Espanha', value: 94 },
-  { country: 'ITA', name: 'Itália', value: 76 },
-  { country: 'NLD', name: 'Holanda', value: 55 },
-  { country: 'SWE', name: 'Suécia', value: 44 },
-  { country: 'JPN', name: 'Japão', value: 112 },
-  { country: 'KOR', name: 'Coreia do Sul', value: 89 },
-  { country: 'ZAF', name: 'África do Sul', value: 33 },
-  { country: 'NGA', name: 'Nigéria', value: 27 },
-  { country: 'EGY', name: 'Egito', value: 22 },
-];
+export function Messages() {
+  const [formData, setFormData] = useState({
+    companyName: '',
+    contactName: '',
+    email: '',
+    contactType: 'email',
+    jobType: 'freelance',
+    messageGoal: 'proposal',
+    customMessage: ''
+  });
 
-const barData = [
-  { name: 'UI Design', value: 142 },
-  { name: 'UX Design', value: 128 },
-  { name: 'Motion Design', value: 76 },
-  { name: 'Social Media', value: 94 },
-  { name: 'Identidade Visual', value: 112 },
-  { name: 'Branding', value: 65 },
-  { name: 'Landing Pages', value: 88 },
-  { name: 'Carrosséis', value: 53 },
-];
+  const [generatedMessage, setGeneratedMessage] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [history, setHistory] = useState<Array<{ id: number; company: string; message: string; date: string }>>([
+    { id: 1, company: 'TechCorp Brasil', message: 'Olá, gostaria de saber mais sobre...', date: '2 horas atrás' },
+    { id: 2, company: 'Creative Studio SP', message: 'Sua proposta foi enviada com sucesso...', date: '5 horas atrás' },
+    { id: 3, company: 'StartupXYZ', message: 'Agradecemos seu interesse...', date: 'Ontem' },
+  ]);
 
-const topCompanies = [
-  { name: 'TechCorp Brasil', jobs: 24, match: 96 },
-  { name: 'Creative Studio SP', jobs: 18, match: 92 },
-  { name: 'StartupXYZ', jobs: 15, match: 89 },
-  { name: 'Agência Nova', jobs: 12, match: 85 },
-  { name: 'E-commerce Top', jobs: 10, match: 82 },
-];
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-const colorScale = (value: number) => {
-  if (value > 200) return '#831843';
-  if (value > 150) return '#9d174d';
-  if (value > 100) return '#be185d';
-  if (value > 50) return '#db2777';
-  if (value > 20) return '#ec4899';
-  return '#f472b6';
-};
+  const generateMessage = () => {
+    setIsGenerating(true);
+    setTimeout(() => {
+      const messages = [
+        // Propostas para Freelance
+        `Olá ${formData.contactName || 'Cliente'},
 
-const geoUrl = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json';
+Meu nome é [Seu Nome] e sou ${formData.jobType === 'freelance' ? 'designer freelancer' : 'designer especializado'} com foco em criar soluções visuais que geram resultados.
 
-export function Analytics() {
-  const [position, setPosition] = useState({ coordinates: [0, 20], zoom: 1.2 });
-  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+Vi que a ${formData.companyName || 'sua empresa'} está buscando profissionais para projetos de design e acredito que posso contribuir significativamente. Tenho experiência em projetos similares e posso ajudar a elevar a identidade visual da sua marca.
 
-  const stats = [
-    { 
-      icon: Briefcase, 
-      value: '1.424', 
-      label: 'Vagas ativas', 
-      change: '+12% este mês',
-      color: '#ec4899'
-    },
-    { 
-      icon: Target, 
-      value: '87,6%', 
-      label: 'Match médio', 
-      change: '+2,1% esta semana',
-      color: '#22c55e'
-    },
-    { 
-      icon: Building2, 
-      value: '324', 
-      label: 'Empresas ativas', 
-      change: '+8 esta semana',
-      color: '#8b5cf6'
-    },
-    { 
-      icon: Globe, 
-      value: '22', 
-      label: 'Países alcançados', 
-      change: '+3 novos',
-      color: '#f59e0b'
-    },
-  ];
+Gostaria de agendar uma conversa para entender melhor suas necessidades e apresentar algumas ideias.
+
+Aguardo seu contato!
+
+Atenciosamente,
+[Seu Nome]
+${formData.contactType !== 'email' ? `\n${formData.contactType === 'whatsapp' ? 'WhatsApp: [Seu Número]' : formData.contactType === 'linkedin' ? 'LinkedIn: [Seu Perfil]' : ''}` : ''}`,
+
+        `Prezado(a) ${formData.contactName || 'Responsável'},
+
+Espero que esta mensagem o(a) encontre bem. Sou um designer com mais de [X] anos de experiência e estou muito interessado(a) em colaborar com a ${formData.companyName || 'sua empresa'}.
+
+Acredito que meu estilo de trabalho e minha abordagem criativa podem agregar valor aos projetos da empresa. Já trabalhei com marcas como [Marcas Anteriores] e desenvolvi projetos que geraram [Resultados].
+
+Ficarei feliz em compartilhar meu portfólio e discutir como posso ajudar a alcançar os objetivos da sua empresa.
+
+Atenciosamente,
+[Seu Nome]`,
+
+        `Olá, ${formData.contactName || 'equipe'}!
+
+Sou um designer apaixonado por criar experiências visuais memoráveis. Vi que a ${formData.companyName || 'sua empresa'} tem um trabalho incrível e gostaria de fazer parte desse time.
+
+Minhas habilidades incluem UI/UX, identidade visual, motion design e muito mais. Tenho certeza que posso trazer uma perspectiva fresca e criativa para os projetos da empresa.
+
+Vamos marcar um café virtual para conversarmos melhor?
+
+Grande abraço,
+[Seu Nome]`,
+
+        // Propostas para CLT
+        `Prezado(a) ${formData.contactName || 'Recrutador(a)'},
+
+Venho através desta mensagem expressar meu interesse em integrar a equipe da ${formData.companyName || 'sua empresa'} como designer.
+
+Sou um profissional com sólida experiência em design, atuando em projetos que vão desde identidade visual até interfaces digitais. Minha abordagem é centrada no usuário e busco sempre entregar soluções que alinhem estética e funcionalidade.
+
+Estou em busca de uma oportunidade CLT onde possa desenvolver minha carreira e contribuir ativamente para o crescimento da empresa.
+
+Anexo meu portfólio e currículo para sua análise. Fico à disposição para uma conversa.
+
+Atenciosamente,
+[Seu Nome]`,
+
+        `Olá, ${formData.contactName || 'equipe de recrutamento'}!
+
+Sou um designer criativo e estratégico, com experiência em projetos de grande porte. Acredito que a ${formData.companyName || 'sua empresa'} é o lugar onde posso realmente fazer a diferença.
+
+Tenho expertise em design de produtos digitais, branding e direção de arte. Busco uma posição CLT onde possa aplicar minhas habilidades e continuar evoluindo profissionalmente.
+
+Aguardo a oportunidade de conversar sobre como posso contribuir com a equipe de vocês.
+
+Atenciosamente,
+[Seu Nome]`,
+
+        `Prezado(a) ${formData.contactName || 'responsável'},
+
+Sou um designer com paixão por criar soluções inovadoras e funcionais. A ${formData.companyName || 'sua empresa'} sempre me inspirou pela qualidade do seu trabalho e gostaria de fazer parte desse time.
+
+Tenho experiência em projetos de design end-to-end, desde a pesquisa até a entrega final. Busco uma oportunidade CLT que me permita crescer profissionalmente e contribuir com meu conhecimento.
+
+Aguardo seu contato para que possamos conversar.
+
+Atenciosamente,
+[Seu Nome]`
+      ];
+
+      const selectedMessage = messages[Math.floor(Math.random() * messages.length)];
+      setGeneratedMessage(selectedMessage);
+      setIsGenerating(false);
+    }, 1500);
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(generatedMessage);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const saveToHistory = () => {
+    if (generatedMessage && formData.companyName) {
+      const newHistory = {
+        id: history.length + 1,
+        company: formData.companyName,
+        message: generatedMessage.substring(0, 60) + '...',
+        date: 'Agora mesmo'
+      };
+      setHistory([newHistory, ...history]);
+    }
+  };
 
   return (
     <div className="dashboard-page">
       <Sidebar />
       <div className="dashboard-main">
         <Header />
-        <div className="dashboard-content analytics-content">
-          <div className="analytics-header">
+        <div className="dashboard-content messages-content">
+          <div className="messages-header">
             <div>
-              <h1 className="analytics-title">Análises</h1>
-              <p className="analytics-subtitle">Visão geral do mercado de design e oportunidades.</p>
-            </div>
-            <div className="analytics-header-actions">
-              <span className="analytics-badge">
-                <Sparkles size={12} />
-                Atualizado há 2 dias
-              </span>
+              <h1 className="messages-title">Mensagens</h1>
+              <p className="messages-subtitle">
+                Gere mensagens personalizadas para clientes e oportunidades de trabalho.
+              </p>
             </div>
           </div>
 
-          <div className="analytics-stats-grid">
-            {stats.map((stat, index) => (
-              <Card key={index} className="analytics-stat-card">
-                <div className="analytics-stat-top">
-                  <div className="analytics-stat-icon" style={{ background: `${stat.color}10`, color: stat.color }}>
-                    <stat.icon size={18} />
+          <div className="messages-layout">
+            <Card className="messages-form-card">
+              <div className="messages-form-header">
+                <h3>Gerar mensagem personalizada</h3>
+                <span className="messages-form-badge">
+                  <Sparkles size={14} />
+                  IA
+                </span>
+              </div>
+
+              <form className="messages-form" onSubmit={(e) => { e.preventDefault(); generateMessage(); }}>
+                <div className="messages-form-row">
+                  <div className="messages-form-group">
+                    <label>Tipo de trabalho</label>
+                    <select name="jobType" value={formData.jobType} onChange={handleChange} className="messages-form-select">
+                      <option value="freelance">Freelance</option>
+                      <option value="clt">CLT</option>
+                      <option value="pj">PJ</option>
+                    </select>
                   </div>
-                  <span className="analytics-stat-change">{stat.change}</span>
+                  <div className="messages-form-group">
+                    <label>Tipo de contato</label>
+                    <select name="contactType" value={formData.contactType} onChange={handleChange} className="messages-form-select">
+                      <option value="email">E-mail</option>
+                      <option value="whatsapp">WhatsApp</option>
+                      <option value="linkedin">LinkedIn</option>
+                      <option value="telegram">Telegram</option>
+                    </select>
+                  </div>
                 </div>
-                <div className="analytics-stat-value">{stat.value}</div>
-                <div className="analytics-stat-label">{stat.label}</div>
-              </Card>
-            ))}
-          </div>
 
-          <div className="analytics-grid">
-            <Card className="analytics-map-card">
-              <div className="analytics-card-header">
-                <div className="analytics-card-title">
-                  <Globe size={16} />
-                  Distribuição global
+                <div className="messages-form-group">
+                  <label>Nome da empresa / contratante</label>
+                  <div className="messages-form-input-wrapper">
+                    <Building2 size={16} className="messages-form-icon" />
+                    <input 
+                      type="text" 
+                      name="companyName" 
+                      placeholder="Ex: TechCorp Brasil" 
+                      value={formData.companyName}
+                      onChange={handleChange}
+                      className="messages-form-input"
+                    />
+                  </div>
                 </div>
-                <div className="analytics-card-actions">
-                  {selectedCountry && (
-                    <span className="analytics-tag">
-                      {mapData.find(d => d.country === selectedCountry)?.name}
-                    </span>
+
+                <div className="messages-form-group">
+                  <label>Nome completo do contato</label>
+                  <div className="messages-form-input-wrapper">
+                    <User size={16} className="messages-form-icon" />
+                    <input 
+                      type="text" 
+                      name="contactName" 
+                      placeholder="Ex: João Silva" 
+                      value={formData.contactName}
+                      onChange={handleChange}
+                      className="messages-form-input"
+                    />
+                  </div>
+                </div>
+
+                <div className="messages-form-group">
+                  <label>E-mail</label>
+                  <div className="messages-form-input-wrapper">
+                    <Mail size={16} className="messages-form-icon" />
+                    <input 
+                      type="email" 
+                      name="email" 
+                      placeholder="Ex: joao@empresa.com" 
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="messages-form-input"
+                    />
+                  </div>
+                </div>
+
+                <div className="messages-form-group">
+                  <label>Objetivo da mensagem</label>
+                  <select name="messageGoal" value={formData.messageGoal} onChange={handleChange} className="messages-form-select">
+                    <option value="proposal">Proposta de trabalho</option>
+                    <option value="followup">Follow-up</option>
+                    <option value="pitch">Pitch criativo</option>
+                    <option value="presentation">Apresentação pessoal</option>
+                  </select>
+                </div>
+
+                <div className="messages-form-group">
+                  <label>Mensagem adicional (opcional)</label>
+                  <textarea 
+                    name="customMessage" 
+                    placeholder="Adicione detalhes específicos sobre o projeto ou empresa..."
+                    value={formData.customMessage}
+                    onChange={handleChange}
+                    className="messages-form-textarea"
+                    rows={3}
+                  />
+                </div>
+
+                <Button 
+                  type="submit" 
+                  fullWidth 
+                  size="lg" 
+                  icon={isGenerating ? undefined : <Sparkles size={16} />}
+                  disabled={isGenerating}
+                >
+                  {isGenerating ? (
+                    <>
+                      <span className="messages-spinner" />
+                      Gerando mensagem...
+                    </>
+                  ) : (
+                    'Gerar mensagem com IA'
+                  )}
+                </Button>
+              </form>
+            </Card>
+
+            <div className="messages-right-column">
+              <Card className="messages-result-card">
+                <div className="messages-result-header">
+                  <h3>Mensagem gerada</h3>
+                  <div className="messages-result-actions">
+                    {generatedMessage && (
+                      <>
+                        <button onClick={copyToClipboard} className="messages-result-btn">
+                          {copied ? <CheckCircle size={16} /> : <Copy size={16} />}
+                          {copied ? 'Copiado!' : 'Copiar'}
+                        </button>
+                        <button onClick={saveToHistory} className="messages-result-btn">
+                          <FileText size={16} />
+                          Salvar
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+                <div className="messages-result-content">
+                  {generatedMessage ? (
+                    <pre className="messages-result-text">{generatedMessage}</pre>
+                  ) : (
+                    <div className="messages-result-empty">
+                      <MessageSquare size={40} />
+                      <p>Preencha os campos e clique em "Gerar mensagem"</p>
+                    </div>
                   )}
                 </div>
-              </div>
-              <div className="analytics-map-container">
-                <ComposableMap
-                  projection="geoMercator"
-                  projectionConfig={{ scale: 110 }}
-                >
-                  <ZoomableGroup
-                    center={position.coordinates as [number, number]}
-                    zoom={position.zoom}
-                    onMoveEnd={(pos: any) => setPosition(pos)}
-                  >
-                    <Geographies geography={geoUrl}>
-                      {({ geographies }: any) =>
-                        geographies.map((geo: any) => {
-                          const countryData = mapData.find(
-                            (d) => d.country === geo.properties.iso_a3 || d.country === geo.properties.iso_a2
-                          );
-                          const value = countryData?.value || 0;
-                          return (
-                            <Geography
-                              key={geo.rsmKey}
-                              geography={geo}
-                              fill={colorScale(value)}
-                              stroke="#ffffff"
-                              strokeWidth={0.8}
-                              style={{
-                                default: { outline: 'none' },
-                                hover: { fill: '#831843', outline: 'none', cursor: 'pointer' },
-                                pressed: { outline: 'none' },
-                              }}
-                              onClick={() => {
-                                const code = geo.properties.iso_a3 || geo.properties.iso_a2;
-                                setSelectedCountry(code || null);
-                              }}
-                            />
-                          );
-                        })
-                      }
-                    </Geographies>
-                  </ZoomableGroup>
-                </ComposableMap>
-              </div>
-              <div className="analytics-map-footer">
-                <span className="analytics-map-note">
-                  {selectedCountry 
-                    ? `${mapData.find(d => d.country === selectedCountry)?.name} — ${mapData.find(d => d.country === selectedCountry)?.value} vagas`
-                    : 'Clique em um país para ver detalhes'
-                  }
-                </span>
-                <div className="analytics-legend">
-                  <div className="analytics-legend-item"><span style={{ background: '#831843' }} />200+</div>
-                  <div className="analytics-legend-item"><span style={{ background: '#be185d' }} />100+</div>
-                  <div className="analytics-legend-item"><span style={{ background: '#ec4899' }} />20+</div>
-                  <div className="analytics-legend-item"><span style={{ background: '#f472b6' }} />0</div>
-                </div>
-              </div>
-            </Card>
+              </Card>
 
-            <Card className="analytics-chart-card">
-              <div className="analytics-card-header">
-                <div className="analytics-card-title">
-                  <BarChart3 size={16} />
-                  Vagas por área
+              <Card className="messages-history-card">
+                <div className="messages-history-header">
+                  <h3>Histórico</h3>
+                  <span className="messages-history-badge">{history.length} mensagens</span>
                 </div>
-              </div>
-              <div className="analytics-chart-container">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={barData} layout="vertical" margin={{ left: 80, right: 20, top: 10, bottom: 10 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                    <XAxis type="number" stroke="#94a3b8" tick={{ fill: '#94a3b8', fontSize: 11 }} />
-                    <YAxis 
-                      type="category" 
-                      dataKey="name" 
-                      stroke="#94a3b8" 
-                      tick={{ fill: '#64748b', fontSize: 11 }}
-                      width={90}
-                    />
-                    <Tooltip 
-                      contentStyle={{ background: '#ffffff', border: '1px solid #f1f5f9', borderRadius: 8, boxShadow: '0 4px 12px rgba(0,0,0,0.04)' }}
-                      itemStyle={{ color: '#1a1a2e', fontSize: 12 }}
-                      labelStyle={{ color: '#64748b' }}
-                    />
-                    <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={18}>
-                      {barData.map((_, index) => (
-                        <Cell key={`cell-${index}`} fill={['#ec4899', '#f472b6', '#db2777', '#be185d', '#f59e0b', '#8b5cf6', '#14b8a6', '#f97316'][index % 8]} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </Card>
-          </div>
-
-          <Card className="analytics-table-card">
-            <div className="analytics-card-header">
-              <div className="analytics-card-title">
-                <Star size={16} />
-                Empresas com maior compatibilidade
-              </div>
-            </div>
-            <div className="analytics-table-container">
-              <table className="analytics-table">
-                <thead>
-                  <tr>
-                    <th>Empresa</th>
-                    <th>Vagas</th>
-                    <th>Match</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {topCompanies.map((company, index) => (
-                    <tr key={index}>
-                      <td>
-                        <div className="analytics-company">
-                          <span className="analytics-rank">#{index + 1}</span>
-                          {company.name}
+                <div className="messages-history-list">
+                  {history.length > 0 ? (
+                    history.map((item) => (
+                      <div key={item.id} className="messages-history-item">
+                        <div className="messages-history-avatar">
+                          {item.company.substring(0, 2).toUpperCase()}
                         </div>
-                      </td>
-                      <td>{company.jobs}</td>
-                      <td>
-                        <span className="analytics-match" style={{ 
-                          color: company.match >= 90 ? '#22c55e' : company.match >= 85 ? '#f59e0b' : '#ec4899'
-                        }}>
-                          {company.match}%
-                        </span>
-                      </td>
-                      <td>
-                        <span className="analytics-status">Ativa</span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                        <div className="messages-history-info">
+                          <span className="messages-history-name">{item.company}</span>
+                          <span className="messages-history-preview">{item.message}</span>
+                        </div>
+                        <span className="messages-history-time">{item.date}</span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="messages-history-empty">
+                      <p>Nenhuma mensagem salva ainda</p>
+                    </div>
+                  )}
+                </div>
+              </Card>
             </div>
-          </Card>
+          </div>
         </div>
       </div>
     </div>
