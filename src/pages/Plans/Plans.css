@@ -716,6 +716,23 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
 }
 
+.plans-cta-bottom-content .btn {
+  background: #ec4899 !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-weight: 600 !important;
+}
+
+.plans-cta-bottom-content .btn:hover {
+  background: #db2777 !important;
+  transform: scale(1.02) !important;
+  box-shadow: 0 8px 32px rgba(236, 72, 153, 0.25) !important;
+}
+
+.plans-cta-bottom-content .btn svg {
+  color: #ffffff !important;
+}
+
 .plans-cta-bottom-glow {
   position: absolute;
   top: -50%;
