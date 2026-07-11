@@ -5,7 +5,7 @@ import { Card } from '../../components/Card/Card';
 import { Button } from '../../components/Button/Button';
 import { 
   Send, MessageSquare, Sparkles, Copy, CheckCircle,
-  Building2, User, Mail, Briefcase, Globe
+  Building2, User, Mail, Briefcase, Globe, Phone
 } from 'lucide-react';
 import messagesData from '../../data/messages.json';
 import './Messages.css';
@@ -15,6 +15,9 @@ export function Messages() {
     companyName: '',
     contactName: '',
     email: '',
+    phone: '',
+    whatsappNumber: '',
+    subject: '',
     contactType: 'email',
     jobType: 'freelance',
     messageGoal: 'proposal'
@@ -24,7 +27,7 @@ export function Messages() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -68,6 +71,48 @@ export function Messages() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const sendEmail = () => {
+    if (!formData.email || !generatedMessage) return;
+    
+    const subject = formData.subject || `Proposta de trabalho - ${formData.companyName || 'Design'}`;
+    const mailtoLink = `mailto:${formData.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(generatedMessage)}`;
+    window.open(mailtoLink, '_blank');
+  };
+
+  const sendWhatsApp = () => {
+    if (!formData.whatsappNumber || !generatedMessage) return;
+    
+    const cleanNumber = formData.whatsappNumber.replace(/\D/g, '');
+    const whatsappLink = `https://wa.me/${cleanNumber}?text=${encodeURIComponent(generatedMessage)}`;
+    window.open(whatsappLink, '_blank');
+  };
+
+  const handleSend = () => {
+    if (formData.contactType === 'email') {
+      sendEmail();
+    } else if (formData.contactType === 'whatsapp') {
+      sendWhatsApp();
+    } else if (formData.contactType === 'linkedin') {
+      copyToClipboard();
+      alert('Mensagem copiada! Cole no LinkedIn para enviar.');
+    }
+  };
+
+  const isSendDisabled = () => {
+    if (!generatedMessage) return true;
+    if (formData.contactType === 'email' && !formData.email) return true;
+    if (formData.contactType === 'whatsapp' && !formData.whatsappNumber) return true;
+    return false;
+  };
+
+  const getSendButtonText = () => {
+    if (!generatedMessage) return 'Gere uma mensagem primeiro';
+    if (formData.contactType === 'email') return 'Enviar por E-mail';
+    if (formData.contactType === 'whatsapp') return 'Enviar por WhatsApp';
+    if (formData.contactType === 'linkedin') return 'Copiar para LinkedIn';
+    return 'Enviar mensagem';
+  };
+
   return (
     <div className="dashboard-page">
       <Sidebar />
@@ -78,7 +123,7 @@ export function Messages() {
             <div>
               <h1 className="messages-title">Mensagens</h1>
               <p className="messages-subtitle">
-                Gere mensagens personalizadas para clientes e oportunidades de trabalho.
+                Gere mensagens personalizadas e envie diretamente pelo E-mail ou WhatsApp.
               </p>
             </div>
           </div>
@@ -142,20 +187,57 @@ export function Messages() {
                   </div>
                 </div>
 
-                <div className="messages-form-group">
-                  <label>E-mail</label>
-                  <div className="messages-form-input-wrapper">
-                    <Mail size={16} className="messages-form-icon" />
-                    <input 
-                      type="email" 
-                      name="email" 
-                      placeholder="Ex: joao@empresa.com" 
-                      value={formData.email}
-                      onChange={handleChange}
-                      className="messages-form-input"
-                    />
+                {formData.contactType === 'email' && (
+                  <>
+                    <div className="messages-form-group">
+                      <label>E-mail do destinatário</label>
+                      <div className="messages-form-input-wrapper">
+                        <Mail size={16} className="messages-form-icon" />
+                        <input 
+                          type="email" 
+                          name="email" 
+                          placeholder="Ex: joao@empresa.com" 
+                          value={formData.email}
+                          onChange={handleChange}
+                          className="messages-form-input"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="messages-form-group">
+                      <label>Assunto do e-mail</label>
+                      <div className="messages-form-input-wrapper">
+                        <Briefcase size={16} className="messages-form-icon" />
+                        <input 
+                          type="text" 
+                          name="subject" 
+                          placeholder="Ex: Proposta de trabalho - Design" 
+                          value={formData.subject}
+                          onChange={handleChange}
+                          className="messages-form-input"
+                        />
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {formData.contactType === 'whatsapp' && (
+                  <div className="messages-form-group">
+                    <label>Número do WhatsApp (com DDD)</label>
+                    <div className="messages-form-input-wrapper">
+                      <Phone size={16} className="messages-form-icon" />
+                      <input 
+                        type="text" 
+                        name="whatsappNumber" 
+                        placeholder="Ex: 11999999999" 
+                        value={formData.whatsappNumber}
+                        onChange={handleChange}
+                        className="messages-form-input"
+                        required
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
 
                 <div className="messages-form-group">
                   <label>Objetivo da mensagem</label>
@@ -208,6 +290,20 @@ export function Messages() {
                   </div>
                 )}
               </div>
+              {generatedMessage && (
+                <div className="messages-send-container">
+                  <Button 
+                    fullWidth 
+                    size="lg" 
+                    icon={<Send size={16} />}
+                    onClick={handleSend}
+                    disabled={isSendDisabled()}
+                    className="messages-send-btn"
+                  >
+                    {getSendButtonText()}
+                  </Button>
+                </div>
+              )}
             </Card>
           </div>
         </div>
