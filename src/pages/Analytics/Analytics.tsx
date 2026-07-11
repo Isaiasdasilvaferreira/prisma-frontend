@@ -4,7 +4,8 @@ import { Header } from '../../components/Header/Header';
 import { Card } from '../../components/Card/Card';
 import { 
   Briefcase, TrendingUp, Target, Globe, 
-  ArrowUpRight, Building2, Star, BarChart3
+  ArrowUpRight, Building2, Star, BarChart3,
+  Sparkles
 } from 'lucide-react';
 import {
   ComposableMap,
@@ -70,12 +71,12 @@ const topCompanies = [
 ];
 
 const colorScale = (value: number) => {
-  if (value > 200) return '#1a6b48';
-  if (value > 150) return '#2d8f5e';
-  if (value > 100) return '#40b374';
-  if (value > 50) return '#5ed49b';
-  if (value > 20) return '#82e7c4';
-  return '#2a2a2a';
+  if (value > 200) return '#be185d';
+  if (value > 150) return '#db2777';
+  if (value > 100) return '#ec4899';
+  if (value > 50) return '#f472b6';
+  if (value > 20) return '#fbcfe8';
+  return '#fce7f3';
 };
 
 const geoUrl = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json';
@@ -83,9 +84,6 @@ const geoUrl = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json';
 export function Analytics() {
   const [position, setPosition] = useState({ coordinates: [0, 20], zoom: 1.2 });
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   const stats = [
     { 
@@ -93,7 +91,7 @@ export function Analytics() {
       value: '1.424', 
       label: 'Vagas ativas', 
       change: '+12% este mês',
-      color: '#3b82f6'
+      color: '#ec4899'
     },
     { 
       icon: Target, 
@@ -107,7 +105,7 @@ export function Analytics() {
       value: '324', 
       label: 'Empresas ativas', 
       change: '+8 esta semana',
-      color: '#a855f7'
+      color: '#8b5cf6'
     },
     { 
       icon: Globe, 
@@ -120,9 +118,9 @@ export function Analytics() {
 
   return (
     <div className="dashboard-page">
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar />
       <div className="dashboard-main">
-        <Header onMenuClick={toggleSidebar} />
+        <Header />
         <div className="dashboard-content analytics-content">
           <div className="analytics-header">
             <div>
@@ -130,7 +128,10 @@ export function Analytics() {
               <p className="analytics-subtitle">Visão geral do mercado de design e oportunidades.</p>
             </div>
             <div className="analytics-header-actions">
-              <span className="analytics-badge">Atualizado há 2 min</span>
+              <span className="analytics-badge">
+                <Sparkles size={12} />
+                Atualizado há 2 min
+              </span>
             </div>
           </div>
 
@@ -138,7 +139,7 @@ export function Analytics() {
             {stats.map((stat, index) => (
               <Card key={index} className="analytics-stat-card">
                 <div className="analytics-stat-top">
-                  <div className="analytics-stat-icon" style={{ color: stat.color }}>
+                  <div className="analytics-stat-icon" style={{ background: `${stat.color}10`, color: stat.color }}>
                     <stat.icon size={18} />
                   </div>
                   <span className="analytics-stat-change">{stat.change}</span>
@@ -186,11 +187,11 @@ export function Analytics() {
                               key={geo.rsmKey}
                               geography={geo}
                               fill={colorScale(value)}
-                              stroke="#0a0a0a"
+                              stroke="#fafafa"
                               strokeWidth={0.5}
                               style={{
                                 default: { outline: 'none' },
-                                hover: { fill: '#82e7c4', outline: 'none', cursor: 'pointer' },
+                                hover: { fill: '#f472b6', outline: 'none', cursor: 'pointer' },
                                 pressed: { outline: 'none' },
                               }}
                               onClick={() => {
@@ -213,10 +214,10 @@ export function Analytics() {
                   }
                 </span>
                 <div className="analytics-legend">
-                  <div className="analytics-legend-item"><span style={{ background: '#1a6b48' }} />200+</div>
-                  <div className="analytics-legend-item"><span style={{ background: '#40b374' }} />100+</div>
-                  <div className="analytics-legend-item"><span style={{ background: '#82e7c4' }} />20+</div>
-                  <div className="analytics-legend-item"><span style={{ background: '#2a2a2a' }} />0</div>
+                  <div className="analytics-legend-item"><span style={{ background: '#be185d' }} />200+</div>
+                  <div className="analytics-legend-item"><span style={{ background: '#ec4899' }} />100+</div>
+                  <div className="analytics-legend-item"><span style={{ background: '#fbcfe8' }} />20+</div>
+                  <div className="analytics-legend-item"><span style={{ background: '#fce7f3' }} />0</div>
                 </div>
               </div>
             </Card>
@@ -231,22 +232,23 @@ export function Analytics() {
               <div className="analytics-chart-container">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={barData} layout="vertical" margin={{ left: 80, right: 20, top: 10, bottom: 10 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#222" />
-                    <XAxis type="number" stroke="#444" tick={{ fill: '#444', fontSize: 11 }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                    <XAxis type="number" stroke="#94a3b8" tick={{ fill: '#94a3b8', fontSize: 11 }} />
                     <YAxis 
                       type="category" 
                       dataKey="name" 
-                      stroke="#444" 
-                      tick={{ fill: '#666', fontSize: 11 }}
+                      stroke="#94a3b8" 
+                      tick={{ fill: '#64748b', fontSize: 11 }}
                       width={90}
                     />
                     <Tooltip 
-                      contentStyle={{ background: '#0a0a0a', border: '1px solid #1a1a1a', borderRadius: 6 }}
-                      itemStyle={{ color: '#fff', fontSize: 12 }}
+                      contentStyle={{ background: '#ffffff', border: '1px solid #f1f5f9', borderRadius: 8, boxShadow: '0 4px 12px rgba(0,0,0,0.04)' }}
+                      itemStyle={{ color: '#1a1a2e', fontSize: 12 }}
+                      labelStyle={{ color: '#64748b' }}
                     />
                     <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={18}>
                       {barData.map((_, index) => (
-                        <Cell key={`cell-${index}`} fill={['#3b82f6', '#22c55e', '#a855f7', '#f59e0b', '#ec4899', '#14b8a6', '#f97316', '#8b5cf6'][index % 8]} />
+                        <Cell key={`cell-${index}`} fill={['#ec4899', '#f472b6', '#db2777', '#be185d', '#f59e0b', '#8b5cf6', '#14b8a6', '#f97316'][index % 8]} />
                       ))}
                     </Bar>
                   </BarChart>
@@ -284,7 +286,7 @@ export function Analytics() {
                       <td>{company.jobs}</td>
                       <td>
                         <span className="analytics-match" style={{ 
-                          color: company.match >= 90 ? '#22c55e' : company.match >= 85 ? '#f59e0b' : '#3b82f6'
+                          color: company.match >= 90 ? '#22c55e' : company.match >= 85 ? '#f59e0b' : '#ec4899'
                         }}>
                           {company.match}%
                         </span>
