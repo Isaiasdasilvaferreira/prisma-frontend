@@ -308,6 +308,61 @@
   gap: 10px;
 }
 
+.dashboard-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  gap: 16px;
+}
+
+.dashboard-empty-state-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.08), rgba(236, 72, 153, 0.02));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ec4899;
+  margin-bottom: 4px;
+}
+
+.dashboard-empty-state h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+.dashboard-empty-state p {
+  font-size: 14px;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.dashboard-empty-state-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.dashboard-empty-state-actions .btn-outline {
+  background: transparent;
+  color: #64748b;
+  border: 1px solid rgba(236, 72, 153, 0.15);
+}
+
+.dashboard-empty-state-actions .btn-outline:hover {
+  background: rgba(236, 72, 153, 0.04);
+  color: #1a1a2e;
+}
+
 .dashboard-opportunity-card {
   display: flex;
   gap: 16px;
@@ -923,6 +978,38 @@
 
   .dashboard-opportunity-budget {
     font-size: 13px;
+  }
+
+  .dashboard-empty-state {
+    padding: 40px 16px;
+  }
+
+  .dashboard-empty-state-icon {
+    width: 64px;
+    height: 64px;
+  }
+
+  .dashboard-empty-state-icon svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .dashboard-empty-state h3 {
+    font-size: 16px;
+  }
+
+  .dashboard-empty-state p {
+    font-size: 13px;
+  }
+
+  .dashboard-empty-state-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .dashboard-empty-state-actions .btn {
+    width: 100%;
+    justify-content: center;
   }
 }
 
