@@ -40,6 +40,10 @@ class Api {
       withCredentials: true,
     });
 
+    this.setupInterceptors();
+  }
+
+  private setupInterceptors() {
     this.client.interceptors.request.use(
       (config) => {
         const token = localStorage.getItem('token');
@@ -240,8 +244,6 @@ class Api {
     });
     return response.data;
   }
-
-  defaults = this.client.defaults;
 }
 
 export const api = new Api();
