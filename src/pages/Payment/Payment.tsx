@@ -173,6 +173,14 @@ export function Payment() {
 
   return (
     <div className="payment-page">
+      <div className="payment-bg">
+        <div className="payment-grid-bg" />
+        <div className="payment-orbs">
+          <div className="payment-orb payment-orb-1" />
+          <div className="payment-orb payment-orb-2" />
+        </div>
+      </div>
+
       <div className="payment-container">
         <button className="payment-back-btn" onClick={handleBack}>
           <ArrowLeft size={16} />
