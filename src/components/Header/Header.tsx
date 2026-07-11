@@ -23,6 +23,8 @@ export function Header({ onMenuClick }: HeaderProps) {
       return 'Enviar Mensagens';
     } else if (path === '/tutorial') {
       return 'Tutorial';
+    } else if (path === 'plans') {
+      return 'Planos';
     }
     
     return 'Dashboard';
