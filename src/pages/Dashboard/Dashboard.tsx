@@ -169,10 +169,18 @@ export function Dashboard() {
 
       if (response.ok) {
         const data = await response.json();
-        if (data.success && data.data) {
-          setOpportunities(data.data);
-          updateDashboardStats(data.data);
+        // Verifica se a resposta é um array diretamente ou está dentro de data
+        let opportunitiesData: Opportunity[] = [];
+        if (Array.isArray(data)) {
+          opportunitiesData = data;
+        } else if (data.success && Array.isArray(data.data)) {
+          opportunitiesData = data.data;
+        } else if (Array.isArray(data.data)) {
+          opportunitiesData = data.data;
         }
+        
+        setOpportunities(opportunitiesData);
+        updateDashboardStats(opportunitiesData);
       }
     } catch (error) {
       console.error('Error fetching opportunities:', error);
@@ -193,6 +201,8 @@ export function Dashboard() {
       if (response.ok) {
         const data = await response.json();
         if (data.success) {
+          setStats(data.data);
+        } else if (data.data) {
           setStats(data.data);
         }
       }
@@ -361,7 +371,7 @@ export function Dashboard() {
   ];
 
   const quickActions = [
-    { icon: RefreshCw, label: 'Raspar Vagas', onClick: () => handleScrape(), color: '#ec4899' },
+    { icon: Briefcase, label: 'Oportunidades', path: '/dashboard', color: '#ec4899' },
     { icon: Send, label: 'Enviar Mensagem', path: '/messages', color: '#f472b6' },
     { icon: GraduationCap, label: 'Tutorial', path: '/tutorial', color: '#db2777' },
     { icon: Crown, label: 'Planos', path: '/plans', color: '#be185d' },
@@ -437,23 +447,13 @@ export function Dashboard() {
 
           <div className="dashboard-quick-actions">
             {quickActions.map((action, index) => (
-              action.path ? (
-                <Link key={index} to={action.path} className="dashboard-quick-action">
-                  <div className="dashboard-quick-action-icon" style={{ background: `${action.color}10` }}>
-                    <action.icon size={18} style={{ color: action.color }} />
-                  </div>
-                  <span className="dashboard-quick-action-label">{action.label}</span>
-                  <ChevronRight size={14} className="dashboard-quick-action-arrow" />
-                </Link>
-              ) : (
-                <div key={index} className="dashboard-quick-action" onClick={action.onClick} style={{ cursor: 'pointer' }}>
-                  <div className="dashboard-quick-action-icon" style={{ background: `${action.color}10` }}>
-                    {scraping ? <Loader2 size={18} className="spinning" style={{ color: action.color }} /> : <action.icon size={18} style={{ color: action.color }} />}
-                  </div>
-                  <span className="dashboard-quick-action-label">{scraping ? 'Raspando...' : action.label}</span>
-                  <ChevronRight size={14} className="dashboard-quick-action-arrow" />
+              <Link key={index} to={action.path} className="dashboard-quick-action">
+                <div className="dashboard-quick-action-icon" style={{ background: `${action.color}10` }}>
+                  <action.icon size={18} style={{ color: action.color }} />
                 </div>
-              )
+                <span className="dashboard-quick-action-label">{action.label}</span>
+                <ChevronRight size={14} className="dashboard-quick-action-arrow" />
+              </Link>
             ))}
           </div>
 
