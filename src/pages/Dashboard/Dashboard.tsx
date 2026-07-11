@@ -14,55 +14,46 @@ import {
   ArrowUpRight, Bookmark, DollarSign, Globe, Building2,
   AlertCircle, ChevronRight, TrendingDown, Activity,
   LayoutDashboard, PieChart, Send, GraduationCap, Settings,
-  Sliders, ListFilter, Lock, Sparkle, Heart
+  Sliders, ListFilter, Lock, Sparkle, Heart, Loader2
 } from 'lucide-react';
 import './Dashboard.css';
 
-const statsCards = [
-  { 
-    icon: TrendingUp, 
-    value: '0', 
-    label: 'Oportunidades',
-    change: '+0%',
-    trend: 'up',
-    color: '#ec4899',
-    bgColor: 'rgba(236, 72, 153, 0.08)'
-  },
-  { 
-    icon: Star, 
-    value: '0', 
-    label: 'Novas esta semana',
-    change: '+0',
-    trend: 'up',
-    color: '#f472b6',
-    bgColor: 'rgba(244, 114, 182, 0.08)'
-  },
-  { 
-    icon: MessageSquare, 
-    value: '0', 
-    label: 'Mensagens',
-    change: '+0',
-    trend: 'up',
-    color: '#db2777',
-    bgColor: 'rgba(219, 39, 119, 0.08)'
-  },
-  { 
-    icon: Target, 
-    value: '0%', 
-    label: 'Taxa de match',
-    change: '+0%',
-    trend: 'up',
-    color: '#be185d',
-    bgColor: 'rgba(190, 24, 93, 0.08)'
-  }
-];
+interface Opportunity {
+  id: string;
+  external_id: string;
+  source: string;
+  company: string;
+  title: string;
+  description: string;
+  contract_type: string;
+  modality: string;
+  level: string;
+  service_type: string;
+  location: string;
+  salary_range: string;
+  application_url: string;
+  posted_at: string;
+  is_active: boolean;
+  created_at: string;
+}
 
-const quickActions = [
-  { icon: PieChart, label: 'Análises', path: '/analytics', color: '#ec4899' },
-  { icon: Send, label: 'Enviar Mensagem', path: '/messages', color: '#f472b6' },
-  { icon: GraduationCap, label: 'Tutorial', path: '/tutorial', color: '#db2777' },
-  { icon: Crown, label: 'Planos', path: '/plans', color: '#be185d' },
-];
+interface Stats {
+  total: number;
+  plan_type: string;
+  daily_limit: number;
+  by_source: Record<string, number>;
+  by_contract: Record<string, number>;
+  by_modality: Record<string, number>;
+  by_level: Record<string, number>;
+  recent_count: number;
+}
+
+interface DashboardStats {
+  opportunities: number;
+  newThisWeek: number;
+  messages: number;
+  matchRate: string;
+}
 
 const filterOptions = {
   cltCargos: [
@@ -125,12 +116,22 @@ const filterOptions = {
 };
 
 export function Dashboard() {
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [greeting, setGreeting] = useState('');
   const [savedOpps, setSavedOpps] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedContractType, setSelectedContractType] = useState<'clt' | 'freelancer' | null>(null);
+  const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
+  const [stats, setStats] = useState<Stats | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [scraping, setScraping] = useState(false);
+  const [dashboardStats, setDashboardStats] = useState<DashboardStats>({
+    opportunities: 0,
+    newThisWeek: 0,
+    messages: 0,
+    matchRate: '0%'
+  });
 
   const [filters, setFilters] = useState({
     titulosTags: [] as string[],
@@ -141,12 +142,107 @@ export function Dashboard() {
     urgencia: [] as string[]
   });
 
+  const API_URL = 'https://prisma-backend-z37q.onrender.com';
+
   useEffect(() => {
     const hour = new Date().getHours();
     if (hour < 12) setGreeting('Bom dia');
     else if (hour < 18) setGreeting('Boa tarde');
     else setGreeting('Boa noite');
   }, []);
+
+  useEffect(() => {
+    if (token) {
+      fetchOpportunities();
+      fetchStats();
+    }
+  }, [token]);
+
+  const fetchOpportunities = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/opportunities`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.data) {
+          setOpportunities(data.data);
+          updateDashboardStats(data.data);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching opportunities:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchStats = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/opportunities/stats`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          setStats(data.data);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+    }
+  };
+
+  const updateDashboardStats = (opps: Opportunity[]) => {
+    const now = new Date();
+    const weekAgo = new Date(now);
+    weekAgo.setDate(weekAgo.getDate() - 7);
+
+    const newThisWeek = opps.filter(opp => {
+      const postedAt = new Date(opp.posted_at);
+      return postedAt >= weekAgo;
+    }).length;
+
+    const total = opps.length;
+    const matchRate = total > 0 ? Math.min(100, Math.round((total / 10) * 100)) : 0;
+
+    setDashboardStats({
+      opportunities: total,
+      newThisWeek: newThisWeek,
+      messages: 0,
+      matchRate: `${matchRate}%`
+    });
+  };
+
+  const handleScrape = async (source?: string) => {
+    setScraping(true);
+    try {
+      const endpoint = source ? `/api/scrape/${source}` : '/api/scrape/all';
+      const response = await fetch(`${API_URL}${endpoint}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        await fetchOpportunities();
+        await fetchStats();
+      }
+    } catch (error) {
+      console.error('Error scraping:', error);
+    } finally {
+      setScraping(false);
+    }
+  };
 
   const toggleFilter = (category: 'titulosTags' | 'niveis' | 'modalidades' | 'tipoServico' | 'tipoCliente' | 'urgencia', value: string) => {
     setFilters(prev => {
@@ -178,14 +274,100 @@ export function Dashboard() {
     );
   };
 
-  const getTitulosOptions = () => {
-    if (selectedContractType === 'clt') {
-      return filterOptions.cltCargos;
-    } else if (selectedContractType === 'freelancer') {
-      return filterOptions.freelancerServicos;
+  const getFilteredOpportunities = () => {
+    let filtered = opportunities;
+
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(opp => 
+        opp.title.toLowerCase().includes(term) ||
+        opp.company.toLowerCase().includes(term) ||
+        opp.location.toLowerCase().includes(term)
+      );
     }
-    return [];
+
+    if (selectedContractType === 'clt') {
+      filtered = filtered.filter(opp => opp.contract_type === 'CLT');
+    } else if (selectedContractType === 'freelancer') {
+      filtered = filtered.filter(opp => opp.contract_type === 'Freelancer');
+    }
+
+    if (filters.modalidades.length > 0) {
+      filtered = filtered.filter(opp => filters.modalidades.includes(opp.modality));
+    }
+
+    if (filters.niveis.length > 0) {
+      filtered = filtered.filter(opp => filters.niveis.includes(opp.level));
+    }
+
+    return filtered;
   };
+
+  const getSourceIcon = (source: string) => {
+    switch(source) {
+      case 'ashby': return <Building2 size={14} />;
+      case 'greenhouse': return <Globe size={14} />;
+      case 'lever': return <Briefcase size={14} />;
+      default: return <Briefcase size={14} />;
+    }
+  };
+
+  const getSourceColor = (source: string) => {
+    switch(source) {
+      case 'ashby': return '#ec4899';
+      case 'greenhouse': return '#10b981';
+      case 'lever': return '#f59e0b';
+      default: return '#6b7280';
+    }
+  };
+
+  const statsCards = [
+    { 
+      icon: TrendingUp, 
+      value: dashboardStats.opportunities.toString(), 
+      label: 'Oportunidades',
+      change: `+${dashboardStats.newThisWeek}`,
+      trend: 'up',
+      color: '#ec4899',
+      bgColor: 'rgba(236, 72, 153, 0.08)'
+    },
+    { 
+      icon: Star, 
+      value: dashboardStats.newThisWeek.toString(), 
+      label: 'Novas esta semana',
+      change: `+${dashboardStats.newThisWeek}`,
+      trend: 'up',
+      color: '#f472b6',
+      bgColor: 'rgba(244, 114, 182, 0.08)'
+    },
+    { 
+      icon: Crown, 
+      value: stats?.plan_type === 'professional' ? 'Pro' : 'Free', 
+      label: 'Plano',
+      change: stats?.plan_type === 'professional' ? '✓ Ativo' : 'Upgrade',
+      trend: stats?.plan_type === 'professional' ? 'up' : 'down',
+      color: stats?.plan_type === 'professional' ? '#db2777' : '#9ca3af',
+      bgColor: stats?.plan_type === 'professional' ? 'rgba(219, 39, 119, 0.08)' : 'rgba(156, 163, 175, 0.08)'
+    },
+    { 
+      icon: Target, 
+      value: dashboardStats.matchRate, 
+      label: 'Taxa de match',
+      change: '+0%',
+      trend: 'up',
+      color: '#be185d',
+      bgColor: 'rgba(190, 24, 93, 0.08)'
+    }
+  ];
+
+  const quickActions = [
+    { icon: RefreshCw, label: 'Raspar Vagas', onClick: () => handleScrape(), color: '#ec4899' },
+    { icon: Send, label: 'Enviar Mensagem', path: '/messages', color: '#f472b6' },
+    { icon: GraduationCap, label: 'Tutorial', path: '/tutorial', color: '#db2777' },
+    { icon: Crown, label: 'Planos', path: '/plans', color: '#be185d' },
+  ];
+
+  const filteredOpportunities = getFilteredOpportunities();
 
   return (
     <div className="dashboard-page">
@@ -200,7 +382,7 @@ export function Dashboard() {
               <div>
                 <div className="dashboard-welcome-greeting">
                   <Sparkles size={16} />
-                  <span>{greeting}, {user?.name?.split(' ')[0]}</span>
+                  <span>{greeting}, {user?.name?.split(' ')[0] || 'Usuário'}</span>
                 </div>
                 <p className="dashboard-welcome-text">
                   Conecte-se com as melhores oportunidades para designers.
@@ -211,6 +393,13 @@ export function Dashboard() {
               <div className="dashboard-date">
                 <Calendar size={14} />
                 {new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })}
+              </div>
+              <div className="dashboard-plan-badge">
+                <Crown size={12} />
+                {stats?.plan_type === 'professional' ? 'Pro' : 'Free'}
+                <span className="dashboard-plan-limit">
+                  {stats?.daily_limit || 10} vagas/dia
+                </span>
               </div>
             </div>
           </div>
@@ -248,19 +437,41 @@ export function Dashboard() {
 
           <div className="dashboard-quick-actions">
             {quickActions.map((action, index) => (
-              <Link key={index} to={action.path} className="dashboard-quick-action">
-                <div className="dashboard-quick-action-icon" style={{ background: `${action.color}10` }}>
-                  <action.icon size={18} style={{ color: action.color }} />
+              action.path ? (
+                <Link key={index} to={action.path} className="dashboard-quick-action">
+                  <div className="dashboard-quick-action-icon" style={{ background: `${action.color}10` }}>
+                    <action.icon size={18} style={{ color: action.color }} />
+                  </div>
+                  <span className="dashboard-quick-action-label">{action.label}</span>
+                  <ChevronRight size={14} className="dashboard-quick-action-arrow" />
+                </Link>
+              ) : (
+                <div key={index} className="dashboard-quick-action" onClick={action.onClick} style={{ cursor: 'pointer' }}>
+                  <div className="dashboard-quick-action-icon" style={{ background: `${action.color}10` }}>
+                    {scraping ? <Loader2 size={18} className="spinning" style={{ color: action.color }} /> : <action.icon size={18} style={{ color: action.color }} />}
+                  </div>
+                  <span className="dashboard-quick-action-label">{scraping ? 'Raspando...' : action.label}</span>
+                  <ChevronRight size={14} className="dashboard-quick-action-arrow" />
                 </div>
-                <span className="dashboard-quick-action-label">{action.label}</span>
-                <ChevronRight size={14} className="dashboard-quick-action-arrow" />
-              </Link>
+              )
             ))}
           </div>
 
           <div className="dashboard-grid">
             <Card className="dashboard-opportunities-card" glow>
               <div className="dashboard-section-header">
+                <div className="dashboard-section-header-left">
+                  <h2 className="dashboard-section-title">Oportunidades</h2>
+                  <span className="dashboard-section-badge pulse">{filteredOpportunities.length} disponíveis</span>
+                  <button 
+                    className="dashboard-scrape-button"
+                    onClick={() => handleScrape()}
+                    disabled={scraping}
+                  >
+                    {scraping ? <Loader2 size={14} className="spinning" /> : <RefreshCw size={14} />}
+                    {scraping ? 'Raspando...' : 'Atualizar'}
+                  </button>
+                </div>
                 <div className="dashboard-section-header-right">
                   <div className="dashboard-search-wrapper">
                     <Search size={16} className="dashboard-search-icon" />
@@ -273,31 +484,99 @@ export function Dashboard() {
                     />
                   </div>
                 </div>
-                <div className="dashboard-section-header-left">
-                  <h2 className="dashboard-section-title">Oportunidades</h2>
-                  <span className="dashboard-section-badge pulse">0 disponíveis</span>
-                </div>
               </div>
               
               <div className="dashboard-opportunities-container">
-                <div className="dashboard-empty-state">
-                  <div className="dashboard-empty-state-icon">
-                    <Briefcase size={48} />
+                {loading ? (
+                  <div className="dashboard-loading-state">
+                    <Loader2 size={48} className="spinning" />
+                    <p>Carregando oportunidades...</p>
                   </div>
-                  <h3>Nenhuma oportunidade disponível</h3>
-                  <p>Estamos buscando as melhores vagas para você. 
-                  <br />Volte em breve ou comece explorando nosso tutorial.</p>
-                  <div className="dashboard-empty-state-actions">
-                    <Link to="/tutorial">
-                      <Button variant="primary" size="md" icon={<GraduationCap size={16} />}>
-                        Ver tutorial
+                ) : filteredOpportunities.length === 0 ? (
+                  <div className="dashboard-empty-state">
+                    <div className="dashboard-empty-state-icon">
+                      <Briefcase size={48} />
+                    </div>
+                    <h3>Nenhuma oportunidade disponível</h3>
+                    <p>Estamos buscando as melhores vagas para você. 
+                    <br />Clique em "Raspar Vagas" para começar.</p>
+                    <div className="dashboard-empty-state-actions">
+                      <Button 
+                        variant="primary" 
+                        size="md" 
+                        icon={scraping ? <Loader2 size={16} className="spinning" /> : <RefreshCw size={16} />}
+                        onClick={() => handleScrape()}
+                        disabled={scraping}
+                      >
+                        {scraping ? 'Raspando...' : 'Raspar Vagas'}
                       </Button>
-                    </Link>
-                    <Button variant="outline" size="md" icon={<RefreshCw size={16} />}>
-                      Atualizar
-                    </Button>
+                      <Link to="/tutorial">
+                        <Button variant="outline" size="md" icon={<GraduationCap size={16} />}>
+                          Ver tutorial
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="dashboard-opportunities-list">
+                    {filteredOpportunities.slice(0, 10).map((opp) => (
+                      <div key={opp.id} className="dashboard-opportunity-item">
+                        <div className="dashboard-opportunity-main">
+                          <div className="dashboard-opportunity-source">
+                            {getSourceIcon(opp.source)}
+                            <span style={{ color: getSourceColor(opp.source) }}>
+                              {opp.source.charAt(0).toUpperCase() + opp.source.slice(1)}
+                            </span>
+                          </div>
+                          <h4 className="dashboard-opportunity-title">{opp.title}</h4>
+                          <div className="dashboard-opportunity-meta">
+                            <span className="dashboard-opportunity-company">
+                              <Building2 size={14} />
+                              {opp.company}
+                            </span>
+                            <span className="dashboard-opportunity-location">
+                              <MapPin size={14} />
+                              {opp.location || 'Remoto'}
+                            </span>
+                            <span className="dashboard-opportunity-contract">
+                              <Briefcase size={14} />
+                              {opp.contract_type || 'CLT'}
+                            </span>
+                            <span className="dashboard-opportunity-level">
+                              <TrendingUp size={14} />
+                              {opp.level || 'Não definido'}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="dashboard-opportunity-actions">
+                          <button 
+                            className={`dashboard-save-button ${savedOpps.includes(opp.id) ? 'saved' : ''}`}
+                            onClick={() => toggleSave(opp.id)}
+                          >
+                            <Heart size={18} fill={savedOpps.includes(opp.id) ? '#ec4899' : 'none'} />
+                          </button>
+                          <a 
+                            href={opp.application_url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="dashboard-apply-button"
+                          >
+                            Ver Vaga
+                            <ArrowUpRight size={14} />
+                          </a>
+                        </div>
+                      </div>
+                    ))}
+                    {filteredOpportunities.length > 10 && (
+                      <div className="dashboard-view-more">
+                        <Button variant="outline" size="sm">
+                          Ver todas ({filteredOpportunities.length})
+                          <ChevronRight size={14} />
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </Card>
 
