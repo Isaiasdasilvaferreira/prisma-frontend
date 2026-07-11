@@ -4,7 +4,7 @@ import { Header } from '../../components/Header/Header';
 import { Card } from '../../components/Card/Card';
 import { Button } from '../../components/Button/Button';
 import { 
-  Send, MessageSquare, Copy, CheckCircle,
+  Send, MessageSquare, Sparkles,Copy, CheckCircle,
   Building2, User, Mail, Briefcase, Globe, Phone
 } from 'lucide-react';
 import messagesData from '../../data/messages.json';
