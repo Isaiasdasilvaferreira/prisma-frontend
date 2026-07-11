@@ -121,8 +121,6 @@ export function Tutorial() {
                         <li><strong>Greenhouse</strong></li>
                         <li><strong>Ashby</strong></li>
                         <li><strong>Lever</strong></li>
-                        <li><strong>Workable</strong></li>
-                        <li><strong>BambooHR</strong></li>
                       </ul>
                     </section>
 
