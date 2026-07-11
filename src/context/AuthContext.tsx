@@ -39,32 +39,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    if (window.location.pathname === '/login' || window.location.pathname === '/register') {
-      setLoading(false);
-      return;
-    }
-
     const checkAuth = async () => {
       try {
         const storedToken = localStorage.getItem('token');
-        if (storedToken) {
+        const storedUser = localStorage.getItem('user');
+        
+        if (storedToken && storedUser) {
           setToken(storedToken);
-        }
-
-        const response = await api.get<UserData>('/auth/me');
-        if (response.data) {
+          const parsedUser = JSON.parse(storedUser);
           setUser({
-            id: response.data.id,
-            name: response.data.name || '',
-            email: response.data.email,
+            id: parsedUser.id,
+            name: parsedUser.name || '',
+            email: parsedUser.email,
             onboardingCompleted: getOnboardingState(),
             profile: {}
           });
+        } else {
+          setUser(null);
+          setToken(null);
         }
       } catch (error) {
+        console.error('Erro ao verificar autenticação:', error);
         setUser(null);
         setToken(null);
-        localStorage.removeItem('token');
       } finally {
         setLoading(false);
       }
@@ -91,6 +88,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (response.token) {
         setToken(response.token);
         localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(userData));
       }
     }
   };
@@ -113,6 +111,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (response.token) {
         setToken(response.token);
         localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(userData));
       }
     }
   };
@@ -122,6 +121,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
     setToken(null);
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
   };
 
   const updateProfile = async (profile: Partial<UserProfile>, onboardingCompleted?: boolean) => {
