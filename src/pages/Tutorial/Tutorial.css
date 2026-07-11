@@ -123,29 +123,6 @@
   animation: fadeIn 0.3s ease;
 }
 
-.overlay.fullscreen {
-  padding: 0;
-  background: #000;
-}
-
-.overlay.fullscreen .modal-container {
-  width: 100vw;
-  height: 100vh;
-  max-width: none;
-  max-height: none;
-  border-radius: 0;
-  background: #000;
-}
-
-.overlay.fullscreen .modal-header {
-  display: none;
-}
-
-.overlay.fullscreen .modal-body {
-  height: 100vh;
-  max-height: none;
-}
-
 .modal-container {
   width: 100%;
   max-width: 900px;
@@ -184,11 +161,6 @@
   margin: 0;
 }
 
-.modal-controls {
-  display: flex;
-  gap: 8px;
-}
-
 .modal-control-btn {
   background: transparent;
   border: none;
@@ -204,11 +176,6 @@
 
 .modal-control-btn:hover {
   background: rgba(255, 182, 193, 0.2);
-  color: #ff1493;
-}
-
-.close-btn {
-  color: #666;
 }
 
 .close-btn:hover {
@@ -352,9 +319,5 @@
 
   .overlay {
     padding: 10px;
-  }
-
-  .overlay.fullscreen {
-    padding: 0;
   }
 }
