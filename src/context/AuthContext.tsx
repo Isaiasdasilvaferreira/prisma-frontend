@@ -50,6 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } catch (error) {
         setUser(null);
         setToken(null);
+        api.setToken(null);
       } finally {
         setLoading(false);
       }
@@ -75,6 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       if (response.token) {
         setToken(response.token);
+        api.setToken(response.token);
       }
     }
   };
@@ -96,6 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       if (response.token) {
         setToken(response.token);
+        api.setToken(response.token);
       }
     }
   };
@@ -104,6 +107,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await api.logout();
     setUser(null);
     setToken(null);
+    api.setToken(null);
   };
 
   const updateProfile = async (profile: Partial<UserProfile>, onboardingCompleted?: boolean) => {
