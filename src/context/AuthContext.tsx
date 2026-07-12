@@ -59,7 +59,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setToken(null);
         }
       } catch (error) {
-        console.error('Erro ao verificar autenticação:', error);
         setUser(null);
         setToken(null);
       } finally {
