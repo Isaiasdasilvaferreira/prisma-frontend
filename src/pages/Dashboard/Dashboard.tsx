@@ -25,15 +25,11 @@ interface Opportunity {
   source: string;
   company: string;
   title: string;
-  description: string;
   contract_type: string;
   modality: string;
-  level: string;
   service_type: string;
   location: string;
-  salary_range: string;
   application_url: string;
-  posted_at: string;
   is_active: boolean;
   created_at: string;
 }
@@ -45,7 +41,6 @@ interface Stats {
   by_source: Record<string, number>;
   by_contract: Record<string, number>;
   by_modality: Record<string, number>;
-  by_level: Record<string, number>;
   recent_count: number;
 }
 
@@ -57,33 +52,6 @@ interface DashboardStats {
 }
 
 const filterOptions = {
-  cltCargos: [
-    'UI Design',
-    'UX Design',
-    'Product Design',
-    'Branding / Identidade Visual',
-    'Motion Design',
-    'Design Gráfico (generalista)',
-    'Design Editorial',
-    'Packaging'
-  ],
-  freelancerServicos: [
-    'Criação de Identidade Visual / Branding',
-    'Social Media Design',
-    'UI/UX para Apps e Sites',
-    'Motion Graphics / Animação',
-    'Arte para Impressão',
-    'Redesign de Marca',
-    'Landing Page Design',
-    'Apresentações'
-  ],
-  niveis: [
-    'Júnior',
-    'Pleno',
-    'Sênior',
-    'Especialista',
-    'Estagiário / Trainee'
-  ],
   modalidades: [
     'Remoto',
     'Presencial',
@@ -135,8 +103,6 @@ export function Dashboard() {
   });
 
   const [filters, setFilters] = useState({
-    titulosTags: [] as string[],
-    niveis: [] as string[],
     modalidades: [] as string[],
     tipoServico: [] as string[],
     tipoCliente: [] as string[],
@@ -186,21 +152,12 @@ export function Dashboard() {
   };
 
   const updateDashboardStats = (opps: Opportunity[]) => {
-    const now = new Date();
-    const weekAgo = new Date(now);
-    weekAgo.setDate(weekAgo.getDate() - 7);
-
-    const newThisWeek = opps.filter(opp => {
-      const postedAt = new Date(opp.posted_at);
-      return postedAt >= weekAgo;
-    }).length;
-
     const total = opps.length;
     const matchRate = total > 0 ? Math.min(100, Math.round((total / 10) * 100)) : 0;
 
     setDashboardStats({
       opportunities: total,
-      newThisWeek: newThisWeek,
+      newThisWeek: total,
       messages: 0,
       matchRate: `${matchRate}%`
     });
@@ -222,7 +179,7 @@ export function Dashboard() {
     }
   };
 
-  const toggleFilter = (category: 'titulosTags' | 'niveis' | 'modalidades' | 'tipoServico' | 'tipoCliente' | 'urgencia', value: string) => {
+  const toggleFilter = (category: 'modalidades' | 'tipoServico' | 'tipoCliente' | 'urgencia', value: string) => {
     setFilters(prev => {
       const current = prev[category];
       const newValues = current.includes(value)
@@ -234,8 +191,6 @@ export function Dashboard() {
 
   const clearFilters = () => {
     setFilters({ 
-      titulosTags: [], 
-      niveis: [], 
       modalidades: [],
       tipoServico: [],
       tipoCliente: [],
@@ -272,10 +227,6 @@ export function Dashboard() {
 
     if (filters.modalidades.length > 0) {
       filtered = filtered.filter(opp => filters.modalidades.includes(opp.modality));
-    }
-
-    if (filters.niveis.length > 0) {
-      filtered = filtered.filter(opp => filters.niveis.includes(opp.level));
     }
 
     return filtered;
@@ -481,7 +432,7 @@ export function Dashboard() {
                 ) : (
                   <div className="dashboard-opportunities-list">
                     {filteredOpportunities.slice(0, 10).map((opp) => (
-                      <div key={opp.id} className="dashboard-opportunity-item">
+                      <div key={opp.external_id} className="dashboard-opportunity-item">
                         <div className="dashboard-opportunity-main">
                           <div className="dashboard-opportunity-source">
                             {getSourceIcon(opp.source)}
@@ -503,18 +454,14 @@ export function Dashboard() {
                               <Briefcase size={14} />
                               {opp.contract_type || 'CLT'}
                             </span>
-                            <span className="dashboard-opportunity-level">
-                              <TrendingUp size={14} />
-                              {opp.level || 'Não definido'}
-                            </span>
                           </div>
                         </div>
                         <div className="dashboard-opportunity-actions">
                           <button 
-                            className={`dashboard-save-button ${savedOpps.includes(opp.id) ? 'saved' : ''}`}
-                            onClick={() => toggleSave(opp.id)}
+                            className={`dashboard-save-button ${savedOpps.includes(opp.external_id) ? 'saved' : ''}`}
+                            onClick={() => toggleSave(opp.external_id)}
                           >
-                            <Heart size={18} fill={savedOpps.includes(opp.id) ? '#ec4899' : 'none'} />
+                            <Heart size={18} fill={savedOpps.includes(opp.external_id) ? '#ec4899' : 'none'} />
                           </button>
                           <a 
                             href={opp.application_url} 
@@ -576,21 +523,6 @@ export function Dashboard() {
                       key={opt}
                       className={`dashboard-filter-option ${filters.modalidades.includes(opt) ? 'selected' : ''}`}
                       onClick={() => toggleFilter('modalidades', opt)}
-                    >
-                      {opt}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="dashboard-filter-section">
-                <span className="dashboard-filter-label">Níveis</span>
-                <div className="dashboard-filter-options">
-                  {filterOptions.niveis.map((opt) => (
-                    <div 
-                      key={opt}
-                      className={`dashboard-filter-option ${filters.niveis.includes(opt) ? 'selected' : ''}`}
-                      onClick={() => toggleFilter('niveis', opt)}
                     >
                       {opt}
                     </div>
