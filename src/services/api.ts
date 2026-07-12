@@ -96,6 +96,18 @@ class Api {
     }
   }
 
+  setToken(token: string | null): void {
+    this.currentToken = token;
+  }
+
+  getToken(): string | null {
+    return this.currentToken;
+  }
+
+  isAuthenticated(): boolean {
+    return !!this.currentToken;
+  }
+
   async login(email: string, password: string): Promise<ApiResponse<UserData>> {
     try {
       const response = await this.client.post<LoginResponse>('/auth/login', { email, password });
@@ -150,22 +162,10 @@ class Api {
     try {
       await this.client.post('/auth/logout', {});
     } catch (error) {
-      // silent
+
     } finally {
       this.currentToken = null;
     }
-  }
-
-  setToken(token: string): void {
-    this.currentToken = token;
-  }
-
-  getToken(): string | null {
-    return this.currentToken;
-  }
-
-  isAuthenticated(): boolean {
-    return !!this.currentToken;
   }
 
   async get<T>(endpoint: string): Promise<ApiResponse<T>> {
