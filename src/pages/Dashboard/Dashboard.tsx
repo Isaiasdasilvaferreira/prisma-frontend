@@ -370,7 +370,7 @@ export function Dashboard() {
   ];
 
   const quickActions = [
-    { icon: TrendingUp, label: 'Análises', path: '/analytics', color: '#ec4899' },
+    { icon: BarChart3, label: 'Análises', path: '/analytics', color: '#ec4899' },
     { icon: Send, label: 'Enviar Mensagem', path: '/messages', color: '#f472b6' },
     { icon: GraduationCap, label: 'Tutorial', path: '/tutorial', color: '#db2777' },
     { icon: Crown, label: 'Planos', path: '/plans', color: '#be185d' },
