@@ -18,7 +18,6 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  token: string | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
@@ -31,7 +30,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -49,8 +47,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       } catch (error) {
         setUser(null);
-        setToken(null);
-        api.setToken(null);
       } finally {
         setLoading(false);
       }
@@ -65,19 +61,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error(response.error);
     }
     if (response.data) {
-      const userData = {
+      setUser({
         id: response.data.id,
         name: response.data.name || '',
         email: response.data.email,
         onboardingCompleted: false,
         profile: {}
-      };
-      setUser(userData);
-      
-      if (response.token) {
-        setToken(response.token);
-        api.setToken(response.token);
-      }
+      });
     }
   };
 
@@ -87,27 +77,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error(response.error);
     }
     if (response.data) {
-      const userData = {
+      setUser({
         id: response.data.id,
         name: response.data.name || name,
         email: response.data.email,
         onboardingCompleted: false,
         profile: {}
-      };
-      setUser(userData);
-      
-      if (response.token) {
-        setToken(response.token);
-        api.setToken(response.token);
-      }
+      });
     }
   };
 
   const logout = async () => {
     await api.logout();
     setUser(null);
-    setToken(null);
-    api.setToken(null);
   };
 
   const updateProfile = async (profile: Partial<UserProfile>, onboardingCompleted?: boolean) => {
@@ -136,13 +118,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     <AuthContext.Provider 
       value={{ 
         user, 
-        token,
         loading, 
         login, 
         register, 
         logout, 
         updateProfile,
-        isAuthenticated: !!user && !!token
+        isAuthenticated: !!user
       }}
     >
       {children}
