@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { api } from '../../services/api';
 import { Sidebar } from '../../components/Sidebar/Sidebar';
 import { Header } from '../../components/Header/Header';
 import { Card } from '../../components/Card/Card';
@@ -116,7 +117,7 @@ const filterOptions = {
 };
 
 export function Dashboard() {
-  const { user, token } = useAuth();
+  const { user } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [greeting, setGreeting] = useState('');
   const [savedOpps, setSavedOpps] = useState<string[]>([]);
@@ -142,8 +143,6 @@ export function Dashboard() {
     urgencia: [] as string[]
   });
 
-  const API_URL = 'https://prisma-backend-z37q.onrender.com';
-
   useEffect(() => {
     const hour = new Date().getHours();
     if (hour < 12) setGreeting('Bom dia');
@@ -152,30 +151,22 @@ export function Dashboard() {
   }, []);
 
   useEffect(() => {
-    if (token) {
+    if (api.isAuthenticated()) {
       fetchOpportunities();
       fetchStats();
     }
-  }, [token]);
+  }, []);
 
   const fetchOpportunities = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/opportunities`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
+      const response = await api.get<Opportunity[]>('/opportunities');
+      
+      if (response.data) {
         let opportunitiesData: Opportunity[] = [];
-        if (Array.isArray(data)) {
-          opportunitiesData = data;
-        } else if (data.success && Array.isArray(data.data)) {
-          opportunitiesData = data.data;
-        } else if (Array.isArray(data.data)) {
-          opportunitiesData = data.data;
+        if (Array.isArray(response.data)) {
+          opportunitiesData = response.data;
+        } else if (response.data && Array.isArray(response.data)) {
+          opportunitiesData = response.data;
         }
         
         setOpportunities(opportunitiesData);
@@ -190,20 +181,10 @@ export function Dashboard() {
 
   const fetchStats = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/opportunities/stats`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        if (data.success) {
-          setStats(data.data);
-        } else if (data.data) {
-          setStats(data.data);
-        }
+      const response = await api.get<Stats>('/opportunities/stats');
+      
+      if (response.data) {
+        setStats(response.data);
       }
     } catch (error) {
       console.error('Error fetching stats:', error);
@@ -234,15 +215,10 @@ export function Dashboard() {
   const handleScrape = async (source?: string) => {
     setScraping(true);
     try {
-      const endpoint = source ? `/api/scrape/${source}` : '/api/scrape/all';
-      const response = await fetch(`${API_URL}${endpoint}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (response.ok) {
+      const endpoint = source ? `/scrape/${source}` : '/scrape/all';
+      const response = await api.get(endpoint);
+      
+      if (response.data) {
         await fetchOpportunities();
         await fetchStats();
       }
@@ -370,7 +346,7 @@ export function Dashboard() {
   ];
 
   const quickActions = [
-    { icon: BarChart3, label: 'Análises', path: '/analytics', color: '#ec4899' },
+    { icon: Briefcase, label: 'Oportunidades', path: '/dashboard', color: '#ec4899' },
     { icon: Send, label: 'Enviar Mensagem', path: '/messages', color: '#f472b6' },
     { icon: GraduationCap, label: 'Tutorial', path: '/tutorial', color: '#db2777' },
     { icon: Crown, label: 'Planos', path: '/plans', color: '#be185d' },
