@@ -123,8 +123,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           onboardingCompleted: onboardingDone || prev.onboardingCompleted
         };
       });
-
-      await api.put<UserData>('/user/profile', profile);
     } catch (error) {
       throw error;
     }
