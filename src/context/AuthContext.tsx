@@ -34,29 +34,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const getOnboardingState = () => {
-    return localStorage.getItem('onboardingCompleted') === 'true';
-  };
-
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const storedToken = localStorage.getItem('token');
-        const storedUser = localStorage.getItem('user');
-        
-        if (storedToken && storedUser) {
-          setToken(storedToken);
-          const parsedUser = JSON.parse(storedUser);
+        const response = await api.get<UserData>('/auth/me');
+        if (response.data) {
           setUser({
-            id: parsedUser.id,
-            name: parsedUser.name || '',
-            email: parsedUser.email,
-            onboardingCompleted: getOnboardingState(),
+            id: response.data.id,
+            name: response.data.name || '',
+            email: response.data.email,
+            onboardingCompleted: false,
             profile: {}
           });
-        } else {
-          setUser(null);
-          setToken(null);
         }
       } catch (error) {
         setUser(null);
@@ -79,15 +68,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         id: response.data.id,
         name: response.data.name || '',
         email: response.data.email,
-        onboardingCompleted: getOnboardingState(),
+        onboardingCompleted: false,
         profile: {}
       };
       setUser(userData);
       
       if (response.token) {
         setToken(response.token);
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('user', JSON.stringify(userData));
       }
     }
   };
@@ -109,8 +96,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       if (response.token) {
         setToken(response.token);
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('user', JSON.stringify(userData));
       }
     }
   };
@@ -119,8 +104,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await api.logout();
     setUser(null);
     setToken(null);
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
   };
 
   const updateProfile = async (profile: Partial<UserProfile>, onboardingCompleted?: boolean) => {
@@ -128,9 +111,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     
     try {
       const onboardingDone = onboardingCompleted === true;
-      if (onboardingDone) {
-        localStorage.setItem('onboardingCompleted', 'true');
-      }
 
       setUser(prev => {
         if (!prev) return null;
@@ -146,7 +126,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       await api.put<UserData>('/user/profile', profile);
     } catch (error) {
-      console.error('Erro ao atualizar perfil:', error);
       throw error;
     }
   };
