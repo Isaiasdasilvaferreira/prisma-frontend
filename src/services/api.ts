@@ -24,11 +24,9 @@ interface LoginResponse {
   error?: string;
 }
 
-let currentUser: UserData | null = null;
-let currentToken: string | null = null;
-
 class Api {
   private client: AxiosInstance;
+  private currentToken: string | null = null;
 
   constructor() {
     this.client = axios.create({
@@ -46,9 +44,8 @@ class Api {
   private setupInterceptors() {
     this.client.interceptors.request.use(
       (config) => {
-        const token = localStorage.getItem('token');
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
+        if (this.currentToken) {
+          config.headers.Authorization = `Bearer ${this.currentToken}`;
         }
         return config;
       },
@@ -58,18 +55,13 @@ class Api {
     this.client.interceptors.response.use(
       (response: AxiosResponse) => {
         if (response.data?.success && response.data?.data?.token) {
-          const token = response.data.data.token;
-          localStorage.setItem('token', token);
-          currentToken = token;
+          this.currentToken = response.data.data.token;
         }
         return response;
       },
       (error: AxiosError) => {
         if (error.response?.status === 401) {
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-          currentToken = null;
-          currentUser = null;
+          this.currentToken = null;
         }
         return Promise.reject(error);
       }
@@ -110,10 +102,7 @@ class Api {
       
       if (response.data.success && response.data.data) {
         const { token, user } = response.data.data;
-        currentToken = token;
-        currentUser = user;
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
+        this.currentToken = token;
         return { data: user, token };
       }
       
@@ -140,10 +129,7 @@ class Api {
       
       if (response.data.success && response.data.data) {
         const { token, user } = response.data.data;
-        currentToken = token;
-        currentUser = user;
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
+        this.currentToken = token;
         return { data: user, token };
       }
       
@@ -164,38 +150,22 @@ class Api {
     try {
       await this.client.post('/auth/logout', {});
     } catch (error) {
-      // Erro silencioso
+      // silent
     } finally {
-      currentToken = null;
-      currentUser = null;
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
+      this.currentToken = null;
     }
   }
 
-  getCurrentUser(): UserData | null {
-    if (!currentUser) {
-      const storedUser = localStorage.getItem('user');
-      if (storedUser) {
-        try {
-          currentUser = JSON.parse(storedUser);
-        } catch {
-          currentUser = null;
-        }
-      }
-    }
-    return currentUser;
+  setToken(token: string): void {
+    this.currentToken = token;
   }
 
   getToken(): string | null {
-    if (!currentToken) {
-      currentToken = localStorage.getItem('token');
-    }
-    return currentToken;
+    return this.currentToken;
   }
 
   isAuthenticated(): boolean {
-    return !!this.getToken() && !!this.getCurrentUser();
+    return !!this.currentToken;
   }
 
   async get<T>(endpoint: string): Promise<ApiResponse<T>> {
