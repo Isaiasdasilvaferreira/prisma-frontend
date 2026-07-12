@@ -12,21 +12,11 @@ export interface UserData {
 interface ApiResponse<T> {
   data: T | null;
   error?: string;
-  token?: string;
-}
-
-interface LoginResponse {
-  success: boolean;
-  data?: {
-    token: string;
-    user: UserData;
-  };
-  error?: string;
 }
 
 class Api {
   private client: AxiosInstance;
-  private currentToken: string | null = null;
+  private csrfToken: string | null = null;
 
   constructor() {
     this.client = axios.create({
@@ -44,8 +34,8 @@ class Api {
   private setupInterceptors() {
     this.client.interceptors.request.use(
       (config) => {
-        if (this.currentToken) {
-          config.headers.Authorization = `Bearer ${this.currentToken}`;
+        if (this.csrfToken) {
+          config.headers['X-CSRF-Token'] = this.csrfToken;
         }
         return config;
       },
@@ -54,14 +44,15 @@ class Api {
 
     this.client.interceptors.response.use(
       (response: AxiosResponse) => {
-        if (response.data?.success && response.data?.data?.token) {
-          this.currentToken = response.data.data.token;
+        const csrfToken = response.headers['x-csrf-token'];
+        if (csrfToken) {
+          this.csrfToken = csrfToken;
         }
         return response;
       },
       (error: AxiosError) => {
         if (error.response?.status === 401) {
-          this.currentToken = null;
+          this.csrfToken = null;
         }
         return Promise.reject(error);
       }
@@ -96,29 +87,14 @@ class Api {
     }
   }
 
-  setToken(token: string | null): void {
-    this.currentToken = token;
-  }
-
-  getToken(): string | null {
-    return this.currentToken;
-  }
-
-  isAuthenticated(): boolean {
-    return !!this.currentToken;
-  }
-
   async login(email: string, password: string): Promise<ApiResponse<UserData>> {
     try {
-      const response = await this.client.post<LoginResponse>('/auth/login', { email, password });
-      
-      if (response.data.success && response.data.data) {
-        const { token, user } = response.data.data;
-        this.currentToken = token;
-        return { data: user, token };
+      const response = await this.client.post('/auth/login', { email, password });
+      const csrfToken = response.headers['x-csrf-token'];
+      if (csrfToken) {
+        this.csrfToken = csrfToken;
       }
-      
-      return { data: null, error: 'Erro ao fazer login' };
+      return { data: response.data };
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorData = error.response?.data as any;
@@ -133,19 +109,16 @@ class Api {
 
   async signup(email: string, password: string, metadata: any): Promise<ApiResponse<UserData>> {
     try {
-      const response = await this.client.post<LoginResponse>('/auth/signup', {
+      const response = await this.client.post('/auth/signup', {
         email,
         password,
         metadata,
       });
-      
-      if (response.data.success && response.data.data) {
-        const { token, user } = response.data.data;
-        this.currentToken = token;
-        return { data: user, token };
+      const csrfToken = response.headers['x-csrf-token'];
+      if (csrfToken) {
+        this.csrfToken = csrfToken;
       }
-      
-      return { data: null, error: 'Erro ao criar conta' };
+      return { data: response.data };
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorData = error.response?.data as any;
@@ -162,10 +135,14 @@ class Api {
     try {
       await this.client.post('/auth/logout', {});
     } catch (error) {
-
+      // silent
     } finally {
-      this.currentToken = null;
+      this.csrfToken = null;
     }
+  }
+
+  isAuthenticated(): boolean {
+    return true;
   }
 
   async get<T>(endpoint: string): Promise<ApiResponse<T>> {
