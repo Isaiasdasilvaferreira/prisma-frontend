@@ -164,7 +164,7 @@ class Api {
     try {
       await this.client.post('/auth/logout', {});
     } catch (error) {
-      console.error('Erro ao fazer logout:', error);
+      // Erro silencioso
     } finally {
       currentToken = null;
       currentUser = null;
@@ -177,7 +177,11 @@ class Api {
     if (!currentUser) {
       const storedUser = localStorage.getItem('user');
       if (storedUser) {
-        currentUser = JSON.parse(storedUser);
+        try {
+          currentUser = JSON.parse(storedUser);
+        } catch {
+          currentUser = null;
+        }
       }
     }
     return currentUser;
