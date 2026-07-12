@@ -123,13 +123,10 @@ export function Dashboard() {
 
   const fetchOpportunities = async () => {
     try {
-      const response = await api.get<Opportunity[]>('/opportunities');
+      const response = await api.get<{ data: Opportunity[] }>('/opportunities');
       
-      if (response.data) {
-        let opportunitiesData: Opportunity[] = [];
-        if (Array.isArray(response.data)) {
-          opportunitiesData = response.data;
-        }
+      if (response.data && response.data.data) {
+        const opportunitiesData = response.data.data;
         setOpportunities(opportunitiesData);
         updateDashboardStats(opportunitiesData);
       }
