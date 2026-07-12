@@ -151,10 +151,8 @@ export function Dashboard() {
   }, []);
 
   useEffect(() => {
-    if (api.isAuthenticated()) {
-      fetchOpportunities();
-      fetchStats();
-    }
+    fetchOpportunities();
+    fetchStats();
   }, []);
 
   const fetchOpportunities = async () => {
@@ -165,10 +163,7 @@ export function Dashboard() {
         let opportunitiesData: Opportunity[] = [];
         if (Array.isArray(response.data)) {
           opportunitiesData = response.data;
-        } else if (response.data && Array.isArray(response.data)) {
-          opportunitiesData = response.data;
         }
-        
         setOpportunities(opportunitiesData);
         updateDashboardStats(opportunitiesData);
       }
@@ -182,7 +177,6 @@ export function Dashboard() {
   const fetchStats = async () => {
     try {
       const response = await api.get<Stats>('/opportunities/stats');
-      
       if (response.data) {
         setStats(response.data);
       }
@@ -217,7 +211,6 @@ export function Dashboard() {
     try {
       const endpoint = source ? `/scrape/${source}` : '/scrape/all';
       const response = await api.get(endpoint);
-      
       if (response.data) {
         await fetchOpportunities();
         await fetchStats();
