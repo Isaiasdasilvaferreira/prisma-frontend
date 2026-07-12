@@ -169,7 +169,6 @@ export function Dashboard() {
 
       if (response.ok) {
         const data = await response.json();
-        // Verifica se a resposta é um array diretamente ou está dentro de data
         let opportunitiesData: Opportunity[] = [];
         if (Array.isArray(data)) {
           opportunitiesData = data;
@@ -351,13 +350,13 @@ export function Dashboard() {
       bgColor: 'rgba(244, 114, 182, 0.08)'
     },
     { 
-      icon: Crown, 
-      value: stats?.plan_type === 'professional' ? 'Pro' : 'Free', 
-      label: 'Plano',
-      change: stats?.plan_type === 'professional' ? '✓ Ativo' : 'Upgrade',
-      trend: stats?.plan_type === 'professional' ? 'up' : 'down',
-      color: stats?.plan_type === 'professional' ? '#db2777' : '#9ca3af',
-      bgColor: stats?.plan_type === 'professional' ? 'rgba(219, 39, 119, 0.08)' : 'rgba(156, 163, 175, 0.08)'
+      icon: MessageSquare, 
+      value: '0', 
+      label: 'Mensagens',
+      change: '+0',
+      trend: 'up',
+      color: '#db2777',
+      bgColor: 'rgba(219, 39, 119, 0.08)'
     },
     { 
       icon: Target, 
@@ -403,13 +402,6 @@ export function Dashboard() {
               <div className="dashboard-date">
                 <Calendar size={14} />
                 {new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })}
-              </div>
-              <div className="dashboard-plan-badge">
-                <Crown size={12} />
-                {stats?.plan_type === 'professional' ? 'Pro' : 'Free'}
-                <span className="dashboard-plan-limit">
-                  {stats?.daily_limit || 10} vagas/dia
-                </span>
               </div>
             </div>
           </div>
