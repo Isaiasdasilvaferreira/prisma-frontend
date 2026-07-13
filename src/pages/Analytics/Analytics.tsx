@@ -350,6 +350,22 @@ export function Analytics() {
     return '#e8b4c8';
   };
 
+  const renderLabel = (props: any) => {
+    const { x, y, width, height, value } = props;
+    return (
+      <text 
+        x={x + width / 2} 
+        y={y - 6} 
+        fill="#64748b" 
+        fontSize={11} 
+        textAnchor="middle"
+        dominantBaseline="bottom"
+      >
+        {value}
+      </text>
+    );
+  };
+
   return (
     <div className="dashboard-page">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -503,7 +519,7 @@ export function Analytics() {
                   </div>
                 ) : (
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={serviceTypeData} margin={{ top: 10, right: 20, left: 0, bottom: 20 }}>
+                    <BarChart data={serviceTypeData} margin={{ top: 30, right: 20, left: 0, bottom: 20 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
                       <XAxis 
                         dataKey="name" 
@@ -527,12 +543,7 @@ export function Analytics() {
                         dataKey="value" 
                         radius={[4, 4, 0, 0]} 
                         barSize={36}
-                        label={{ 
-                          position: 'top', 
-                          fill: '#64748b', 
-                          fontSize: 11,
-                          formatter: (value: number) => value
-                        }}
+                        label={renderLabel}
                       >
                         {serviceTypeData.map((entry, index) => (
                           <Cell 
