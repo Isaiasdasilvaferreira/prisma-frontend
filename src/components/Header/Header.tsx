@@ -23,11 +23,22 @@ export function Header({ onMenuClick }: HeaderProps) {
       return 'Enviar Mensagens';
     } else if (path === '/tutorial') {
       return 'Tutorial';
-    } else if (path === 'plans') {
+    } else if (path === '/plans') {
       return 'Planos';
     }
     
     return 'Dashboard';
+  };
+
+  const getUserName = () => {
+    if (user?.name) {
+      const firstName = user.name.split(' ')[0];
+      return firstName;
+    }
+    if (user?.email) {
+      return user.email.split('@')[0];
+    }
+    return 'Usuário';
   };
 
   return (
@@ -42,10 +53,10 @@ export function Header({ onMenuClick }: HeaderProps) {
       <div className="header-right">
         <div className="header-user">
           <div className="header-avatar">
-            {user?.name?.charAt(0).toUpperCase()}
+            {getUserName().charAt(0).toUpperCase()}
           </div>
           <div className="header-user-info">
-            <span className="header-username">{user?.name}</span>
+            <span className="header-username">{getUserName()}</span>
             <span className="header-plan">Plano Gratuito</span>
           </div>
           <ChevronDown size={14} className="header-chevron" />
