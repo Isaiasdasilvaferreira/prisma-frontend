@@ -59,13 +59,115 @@ interface Stats {
   recent_count: number;
 }
 
+interface CountryData {
+  name: string;
+  opportunities: number;
+  percentage: number;
+  locations: string[];
+}
+
 const CHART_COLORS = ['#ec4899', '#f472b6', '#db2777', '#be185d', '#9d174d', '#6b21a5', '#1d4ed8', '#059669', '#d97706', '#ea580c'];
+
+const countryMapping: Record<string, string> = {
+  'Brazil': 'Brasil',
+  'United States': 'EUA',
+  'United States of America': 'EUA',
+  'USA': 'EUA',
+  'Canada': 'Canadá',
+  'United Kingdom': 'Reino Unido',
+  'Germany': 'Alemanha',
+  'France': 'França',
+  'Italy': 'Itália',
+  'Spain': 'Espanha',
+  'Portugal': 'Portugal',
+  'Netherlands': 'Holanda',
+  'Switzerland': 'Suíça',
+  'Australia': 'Austrália',
+  'New Zealand': 'Nova Zelândia',
+  'Japan': 'Japão',
+  'China': 'China',
+  'India': 'Índia',
+  'Singapore': 'Singapura',
+  'Mexico': 'México',
+  'Argentina': 'Argentina',
+  'Chile': 'Chile',
+  'Colombia': 'Colômbia',
+  'Peru': 'Peru',
+  'South Africa': 'África do Sul',
+  'Egypt': 'Egito',
+  'Nigeria': 'Nigéria',
+  'Kenya': 'Quênia',
+  'Israel': 'Israel',
+  'Turkey': 'Turquia',
+  'Poland': 'Polônia',
+  'Sweden': 'Suécia',
+  'Norway': 'Noruega',
+  'Denmark': 'Dinamarca',
+  'Finland': 'Finlândia',
+  'Ireland': 'Irlanda',
+  'Belgium': 'Bélgica',
+  'Austria': 'Áustria',
+  'Greece': 'Grécia',
+  'Russia': 'Rússia',
+  'Ukraine': 'Ucrânia',
+  'Romania': 'Romênia',
+  'Hungary': 'Hungria',
+  'Czech Republic': 'República Tcheca',
+  'Slovakia': 'Eslováquia',
+  'Bulgaria': 'Bulgária',
+  'Serbia': 'Sérvia',
+  'Croatia': 'Croácia',
+  'Slovenia': 'Eslovênia',
+  'Estonia': 'Estônia',
+  'Latvia': 'Letônia',
+  'Lithuania': 'Lituânia',
+  'Iceland': 'Islândia',
+  'Luxembourg': 'Luxemburgo',
+  'Monaco': 'Mônaco',
+  'Andorra': 'Andorra',
+  'Liechtenstein': 'Liechtenstein',
+  'San Marino': 'San Marino',
+  'Vatican City': 'Vaticano',
+  'Malta': 'Malta',
+  'Cyprus': 'Chipre'
+};
+
+const normalizeLocation = (location: string): string => {
+  if (!location) return 'Não especificado';
+  const locationLower = location.toLowerCase();
+  if (locationLower.includes('brasil') || locationLower.includes('brazil')) return 'Brazil';
+  if (locationLower.includes('eua') || locationLower.includes('usa') || locationLower.includes('united states')) return 'United States';
+  if (locationLower.includes('canad') || locationLower.includes('canada')) return 'Canada';
+  if (locationLower.includes('uk') || locationLower.includes('united kingdom') || locationLower.includes('england')) return 'United Kingdom';
+  if (locationLower.includes('alem') || locationLower.includes('germany') || locationLower.includes('deutsch')) return 'Germany';
+  if (locationLower.includes('fran') || locationLower.includes('france')) return 'France';
+  if (locationLower.includes('ital') || locationLower.includes('italy')) return 'Italy';
+  if (locationLower.includes('span') || locationLower.includes('spain') || locationLower.includes('espan')) return 'Spain';
+  if (locationLower.includes('portug') || locationLower.includes('portugal')) return 'Portugal';
+  if (locationLower.includes('holand') || locationLower.includes('netherlands')) return 'Netherlands';
+  if (locationLower.includes('suic') || locationLower.includes('switzerland')) return 'Switzerland';
+  if (locationLower.includes('austr') || locationLower.includes('australia')) return 'Australia';
+  if (locationLower.includes('nova zeland') || locationLower.includes('new zealand')) return 'New Zealand';
+  if (locationLower.includes('jap') || locationLower.includes('japan')) return 'Japan';
+  if (locationLower.includes('china') || locationLower.includes('chin')) return 'China';
+  if (locationLower.includes('india') || locationLower.includes('ind')) return 'India';
+  if (locationLower.includes('singap') || locationLower.includes('singapore')) return 'Singapore';
+  if (locationLower.includes('mex') || locationLower.includes('mexico')) return 'Mexico';
+  if (locationLower.includes('argent') || locationLower.includes('argentina')) return 'Argentina';
+  if (locationLower.includes('chile')) return 'Chile';
+  if (locationLower.includes('colomb') || locationLower.includes('colombia')) return 'Colombia';
+  if (locationLower.includes('peru')) return 'Peru';
+  if (locationLower.includes('africa') || locationLower.includes('south africa')) return 'South Africa';
+  return 'Outros';
+};
 
 export function Analytics() {
   const { user } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [position, setPosition] = useState({ coordinates: [0, 20], zoom: 1.2 });
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+  const [hoveredCountry, setHoveredCountry] = useState<string | null>(null);
+  const [countryData, setCountryData] = useState<Map<string, CountryData>>(new Map());
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -92,6 +194,7 @@ export function Analytics() {
       const response = await api.get<{ data: Opportunity[] }>('/opportunities');
       if (response.data && response.data.data) {
         setOpportunities(response.data.data);
+        processCountryData(response.data.data);
       }
     } catch (error) {
       console.error('Error fetching opportunities:', error);
@@ -107,6 +210,38 @@ export function Analytics() {
     } catch (error) {
       console.error('Error fetching stats:', error);
     }
+  };
+
+  const processCountryData = (opps: Opportunity[]) => {
+    const countryMap = new Map<string, CountryData>();
+    const total = opps.length;
+
+    opps.forEach(opp => {
+      const location = opp.location || 'Não especificado';
+      const normalizedCountry = normalizeLocation(location);
+      const countryName = countryMapping[normalizedCountry] || normalizedCountry;
+
+      if (!countryMap.has(countryName)) {
+        countryMap.set(countryName, {
+          name: countryName,
+          opportunities: 0,
+          percentage: 0,
+          locations: []
+        });
+      }
+
+      const data = countryMap.get(countryName)!;
+      data.opportunities += 1;
+      if (!data.locations.includes(location)) {
+        data.locations.push(location);
+      }
+    });
+
+    countryMap.forEach((data) => {
+      data.percentage = total > 0 ? Math.round((data.opportunities / total) * 100) : 0;
+    });
+
+    setCountryData(countryMap);
   };
 
   const getUniqueCompanies = () => {
@@ -203,6 +338,18 @@ export function Analytics() {
     return null;
   };
 
+  const getCountryColor = (countryName: string): string => {
+    const data = countryData.get(countryName);
+    if (!data) return '#e8b4c8';
+    const maxOpportunities = Math.max(...Array.from(countryData.values()).map(d => d.opportunities));
+    if (maxOpportunities === 0) return '#e8b4c8';
+    const ratio = data.opportunities / maxOpportunities;
+    if (ratio > 0.7) return '#4a0d26';
+    if (ratio > 0.4) return '#8c1a4a';
+    if (ratio > 0.1) return '#ce266e';
+    return '#e8b4c8';
+  };
+
   return (
     <div className="dashboard-page">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -244,6 +391,11 @@ export function Analytics() {
                   Distribuição global
                 </div>
                 <div className="analytics-card-actions">
+                  {hoveredCountry && (
+                    <span className="analytics-tag">
+                      {hoveredCountry}
+                    </span>
+                  )}
                   {selectedCountry && (
                     <span className="analytics-tag">
                       País selecionado
@@ -264,21 +416,42 @@ export function Analytics() {
                     <Geographies geography={geoUrl}>
                       {({ geographies }: any) =>
                         geographies.map((geo: any) => {
+                          const geoName = geo.properties.name || geo.properties.name_ar || '';
+                          const countryName = countryMapping[geoName] || geoName;
+                          const data = countryData.get(countryName);
+                          const fillColor = getCountryColor(countryName);
+
                           return (
                             <Geography
                               key={geo.rsmKey}
                               geography={geo}
-                              fill="#e8b4c8"
+                              fill={fillColor}
                               stroke="#0a0a0a"
                               strokeWidth={0.5}
                               style={{
                                 default: { outline: 'none' },
-                                hover: { fill: '#ce266e', outline: 'none', cursor: 'pointer' },
+                                hover: { 
+                                  fill: data && data.opportunities > 0 ? '#ce266e' : '#ce266e', 
+                                  outline: 'none', 
+                                  cursor: data && data.opportunities > 0 ? 'pointer' : 'default',
+                                  stroke: '#ec4899',
+                                  strokeWidth: 1.5
+                                },
                                 pressed: { outline: 'none' },
                               }}
+                              onMouseEnter={() => {
+                                if (data && data.opportunities > 0) {
+                                  setHoveredCountry(
+                                    `${countryName} (${data.opportunities} vagas - ${data.percentage}%)`
+                                  );
+                                }
+                              }}
+                              onMouseLeave={() => setHoveredCountry(null)}
                               onClick={() => {
-                                const code = geo.properties.iso_a3 || geo.properties.iso_a2;
-                                setSelectedCountry(code || null);
+                                if (data && data.opportunities > 0) {
+                                  const code = geo.properties.iso_a3 || geo.properties.iso_a2;
+                                  setSelectedCountry(code || null);
+                                }
                               }}
                             />
                           );
@@ -290,16 +463,13 @@ export function Analytics() {
               </div>
               <div className="analytics-map-footer">
                 <span className="analytics-map-note">
-                  {selectedCountry 
-                    ? 'Aguardando dados do país selecionado'
-                    : 'Clique em um país para ver detalhes'
-                  }
+                  {selectedCountry && hoveredCountry ? hoveredCountry : 'Passe o mouse sobre um país para ver detalhes'}
                 </span>
                 <div className="analytics-legend">
-                  <div className="analytics-legend-item"><span style={{ background: '#4a0d26' }} />200+</div>
-                  <div className="analytics-legend-item"><span style={{ background: '#8c1a4a' }} />100+</div>
-                  <div className="analytics-legend-item"><span style={{ background: '#ce266e' }} />20+</div>
-                  <div className="analytics-legend-item"><span style={{ background: '#e8b4c8' }} />0</div>
+                  <div className="analytics-legend-item"><span style={{ background: '#4a0d26' }} />Alta</div>
+                  <div className="analytics-legend-item"><span style={{ background: '#8c1a4a' }} />Média</div>
+                  <div className="analytics-legend-item"><span style={{ background: '#ce266e' }} />Baixa</div>
+                  <div className="analytics-legend-item"><span style={{ background: '#e8b4c8' }} />Sem dados</div>
                 </div>
               </div>
             </Card>
@@ -333,7 +503,7 @@ export function Analytics() {
                   </div>
                 ) : (
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={serviceTypeData} margin={{ top: 30, right: 20, left: 0, bottom: 20 }}>
+                    <BarChart data={serviceTypeData} margin={{ top: 10, right: 20, left: 0, bottom: 20 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
                       <XAxis 
                         dataKey="name" 
@@ -357,6 +527,12 @@ export function Analytics() {
                         dataKey="value" 
                         radius={[4, 4, 0, 0]} 
                         barSize={36}
+                        label={{ 
+                          position: 'top', 
+                          fill: '#64748b', 
+                          fontSize: 11,
+                          formatter: (value: number) => value
+                        }}
                       >
                         {serviceTypeData.map((entry, index) => (
                           <Cell 
