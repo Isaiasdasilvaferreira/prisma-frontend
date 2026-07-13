@@ -44,11 +44,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         const response = await api.get<UserData>('/auth/me');
         if (response.data) {
-          const name = response.data.name || response.data.user_metadata?.name || '';
+          const userData = response.data as any;
+          const name = userData.name || userData.user_metadata?.name || '';
           setUser({
-            id: response.data.id,
+            id: userData.id,
             name: name,
-            email: response.data.email,
+            email: userData.email,
             onboardingCompleted: false,
             profile: {}
           });
@@ -70,15 +71,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error(response.error);
     }
     if (response.data) {
-      const name = response.data.name || response.data.user_metadata?.name || '';
-      const userData = {
-        id: response.data.id,
+      const userData = response.data as any;
+      const name = userData.name || userData.user_metadata?.name || '';
+      const userObj = {
+        id: userData.id,
         name: name,
-        email: response.data.email,
+        email: userData.email,
         onboardingCompleted: false,
         profile: {}
       };
-      setUser(userData);
+      setUser(userObj);
       
       if (response.token) {
         setToken(response.token);
@@ -92,15 +94,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error(response.error);
     }
     if (response.data) {
-      const userName = response.data.name || response.data.user_metadata?.name || name || '';
-      const userData = {
-        id: response.data.id,
+      const userData = response.data as any;
+      const userName = userData.name || userData.user_metadata?.name || name || '';
+      const userObj = {
+        id: userData.id,
         name: userName,
-        email: response.data.email,
+        email: userData.email,
         onboardingCompleted: false,
         profile: {}
       };
-      setUser(userData);
+      setUser(userObj);
       
       if (response.token) {
         setToken(response.token);
