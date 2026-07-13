@@ -62,7 +62,7 @@ interface Stats {
 const COLORS = ['#ec4899', '#f472b6', '#db2777', '#be185d', '#9d174d'];
 
 export function Analytics() {
-  const { user, token } = useAuth();
+  const { user } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [position, setPosition] = useState({ coordinates: [0, 20], zoom: 1.2 });
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
@@ -73,12 +73,8 @@ export function Analytics() {
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   useEffect(() => {
-    if (token) {
-      fetchData();
-    } else {
-      setLoading(false);
-    }
-  }, [token]);
+    fetchData();
+  }, []);
 
   const fetchData = async () => {
     setLoading(true);
@@ -93,13 +89,9 @@ export function Analytics() {
 
   const fetchOpportunities = async () => {
     try {
-      const response = await api.get<Opportunity[]>('/opportunities');
-      if (response.data) {
-        let opportunitiesData: Opportunity[] = [];
-        if (Array.isArray(response.data)) {
-          opportunitiesData = response.data;
-        }
-        setOpportunities(opportunitiesData);
+      const response = await api.get<{ data: Opportunity[] }>('/opportunities');
+      if (response.data && response.data.data) {
+        setOpportunities(response.data.data);
       }
     } catch (error) {
       console.error('Error fetching opportunities:', error);
