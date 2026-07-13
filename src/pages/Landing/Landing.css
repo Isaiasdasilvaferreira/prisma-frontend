@@ -1561,3 +1561,113 @@
     padding: 12px 20px;
   }
 }
+
+.opportunity-simple-cta {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.04), rgba(244, 114, 182, 0.02));
+  border: 2px solid rgba(236, 72, 153, 0.08);
+  border-radius: 24px;
+  padding: 48px 40px;
+  transition: all 0.4s ease;
+}
+
+.opportunity-simple-cta:hover {
+  border-color: rgba(236, 72, 153, 0.20);
+  box-shadow: 0 8px 40px rgba(236, 72, 153, 0.06);
+  transform: translateY(-2px);
+}
+
+.opportunity-simple-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.opportunity-simple-icon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(236, 72, 153, 0.08);
+  border-radius: 16px;
+  color: #ec4899;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.opportunity-simple-cta:hover .opportunity-simple-icon {
+  background: rgba(236, 72, 153, 0.14);
+  transform: scale(1.05);
+}
+
+.opportunity-simple-text {
+  flex: 1;
+}
+
+.opportunity-simple-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 4px 0;
+  letter-spacing: -0.3px;
+}
+
+.opportunity-simple-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #64748b;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .opportunity-simple-cta {
+    padding: 32px 24px;
+  }
+  
+  .opportunity-simple-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+  }
+  
+  .opportunity-simple-title {
+    font-size: 20px;
+  }
+  
+  .opportunity-simple-subtitle {
+    font-size: 15px;
+  }
+  
+  .opportunity-simple-icon {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+@media (max-width: 480px) {
+  .opportunity-simple-cta {
+    padding: 24px 16px;
+  }
+  
+  .opportunity-simple-title {
+    font-size: 18px;
+  }
+  
+  .opportunity-simple-subtitle {
+    font-size: 14px;
+  }
+  
+  .opportunity-simple-icon {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .opportunity-simple-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+}
