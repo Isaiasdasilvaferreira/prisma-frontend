@@ -42,13 +42,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         const response = await api.get<any>('/auth/me');
         
-        if (response && response.data) {
+        if (response.data) {
           const userData = response.data;
-          const name = userData.name || '';
           
           setUser({
             id: userData.id,
-            name: name,
+            name: userData.name || '',
             email: userData.email,
             onboardingCompleted: false,
             profile: {}
@@ -71,10 +70,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     if (response.data) {
       const userData = response.data;
-      const name = userData.name || '';
       setUser({
         id: userData.id,
-        name: name,
+        name: userData.name || '',
         email: userData.email,
         onboardingCompleted: false,
         profile: {}
