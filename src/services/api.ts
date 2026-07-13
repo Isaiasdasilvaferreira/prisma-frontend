@@ -7,38 +7,23 @@ export interface UserData {
   email: string;
   role?: string;
   name?: string;
-  user_metadata?: {
-    name?: string;
-    [key: string]: any;
-  };
 }
 
 interface ApiResponse<T> {
   data: T | null;
   error?: string;
-  token?: string;
 }
 
 interface LoginResponse {
   success: boolean;
   data?: {
-    token: string;
-    user: {
-      id: string;
-      email: string;
-      role?: string;
-      user_metadata?: {
-        name?: string;
-        [key: string]: any;
-      };
-    };
+    user: UserData;
   };
   error?: string;
 }
 
 class Api {
   private client: AxiosInstance;
-  private currentToken: string | null = null;
 
   constructor() {
     this.client = axios.create({
@@ -54,27 +39,13 @@ class Api {
   }
 
   private setupInterceptors() {
-    this.client.interceptors.request.use(
-      (config) => {
-        const token = localStorage.getItem('auth_token');
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-      },
-      (error) => Promise.reject(error)
-    );
-
     this.client.interceptors.response.use(
       (response: AxiosResponse) => {
-        if (response.data?.success && response.data?.data?.token) {
-          localStorage.setItem('auth_token', response.data.data.token);
-        }
         return response;
       },
       (error: AxiosError) => {
         if (error.response?.status === 401) {
-          localStorage.removeItem('auth_token');
+          window.location.href = '/login';
         }
         return Promise.reject(error);
       }
@@ -109,21 +80,8 @@ class Api {
     }
   }
 
-  setToken(token: string | null): void {
-    this.currentToken = token;
-    if (token) {
-      localStorage.setItem('auth_token', token);
-    } else {
-      localStorage.removeItem('auth_token');
-    }
-  }
-
-  getToken(): string | null {
-    return this.currentToken || localStorage.getItem('auth_token');
-  }
-
   isAuthenticated(): boolean {
-    return !!this.getToken();
+    return document.cookie.includes('token=');
   }
 
   async login(email: string, password: string): Promise<ApiResponse<UserData>> {
@@ -131,19 +89,7 @@ class Api {
       const response = await this.client.post<LoginResponse>('/auth/login', { email, password });
       
       if (response.data.success && response.data.data) {
-        const { token, user } = response.data.data;
-        localStorage.setItem('auth_token', token);
-        this.currentToken = token;
-        
-        const userData: UserData = {
-          id: user.id,
-          email: user.email,
-          role: user.role,
-          name: user.user_metadata?.name || '',
-          user_metadata: user.user_metadata
-        };
-        
-        return { data: userData, token };
+        return { data: response.data.data.user };
       }
       
       return { data: null, error: 'Erro ao fazer login' };
@@ -168,19 +114,7 @@ class Api {
       });
       
       if (response.data.success && response.data.data) {
-        const { token, user } = response.data.data;
-        localStorage.setItem('auth_token', token);
-        this.currentToken = token;
-        
-        const userData: UserData = {
-          id: user.id,
-          email: user.email,
-          role: user.role,
-          name: user.user_metadata?.name || metadata?.name || '',
-          user_metadata: user.user_metadata
-        };
-        
-        return { data: userData, token };
+        return { data: response.data.data.user };
       }
       
       return { data: null, error: 'Erro ao criar conta' };
@@ -201,9 +135,6 @@ class Api {
       await this.client.post('/auth/logout', {});
     } catch (error) {
       // silent
-    } finally {
-      localStorage.removeItem('auth_token');
-      this.currentToken = null;
     }
   }
 
