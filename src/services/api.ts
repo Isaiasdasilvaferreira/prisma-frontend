@@ -7,6 +7,10 @@ export interface UserData {
   email: string;
   role?: string;
   name?: string;
+  user_metadata?: {
+    name?: string;
+    [key: string]: any;
+  };
 }
 
 interface ApiResponse<T> {
@@ -19,7 +23,15 @@ interface LoginResponse {
   success: boolean;
   data?: {
     token: string;
-    user: UserData;
+    user: {
+      id: string;
+      email: string;
+      role?: string;
+      user_metadata?: {
+        name?: string;
+        [key: string]: any;
+      };
+    };
   };
   error?: string;
 }
@@ -122,7 +134,16 @@ class Api {
         const { token, user } = response.data.data;
         localStorage.setItem('auth_token', token);
         this.currentToken = token;
-        return { data: user, token };
+        
+        const userData: UserData = {
+          id: user.id,
+          email: user.email,
+          role: user.role,
+          name: user.user_metadata?.name || '',
+          user_metadata: user.user_metadata
+        };
+        
+        return { data: userData, token };
       }
       
       return { data: null, error: 'Erro ao fazer login' };
@@ -150,7 +171,16 @@ class Api {
         const { token, user } = response.data.data;
         localStorage.setItem('auth_token', token);
         this.currentToken = token;
-        return { data: user, token };
+        
+        const userData: UserData = {
+          id: user.id,
+          email: user.email,
+          role: user.role,
+          name: user.user_metadata?.name || metadata?.name || '',
+          user_metadata: user.user_metadata
+        };
+        
+        return { data: userData, token };
       }
       
       return { data: null, error: 'Erro ao criar conta' };
