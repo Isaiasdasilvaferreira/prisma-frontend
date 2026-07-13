@@ -359,7 +359,7 @@ export function Analytics() {
         fill="#64748b" 
         fontSize={11} 
         textAnchor="middle"
-        dominantBaseline="bottom"
+        dominantBaseline="auto"
       >
         {value}
       </text>
