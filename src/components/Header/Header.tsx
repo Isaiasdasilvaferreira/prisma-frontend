@@ -9,7 +9,7 @@ interface HeaderProps {
 }
 
 export function Header({ onMenuClick }: HeaderProps) {
-  const { user, logout, token } = useAuth();
+  const { user, logout } = useAuth();
   const location = useLocation();
 
   const getPageTitle = () => {
@@ -35,22 +35,16 @@ export function Header({ onMenuClick }: HeaderProps) {
       return user.name.split(' ')[0];
     }
     
-    if (token) {
-      try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        const name = payload?.user_metadata?.name || payload?.name || '';
-        if (name) {
-          return name.split(' ')[0];
-        }
-      } catch (e) {
-      }
-    }
-    
     if (user?.email) {
       return user.email.split('@')[0];
     }
     
     return 'Usuário';
+  };
+
+  const getUserInitial = () => {
+    const name = getUserName();
+    return name.charAt(0).toUpperCase();
   };
 
   return (
@@ -65,7 +59,7 @@ export function Header({ onMenuClick }: HeaderProps) {
       <div className="header-right">
         <div className="header-user">
           <div className="header-avatar">
-            {getUserName().charAt(0).toUpperCase()}
+            {getUserInitial()}
           </div>
           <div className="header-user-info">
             <span className="header-username">{getUserName()}</span>
