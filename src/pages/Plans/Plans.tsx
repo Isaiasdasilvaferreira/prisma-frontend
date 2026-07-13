@@ -46,7 +46,7 @@ const plans = [
     color: '#d97706',
     gradientClass: 'plan-gradient-pro',
     popular: true,
-    disabled: false,
+    disabled: true,
     features: [
       { text: 'Oportunidades ilimitadas', included: true, highlight: true },
       { text: 'Busca aprofundada', included: true, highlight: true },
@@ -57,7 +57,7 @@ const plans = [
     ],
     cta: 'Assinar Professional',
     variant: 'primary' as const,
-    redirect: '/payment/professional'
+    redirect: '#'
   },
   {
     id: 'enterprise',
