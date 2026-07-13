@@ -417,6 +417,26 @@ export function Landing() {
                 cta: 'Começar grátis'
               },
               {
+                name: 'Professional',
+                price: 'R$29,90',
+                period: '/mês',
+                desc: 'Para designers ativos',
+                icon: Star,
+                color: '#d97706',
+                type: 'pro',
+                popular: true,
+                disabled: true,
+                features: [
+                  'Oportunidades ilimitadas',
+                  'Busca aprofundada',
+                  'Suporte prioritário 24/7',
+                  'Dashboard avançado',
+                  'Gerador de mensagens',
+                  'Filtros avançados'
+                ],
+                cta: 'Assinar Professional'
+              },
+              {
                 name: 'Enterprise',
                 price: 'Em breve',
                 period: '',
