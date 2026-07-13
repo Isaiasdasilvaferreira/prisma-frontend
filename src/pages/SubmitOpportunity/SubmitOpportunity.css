@@ -1,29 +1,28 @@
 .submit-container {
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 32px 24px 80px;
+  padding: 16px 24px 80px;
 }
 
 .submit-card {
   background: #ffffff;
-  border-radius: 24px;
-  padding: 48px 56px;
+  border-radius: 20px;
+  padding: 40px 48px 44px;
   border: 1px solid rgba(236, 72, 153, 0.06);
   box-shadow: 0 4px 40px rgba(0, 0, 0, 0.04);
-  margin-top: 20px;
 }
 
 .back-link {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   color: #94a3b8;
   text-decoration: none;
   font-family: 'Inter', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   transition: color 0.3s ease;
-  margin-bottom: 28px;
+  margin-bottom: 20px;
 }
 
 .back-link:hover {
@@ -33,15 +32,15 @@
 .submit-header {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 36px;
+  gap: 14px;
+  margin-bottom: 28px;
 }
 
 .submit-icon-wrapper {
-  width: 56px;
-  height: 56px;
+  width: 48px;
+  height: 48px;
   background: linear-gradient(135deg, rgba(236, 72, 153, 0.08), rgba(244, 114, 182, 0.04));
-  border-radius: 16px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -51,16 +50,16 @@
 
 .submit-header h1 {
   font-family: 'Inter', sans-serif;
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
   color: #1a1a2e;
-  margin: 0 0 4px 0;
-  letter-spacing: -0.5px;
+  margin: 0 0 2px 0;
+  letter-spacing: -0.3px;
 }
 
 .submit-header p {
   font-family: 'Inter', sans-serif;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 400;
   color: #94a3b8;
   margin: 0;
@@ -69,18 +68,18 @@
 .submit-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .form-group label {
   font-family: 'Inter', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: #1a1a2e;
 }
@@ -89,10 +88,10 @@
 .form-group select,
 .form-group textarea {
   font-family: 'Inter', sans-serif;
-  font-size: 15px;
-  padding: 12px 16px;
+  font-size: 14px;
+  padding: 10px 14px;
   border: 2px solid #eef2f6;
-  border-radius: 12px;
+  border-radius: 10px;
   background: #fafbfc;
   transition: all 0.3s ease;
   color: #1a1a2e;
@@ -103,7 +102,7 @@
 .form-group textarea:focus {
   outline: none;
   border-color: #ec4899;
-  box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.06);
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.06);
   background: #ffffff;
 }
 
@@ -114,27 +113,13 @@
 
 .form-group textarea {
   resize: vertical;
-  min-height: 100px;
+  min-height: 90px;
 }
 
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
-.form-divider {
-  height: 1px;
-  background: #eef2f6;
-  margin: 4px 0 0 0;
-}
-
-.contact-title {
-  font-family: 'Inter', sans-serif;
-  font-size: 18px;
-  font-weight: 600;
-  color: #1a1a2e;
-  margin: 0 0 4px 0;
+  gap: 14px;
 }
 
 .form-footer {
@@ -142,34 +127,34 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-top: 8px;
-  padding-top: 20px;
+  margin-top: 4px;
+  padding-top: 16px;
   border-top: 1px solid #eef2f6;
 }
 
 .form-disclaimer {
   font-family: 'Inter', sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 400;
   color: #94a3b8;
   margin: 0;
 }
 
 .submit-success {
-  max-width: 540px;
-  margin: 80px auto;
+  max-width: 500px;
+  margin: 60px auto;
   text-align: center;
-  padding: 60px 48px;
+  padding: 48px 40px;
   background: #ffffff;
-  border-radius: 24px;
+  border-radius: 20px;
   border: 1px solid rgba(236, 72, 153, 0.06);
   box-shadow: 0 4px 40px rgba(0, 0, 0, 0.04);
 }
 
 .success-icon {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 24px;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 20px;
   background: rgba(236, 72, 153, 0.06);
   border-radius: 50%;
   display: flex;
@@ -180,18 +165,18 @@
 
 .submit-success h2 {
   font-family: 'Inter', sans-serif;
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
   color: #1a1a2e;
-  margin: 0 0 12px 0;
+  margin: 0 0 8px 0;
 }
 
 .submit-success p {
   font-family: 'Inter', sans-serif;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 400;
   color: #64748b;
-  margin: 0 0 28px 0;
+  margin: 0 0 24px 0;
   line-height: 1.6;
 }
 
@@ -203,32 +188,36 @@
 }
 
 .success-actions .btn {
-  min-width: 160px;
+  min-width: 140px;
 }
 
 @media (max-width: 768px) {
+  .submit-container {
+    padding: 12px 16px 60px;
+  }
+
   .submit-card {
-    padding: 32px 24px;
-    border-radius: 20px;
+    padding: 28px 20px 32px;
+    border-radius: 16px;
   }
 
   .submit-header h1 {
-    font-size: 24px;
+    font-size: 20px;
   }
 
   .submit-header p {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .form-row {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 16px;
   }
 
   .form-footer {
     flex-direction: column;
     align-items: stretch;
-    gap: 16px;
+    gap: 14px;
   }
 
   .form-disclaimer {
@@ -236,8 +225,8 @@
   }
 
   .submit-success {
-    padding: 40px 24px;
-    margin: 40px 16px;
+    padding: 32px 20px;
+    margin: 32px 12px;
   }
 
   .success-actions {
@@ -252,48 +241,61 @@
 
 @media (max-width: 480px) {
   .submit-container {
-    padding: 16px 12px 60px;
+    padding: 8px 12px 48px;
   }
 
   .submit-card {
-    padding: 24px 16px;
-    border-radius: 16px;
+    padding: 20px 14px 24px;
+    border-radius: 14px;
   }
 
   .submit-header {
-    gap: 12px;
+    gap: 10px;
+    margin-bottom: 20px;
   }
 
   .submit-icon-wrapper {
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
   }
 
   .submit-icon-wrapper svg {
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
   }
 
   .submit-header h1 {
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .submit-header p {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .form-group input,
   .form-group select,
   .form-group textarea {
-    font-size: 14px;
-    padding: 10px 14px;
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+
+  .form-group label {
+    font-size: 12px;
+  }
+
+  .form-group textarea {
+    min-height: 70px;
+  }
+
+  .form-row {
+    gap: 12px;
   }
 
   .submit-success h2 {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   .submit-success p {
-    font-size: 14px;
+    font-size: 13px;
   }
 }
