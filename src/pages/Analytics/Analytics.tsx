@@ -59,7 +59,7 @@ interface Stats {
   recent_count: number;
 }
 
-const COLORS = ['#ec4899', '#f472b6', '#db2777', '#be185d', '#9d174d', '#6b21a5', '#1d4ed8', '#059669', '#d97706'];
+const CHART_COLORS = ['#ec4899', '#f472b6', '#db2777', '#be185d', '#9d174d', '#6b21a5', '#1d4ed8', '#059669', '#d97706', '#ea580c'];
 
 export function Analytics() {
   const { user } = useAuth();
@@ -125,25 +125,14 @@ export function Analytics() {
       const service = opp.service_type || 'Não definido';
       serviceMap.set(service, (serviceMap.get(service) || 0) + 1);
     });
+    const total = opportunities.length;
     return Array.from(serviceMap.entries())
-      .map(([name, value]) => ({ name, value }))
+      .map(([name, value]) => ({
+        name,
+        value,
+        percentage: total > 0 ? Math.round((value / total) * 100) : 0
+      }))
       .sort((a, b) => b.value - a.value);
-  };
-
-  const getContractData = () => {
-    if (!stats || !stats.by_contract) return [];
-    return Object.entries(stats.by_contract).map(([name, value]) => ({
-      name,
-      value
-    }));
-  };
-
-  const getLevelData = () => {
-    if (!stats || !stats.by_level) return [];
-    return Object.entries(stats.by_level).map(([name, value]) => ({
-      name,
-      value
-    }));
   };
 
   const getCompanyOpportunities = () => {
@@ -151,8 +140,13 @@ export function Analytics() {
     opportunities.forEach(opp => {
       companyMap.set(opp.company, (companyMap.get(opp.company) || 0) + 1);
     });
+    const total = opportunities.length;
     return Array.from(companyMap.entries())
-      .map(([name, count]) => ({ name, count }))
+      .map(([name, count]) => ({
+        name,
+        count,
+        percentage: total > 0 ? Math.round((count / total) * 100) : 0
+      }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
   };
@@ -189,11 +183,25 @@ export function Analytics() {
   ];
 
   const serviceTypeData = getServiceTypeData();
-  const contractData = getContractData();
-  const levelData = getLevelData();
   const companyData = getCompanyOpportunities();
-
   const hasData = opportunities.length > 0;
+
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="analytics-chart-tooltip">
+          <p className="analytics-chart-tooltip-label">{label}</p>
+          <p className="analytics-chart-tooltip-value">
+            {payload[0].value} vagas
+            <span className="analytics-chart-tooltip-percent">
+              ({payload[0].payload.percentage}%)
+            </span>
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
     <div className="dashboard-page">
@@ -302,6 +310,9 @@ export function Analytics() {
                   <BarChart3 size={16} />
                   Vagas por área
                 </div>
+                <span className="analytics-card-count">
+                  {serviceTypeData.length} áreas
+                </span>
               </div>
               <div className="analytics-chart-container">
                 {loading ? (
@@ -322,23 +333,42 @@ export function Analytics() {
                   </div>
                 ) : (
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={serviceTypeData} layout="vertical" margin={{ left: 100, right: 20, top: 10, bottom: 10 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#222" />
-                      <XAxis type="number" stroke="#444" tick={{ fill: '#444', fontSize: 11 }} />
-                      <YAxis 
-                        type="category" 
+                    <BarChart data={serviceTypeData} margin={{ top: 10, right: 20, left: 0, bottom: 20 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
+                      <XAxis 
                         dataKey="name" 
-                        stroke="#444" 
-                        tick={{ fill: '#666', fontSize: 11 }}
-                        width={100}
+                        stroke="#94a3b8" 
+                        tick={{ fill: '#94a3b8', fontSize: 11 }}
+                        axisLine={{ stroke: '#e2e8f0' }}
+                        tickLine={false}
+                        interval={0}
+                        angle={-30}
+                        textAnchor="end"
+                        height={60}
                       />
-                      <Tooltip 
-                        contentStyle={{ background: '#0a0a0a', border: '1px solid #1a1a1a', borderRadius: 6 }}
-                        itemStyle={{ color: '#fff', fontSize: 12 }}
+                      <YAxis 
+                        stroke="#94a3b8" 
+                        tick={{ fill: '#94a3b8', fontSize: 11 }}
+                        axisLine={{ stroke: '#e2e8f0' }}
+                        tickLine={false}
                       />
-                      <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={18}>
+                      <Tooltip content={<CustomTooltip />} />
+                      <Bar 
+                        dataKey="value" 
+                        radius={[4, 4, 0, 0]} 
+                        barSize={36}
+                        label={{ 
+                          position: 'top', 
+                          fill: '#64748b', 
+                          fontSize: 11,
+                          formatter: (value: number) => value
+                        }}
+                      >
                         {serviceTypeData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                          <Cell 
+                            key={`cell-${index}`} 
+                            fill={CHART_COLORS[index % CHART_COLORS.length]} 
+                          />
                         ))}
                       </Bar>
                     </BarChart>
@@ -362,34 +392,47 @@ export function Analytics() {
               <table className="analytics-table">
                 <thead>
                   <tr>
+                    <th>#</th>
                     <th>Empresa</th>
                     <th>Vagas</th>
-                    <th>Match</th>
+                    <th>% do total</th>
                     <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {loading ? (
                     <tr>
-                      <td colSpan={4} style={{ textAlign: 'center', padding: '40px 0' }}>
+                      <td colSpan={5} style={{ textAlign: 'center', padding: '40px 0' }}>
                         <Loader2 size={24} className="spinning" />
                       </td>
                     </tr>
                   ) : companyData.length === 0 ? (
                     <tr>
-                      <td colSpan={4} style={{ textAlign: 'center', color: '#94a3b8', padding: '40px 0' }}>
+                      <td colSpan={5} style={{ textAlign: 'center', color: '#94a3b8', padding: '40px 0' }}>
                         Nenhuma empresa encontrada
                       </td>
                     </tr>
                   ) : (
                     companyData.map((company, index) => (
                       <tr key={index}>
+                        <td>
+                          <span className="analytics-rank">{index + 1}</span>
+                        </td>
                         <td className="analytics-table-company">{company.name}</td>
                         <td>{company.count}</td>
                         <td>
-                          <span className="analytics-table-match">
-                            {Math.min(100, Math.round((company.count / 10) * 100))}%
-                          </span>
+                          <div className="analytics-table-progress">
+                            <span>{company.percentage}%</span>
+                            <div className="analytics-table-progress-bar">
+                              <div 
+                                className="analytics-table-progress-fill" 
+                                style={{ 
+                                  width: `${company.percentage}%`,
+                                  background: CHART_COLORS[index % CHART_COLORS.length]
+                                }}
+                              />
+                            </div>
+                          </div>
                         </td>
                         <td>
                           <span className="analytics-table-status active">
