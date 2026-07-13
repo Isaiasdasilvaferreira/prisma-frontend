@@ -40,20 +40,20 @@ const plans = [
     id: 'professional',
     name: 'Professional',
     subtitle: 'Para designers ativos',
-    price: 'R$29,90',
-    period: '/mês',
+    price: 'Em breve',
+    period: '',
     icon: Star,
     color: '#d97706',
     gradientClass: 'plan-gradient-pro',
     popular: true,
     disabled: true,
     features: [
-      { text: 'Oportunidades ilimitadas', included: true, highlight: true },
-      { text: 'Busca aprofundada', included: true, highlight: true },
-      { text: 'Suporte prioritário 24/7', included: true },
-      { text: 'Dashboard avançado', included: true },
-      { text: 'Gerador de mensagens', included: true, highlight: true },
-      { text: 'Filtros avançados', included: true },
+      { text: '***', included: true, highlight: true },
+      { text: '***', included: true, highlight: true },
+      { text: '***', included: true },
+      { text: '***', included: true },
+      { text: '***', included: true, highlight: true },
+      { text: '***', included: true },
     ],
     cta: 'Assinar Professional',
     variant: 'primary' as const,
@@ -87,21 +87,21 @@ const plans = [
 ];
 
 const faqItems = [
-  { q: 'Posso mudar de plano a qualquer momento?', a: 'Sim! Você pode fazer upgrade ou downgrade quando quiser. A diferença é calculada automaticamente no pró-rata.' },
-  { q: 'Como funciona o período de teste?', a: 'Oferecemos 7 dias de teste grátis no plano Professional. Cancele antes do fim e não será cobrado.' },
-  { q: 'Quais formas de pagamento são aceitas?', a: 'Aceitamos cartão de crédito, PIX e boleto bancário. Todo o processo é seguro com criptografia SSL.' },
-  { q: 'Posso cancelar a qualquer momento?', a: 'Sim, cancele quando quiser diretamente pelo dashboard. Não há multas ou taxas de cancelamento.' },
-  { q: 'Meus dados estão seguros?', a: 'Seus dados são criptografados de ponta a ponta e armazenados em servidores certificados. Nunca compartilhamos informações com terceiros.' },
-  { q: 'O plano Enterprise tem suporte para equipes?', a: 'Sim! O plano Enterprise é feito para times. Até 10 usuários com dashboard colaborativo, relatórios em tempo real e gerente de conta dedicado.' },
+  { q: '***', a: '***' },
+  { q: '***', a: '***' },
+  { q: '***', a: '***' },
+  { q: '***', a: '***' },
+  { q: '***', a: '***' },
+  { q: '***', a: '***' },
 ];
 
 const comparisons = [
-  { feature: 'Oportunidades', starter: '10/semana', professional: 'Ilimitadas', enterprise: '***' },
-  { feature: 'Busca', starter: 'Básica', professional: 'Aprofundada', enterprise: '***' },
-  { feature: 'Suporte', starter: 'Email', professional: 'Prioritário 24/7', enterprise: '***' },
-  { feature: 'Dashboard', starter: 'Básico', professional: 'Avançado', enterprise: '***' },
-  { feature: 'Gerador de mensagens', starter: '—', professional: '✓', enterprise: '***' },
-  { feature: 'Filtros', starter: 'Básicos', professional: 'Avançados', enterprise: '***' },
+  { feature: 'Oportunidades', starter: '10/semana', professional: '***', enterprise: '***' },
+  { feature: 'Busca', starter: 'Básica', professional: '***', enterprise: '***' },
+  { feature: 'Suporte', starter: 'Email', professional: '***', enterprise: '***' },
+  { feature: 'Dashboard', starter: 'Básico', professional: '***', enterprise: '***' },
+  { feature: 'Gerador de mensagens', starter: '—', professional: '***', enterprise: '***' },
+  { feature: 'Filtros', starter: 'Básicos', professional: '***', enterprise: '***' },
 ];
 
 export function Plans() {
