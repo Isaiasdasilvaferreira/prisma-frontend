@@ -12,11 +12,21 @@ export interface UserData {
 interface ApiResponse<T> {
   data: T | null;
   error?: string;
+  token?: string;
+}
+
+interface LoginResponse {
+  success: boolean;
+  data?: {
+    token: string;
+    user: UserData;
+  };
+  error?: string;
 }
 
 class Api {
   private client: AxiosInstance;
-  private csrfToken: string | null = null;
+  private currentToken: string | null = null;
 
   constructor() {
     this.client = axios.create({
@@ -34,8 +44,9 @@ class Api {
   private setupInterceptors() {
     this.client.interceptors.request.use(
       (config) => {
-        if (this.csrfToken) {
-          config.headers['X-CSRF-Token'] = this.csrfToken;
+        const token = localStorage.getItem('auth_token');
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
       },
@@ -44,15 +55,14 @@ class Api {
 
     this.client.interceptors.response.use(
       (response: AxiosResponse) => {
-        const csrfToken = response.headers['x-csrf-token'];
-        if (csrfToken) {
-          this.csrfToken = csrfToken;
+        if (response.data?.success && response.data?.data?.token) {
+          localStorage.setItem('auth_token', response.data.data.token);
         }
         return response;
       },
       (error: AxiosError) => {
         if (error.response?.status === 401) {
-          this.csrfToken = null;
+          localStorage.removeItem('auth_token');
         }
         return Promise.reject(error);
       }
@@ -87,14 +97,35 @@ class Api {
     }
   }
 
+  setToken(token: string | null): void {
+    this.currentToken = token;
+    if (token) {
+      localStorage.setItem('auth_token', token);
+    } else {
+      localStorage.removeItem('auth_token');
+    }
+  }
+
+  getToken(): string | null {
+    return this.currentToken || localStorage.getItem('auth_token');
+  }
+
+  isAuthenticated(): boolean {
+    return !!this.getToken();
+  }
+
   async login(email: string, password: string): Promise<ApiResponse<UserData>> {
     try {
-      const response = await this.client.post('/auth/login', { email, password });
-      const csrfToken = response.headers['x-csrf-token'];
-      if (csrfToken) {
-        this.csrfToken = csrfToken;
+      const response = await this.client.post<LoginResponse>('/auth/login', { email, password });
+      
+      if (response.data.success && response.data.data) {
+        const { token, user } = response.data.data;
+        localStorage.setItem('auth_token', token);
+        this.currentToken = token;
+        return { data: user, token };
       }
-      return { data: response.data };
+      
+      return { data: null, error: 'Erro ao fazer login' };
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorData = error.response?.data as any;
@@ -109,16 +140,20 @@ class Api {
 
   async signup(email: string, password: string, metadata: any): Promise<ApiResponse<UserData>> {
     try {
-      const response = await this.client.post('/auth/signup', {
+      const response = await this.client.post<LoginResponse>('/auth/signup', {
         email,
         password,
         metadata,
       });
-      const csrfToken = response.headers['x-csrf-token'];
-      if (csrfToken) {
-        this.csrfToken = csrfToken;
+      
+      if (response.data.success && response.data.data) {
+        const { token, user } = response.data.data;
+        localStorage.setItem('auth_token', token);
+        this.currentToken = token;
+        return { data: user, token };
       }
-      return { data: response.data };
+      
+      return { data: null, error: 'Erro ao criar conta' };
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorData = error.response?.data as any;
@@ -137,12 +172,9 @@ class Api {
     } catch (error) {
       // silent
     } finally {
-      this.csrfToken = null;
+      localStorage.removeItem('auth_token');
+      this.currentToken = null;
     }
-  }
-
-  isAuthenticated(): boolean {
-    return true;
   }
 
   async get<T>(endpoint: string): Promise<ApiResponse<T>> {
