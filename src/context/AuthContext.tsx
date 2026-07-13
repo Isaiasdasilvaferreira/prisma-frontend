@@ -18,6 +18,7 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
+  token: string | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
@@ -30,6 +31,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -40,21 +42,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           return;
         }
 
-        const response = await api.get<any>('/auth/me');
-        
+        const response = await api.get<UserData>('/auth/me');
         if (response.data) {
-          const userData = response.data;
-          
+          const name = response.data.name || response.data.user_metadata?.name || '';
           setUser({
-            id: userData.id,
-            name: userData.name || '',
-            email: userData.email,
+            id: response.data.id,
+            name: name,
+            email: response.data.email,
             onboardingCompleted: false,
             profile: {}
           });
         }
       } catch (error) {
         setUser(null);
+        setToken(null);
       } finally {
         setLoading(false);
       }
@@ -69,14 +70,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error(response.error);
     }
     if (response.data) {
-      const userData = response.data;
-      setUser({
-        id: userData.id,
-        name: userData.name || '',
-        email: userData.email,
+      const name = response.data.name || response.data.user_metadata?.name || '';
+      const userData = {
+        id: response.data.id,
+        name: name,
+        email: response.data.email,
         onboardingCompleted: false,
         profile: {}
-      });
+      };
+      setUser(userData);
+      
+      if (response.token) {
+        setToken(response.token);
+      }
     }
   };
 
@@ -86,21 +92,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error(response.error);
     }
     if (response.data) {
-      const userData = response.data;
-      const userName = userData.name || name || '';
-      setUser({
-        id: userData.id,
+      const userName = response.data.name || response.data.user_metadata?.name || name || '';
+      const userData = {
+        id: response.data.id,
         name: userName,
-        email: userData.email,
+        email: response.data.email,
         onboardingCompleted: false,
         profile: {}
-      });
+      };
+      setUser(userData);
+      
+      if (response.token) {
+        setToken(response.token);
+      }
     }
   };
 
   const logout = async () => {
     await api.logout();
     setUser(null);
+    setToken(null);
   };
 
   const updateProfile = async (profile: Partial<UserProfile>, onboardingCompleted?: boolean) => {
@@ -129,12 +140,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     <AuthContext.Provider 
       value={{ 
         user, 
+        token,
         loading, 
         login, 
         register, 
         logout, 
         updateProfile,
-        isAuthenticated: !!user
+        isAuthenticated: !!user && !!token
       }}
     >
       {children}
