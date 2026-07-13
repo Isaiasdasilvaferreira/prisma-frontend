@@ -185,15 +185,6 @@ export function Login() {
                 </div>
               </div>
 
-              <div className="login-options">
-                <label className="login-remember">
-                  <input type="checkbox" />
-                  <span className="login-checkbox" />
-                  Permanecer conectado
-                </label>
-                <Link to="/forgot-password" className="login-forgot">Esqueci minha senha</Link>
-              </div>
-
               {error && (
                 <div className="login-error">
                   <span className="login-error-dot" />
