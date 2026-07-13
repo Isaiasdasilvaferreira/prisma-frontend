@@ -72,8 +72,6 @@ export function Analytics() {
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
-  const API_URL = 'https://prisma-backend-z37q.onrender.com';
-
   useEffect(() => {
     if (token) {
       fetchOpportunities();
