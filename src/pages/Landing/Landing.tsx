@@ -518,7 +518,7 @@ export function Landing() {
               <div className="opportunity-simple-text">
                 <h2 className="opportunity-simple-title">Quer enviar uma oportunidade?</h2>
                 <p className="opportunity-simple-subtitle">
-                  Compartilhe vagas, projetos ou contratos com nossa comunidade de designers
+                  Divulgue suas vagas, propostas freelancer e oportunidades para nossa comunidade de designers
                 </p>
               </div>
               <Link to="/enviar-oportunidade">
