@@ -31,20 +31,10 @@ export function Header({ onMenuClick }: HeaderProps) {
   };
 
   const getUserName = () => {
-    if (user?.name && user.name !== '') {
+    if (user?.name) {
       return user.name.split(' ')[0];
     }
-    
-    if (user?.email) {
-      return user.email.split('@')[0];
-    }
-    
     return 'Usuário';
-  };
-
-  const getUserInitial = () => {
-    const name = getUserName();
-    return name.charAt(0).toUpperCase();
   };
 
   return (
@@ -59,7 +49,7 @@ export function Header({ onMenuClick }: HeaderProps) {
       <div className="header-right">
         <div className="header-user">
           <div className="header-avatar">
-            {getUserInitial()}
+            {getUserName().charAt(0).toUpperCase()}
           </div>
           <div className="header-user-info">
             <span className="header-username">{getUserName()}</span>
