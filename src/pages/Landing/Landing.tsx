@@ -418,8 +418,8 @@ export function Landing() {
               },
               {
                 name: 'Professional',
-                price: 'R$29,90',
-                period: '/mês',
+                price: 'Em breve',
+                period: '',
                 desc: 'Para designers ativos',
                 icon: Star,
                 color: '#d97706',
@@ -427,12 +427,12 @@ export function Landing() {
                 popular: true,
                 disabled: true,
                 features: [
-                  'Oportunidades ilimitadas',
-                  'Busca aprofundada',
-                  'Suporte prioritário 24/7',
-                  'Dashboard avançado',
-                  'Gerador de mensagens',
-                  'Filtros avançados'
+                  '***',
+                  '***',
+                  '***',
+                  '***',
+                  '***',
+                  '***'
                 ],
                 cta: 'Assinar Professional'
               },
@@ -447,16 +447,16 @@ export function Landing() {
                 popular: false,
                 disabled: true,
                 features: [
-                  'Oportunidades ilimitadas',
-                  'Busca aprofundada',
-                  'Suporte prioritário 24/7',
-                  'Dashboard avançado',
-                  'Gerador de mensagens',
-                  'Filtros avançados',
-                  'Múltiplos usuários',
-                  'Relatórios personalizados',
-                  'API de integração',
-                  'Suporte dedicado 24/7'
+                  '***',
+                  '***',
+                  '***',
+                  '***',
+                  '***',
+                  '***',
+                  '***',
+                  '***',
+                  '***',
+                  '***'
                 ],
                 cta: 'Em breve'
               }
