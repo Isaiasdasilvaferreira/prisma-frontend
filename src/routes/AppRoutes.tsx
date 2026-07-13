@@ -13,6 +13,7 @@ import { Settings } from '../pages/Settings/Settings';
 import { Tools } from '../pages/Tools/Tools';
 import { Plans } from '../pages/Plans/Plans';
 import { Payment } from '../pages/Payment/Payment';
+import { SubmitOpportunity } from '../pages/SubmitOpportunity/SubmitOpportunity';
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -46,6 +47,7 @@ export function AppRoutes() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/onboarding" element={<Onboarding />} />
+        <Route path="/enviar-oportunidade" element={<SubmitOpportunity />} />
 
         <Route
           path="/dashboard"
