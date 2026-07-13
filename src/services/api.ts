@@ -1,189 +1,151 @@
-import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { api, UserData } from '../services/api';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://prisma-backend-z37q.onrender.com/api';
+interface UserProfile {
+  source?: string;
+  objective?: string;
+  services?: string[];
+  workType?: string;
+}
 
-export interface UserData {
+interface User {
   id: string;
+  name: string;
   email: string;
-  role?: string;
-  name?: string;
+  onboardingCompleted: boolean;
+  profile?: UserProfile;
 }
 
-interface ApiResponse<T> {
-  data: T | null;
-  error?: string;
+interface AuthContextType {
+  user: User | null;
+  loading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  register: (name: string, email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  updateProfile: (profile: Partial<UserProfile>, onboardingCompleted?: boolean) => Promise<void>;
+  isAuthenticated: boolean;
 }
 
-interface LoginResponse {
-  success: boolean;
-  data?: {
-    user: UserData;
-  };
-  error?: string;
-}
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-class Api {
-  private client: AxiosInstance;
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  constructor() {
-    this.client = axios.create({
-      baseURL: API_BASE_URL,
-      timeout: 15000,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      withCredentials: true,
-    });
-
-    this.setupInterceptors();
-  }
-
-  private setupInterceptors() {
-    this.client.interceptors.response.use(
-      (response: AxiosResponse) => {
-        return response;
-      },
-      (error: AxiosError) => {
-        if (error.response?.status === 401) {
-          window.location.href = '/login';
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        if (!api.isAuthenticated()) {
+          setLoading(false);
+          return;
         }
-        return Promise.reject(error);
-      }
-    );
-  }
 
-  private async request<T>(
-    method: string,
-    endpoint: string,
-    body?: unknown
-  ): Promise<ApiResponse<T>> {
-    try {
-      const response = await this.client.request<T>({
-        method,
-        url: endpoint,
-        data: body,
+        const response = await api.get<any>('/auth/me');
+        
+        if (response.data) {
+          const userData = response.data;
+          
+          setUser({
+            id: userData.id,
+            name: userData.name || '',
+            email: userData.email,
+            onboardingCompleted: false,
+            profile: {}
+          });
+        }
+      } catch (error) {
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  const login = async (email: string, password: string) => {
+    const response = await api.login(email, password);
+    if (response.error) {
+      throw new Error(response.error);
+    }
+    if (response.data) {
+      const userData = response.data;
+      setUser({
+        id: userData.id,
+        name: userData.name || '',
+        email: userData.email,
+        onboardingCompleted: false,
+        profile: {}
       });
-      return { data: response.data };
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const errorData = error.response?.data as any;
-        const errorMessage = errorData?.error || errorData?.message || error.message || 'Erro na requisição';
+    }
+  };
+
+  const register = async (name: string, email: string, password: string) => {
+    const response = await api.signup(email, password, { name });
+    if (response.error) {
+      throw new Error(response.error);
+    }
+    if (response.data) {
+      const userData = response.data;
+      const userName = userData.name || name || '';
+      setUser({
+        id: userData.id,
+        name: userName,
+        email: userData.email,
+        onboardingCompleted: false,
+        profile: {}
+      });
+    }
+  };
+
+  const logout = async () => {
+    await api.logout();
+    setUser(null);
+  };
+
+  const updateProfile = async (profile: Partial<UserProfile>, onboardingCompleted?: boolean) => {
+    if (!user) return;
+    
+    try {
+      const onboardingDone = onboardingCompleted === true;
+
+      setUser(prev => {
+        if (!prev) return null;
         return {
-          data: null as T,
-          error: errorMessage,
+          ...prev,
+          profile: {
+            ...prev.profile,
+            ...profile
+          } as UserProfile,
+          onboardingCompleted: onboardingDone || prev.onboardingCompleted
         };
-      }
-      return {
-        data: null as T,
-        error: error instanceof Error ? error.message : 'Erro desconhecido',
-      };
-    }
-  }
-
-  isAuthenticated(): boolean {
-    return document.cookie.includes('token=');
-  }
-
-  async login(email: string, password: string): Promise<ApiResponse<UserData>> {
-    try {
-      const response = await this.client.post<LoginResponse>('/auth/login', { email, password });
-      
-      if (response.data.success && response.data.data) {
-        return { data: response.data.data.user };
-      }
-      
-      return { data: null, error: 'Erro ao fazer login' };
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const errorData = error.response?.data as any;
-        return { 
-          data: null, 
-          error: errorData?.error || errorData?.message || 'Erro ao fazer login' 
-        };
-      }
-      return { data: null, error: 'Erro ao fazer login' };
-    }
-  }
-
-  async signup(email: string, password: string, metadata: any): Promise<ApiResponse<UserData>> {
-    try {
-      const response = await this.client.post<LoginResponse>('/auth/signup', {
-        email,
-        password,
-        metadata,
       });
-      
-      if (response.data.success && response.data.data) {
-        return { data: response.data.data.user };
-      }
-      
-      return { data: null, error: 'Erro ao criar conta' };
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const errorData = error.response?.data as any;
-        return { 
-          data: null, 
-          error: errorData?.error || errorData?.message || 'Erro ao criar conta' 
-        };
-      }
-      return { data: null, error: 'Erro ao criar conta' };
+      throw error;
     }
-  }
+  };
 
-  async logout(): Promise<void> {
-    try {
-      await this.client.post('/auth/logout', {});
-    } catch (error) {
-      // silent
-    }
-  }
-
-  async get<T>(endpoint: string): Promise<ApiResponse<T>> {
-    return this.request<T>('GET', endpoint);
-  }
-
-  async post<T>(endpoint: string, body?: unknown): Promise<ApiResponse<T>> {
-    return this.request<T>('POST', endpoint, body);
-  }
-
-  async put<T>(endpoint: string, body?: unknown): Promise<ApiResponse<T>> {
-    return this.request<T>('PUT', endpoint, body);
-  }
-
-  async delete<T>(endpoint: string): Promise<ApiResponse<T>> {
-    return this.request<T>('DELETE', endpoint);
-  }
-
-  async upload<T>(endpoint: string, formData: FormData): Promise<ApiResponse<T>> {
-    try {
-      const response = await this.client.post<T>(endpoint, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      return { data: response.data };
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const errorMessage = error.response?.data?.error || error.message || 'Erro no upload';
-        return {
-          data: null as T,
-          error: errorMessage,
-        };
-      }
-      return {
-        data: null as T,
-        error: error instanceof Error ? error.message : 'Erro desconhecido',
-      };
-    }
-  }
-
-  async download(endpoint: string): Promise<Blob> {
-    const response = await this.client.get(endpoint, {
-      responseType: 'blob',
-    });
-    return response.data;
-  }
+  return (
+    <AuthContext.Provider 
+      value={{ 
+        user, 
+        loading, 
+        login, 
+        register, 
+        logout, 
+        updateProfile,
+        isAuthenticated: !!user
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
-export const api = new Api();
-export type { ApiResponse };
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+}
