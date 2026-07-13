@@ -510,26 +510,32 @@ export function Landing() {
 
       <section id="enviar-oportunidades" className="section section-alt">
         <div className="section-container">
-          <div className="opportunity-simple-cta reveal">
-            <div className="opportunity-simple-content">
-              <div className="opportunity-simple-icon">
-                <Building2 size={40} />
-              </div>
-              <div className="opportunity-simple-text">
-                <h2 className="opportunity-simple-title">Quer enviar uma oportunidade?</h2>
-                <p className="opportunity-simple-subtitle">
-                  Divulgue suas vagas, propostas freelancer e oportunidades para nossa comunidade de designers
-                </p>
-              </div>
-              <Link to="/enviar-oportunidade">
-                <Button size="lg" icon={<ArrowRight size={18} />}>
-                  Enviar oportunidade
-                </Button>
-              </Link>
-            </div>
+          <div className="section-header reveal">
+            <span className="section-label">Anuncie</span>
+            <h2 className="section-title">Envie sua oportunidade</h2>
+            <p className="section-subtitle">Divulgue vagas, projetos freelancer e oportunidades para nossa comunidade</p>
           </div>
+
+    <div className="opportunity-simple-cta reveal">
+      <div className="opportunity-simple-content">
+        <div className="opportunity-simple-icon">
+          <Building2 size={40} />
         </div>
-      </section>
+        <div className="opportunity-simple-text">
+          <h3 className="opportunity-simple-title">Compartilhe com designers talentosos</h3>
+          <p className="opportunity-simple-subtitle">
+            Encontre profissionais qualificados para suas vagas, propostas freelancer e oportunidades de trabalho
+          </p>
+        </div>
+        <Link to="/enviar-oportunidade">
+          <Button size="lg" icon={<ArrowRight size={18} />}>
+            Enviar oportunidade
+          </Button>
+        </Link>
+      </div>
+    </div>
+  </div>
+</section>
 
       <div className="section-divider" />
 
