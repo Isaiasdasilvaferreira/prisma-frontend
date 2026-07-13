@@ -44,9 +44,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         const response = await api.get<UserData>('/auth/me');
         if (response.data) {
+          const name = response.data.name || response.data.user_metadata?.name || '';
           setUser({
             id: response.data.id,
-            name: response.data.name || '',
+            name: name,
             email: response.data.email,
             onboardingCompleted: false,
             profile: {}
@@ -69,9 +70,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error(response.error);
     }
     if (response.data) {
+      const name = response.data.name || response.data.user_metadata?.name || '';
       const userData = {
         id: response.data.id,
-        name: response.data.name || '',
+        name: name,
         email: response.data.email,
         onboardingCompleted: false,
         profile: {}
@@ -90,9 +92,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error(response.error);
     }
     if (response.data) {
+      const userName = response.data.name || response.data.user_metadata?.name || name || '';
       const userData = {
         id: response.data.id,
-        name: response.data.name || name,
+        name: userName,
         email: response.data.email,
         onboardingCompleted: false,
         profile: {}
