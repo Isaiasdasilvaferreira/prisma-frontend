@@ -23,10 +23,6 @@ function PrivateRoute({ children }: { children: React.ReactNode }) {
     return <Navigate to="/login" replace />;
   }
 
-  if (!user.onboardingCompleted) {
-    return <Navigate to="/onboarding" replace />;
-  }
-
   return <>{children}</>;
 }
 
