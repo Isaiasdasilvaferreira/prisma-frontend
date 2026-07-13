@@ -59,7 +59,7 @@ interface Stats {
   recent_count: number;
 }
 
-const COLORS = ['#ec4899', '#f472b6', '#db2777', '#be185d', '#9d174d'];
+const COLORS = ['#ec4899', '#f472b6', '#db2777', '#be185d', '#9d174d', '#6b21a5', '#1d4ed8', '#059669', '#d97706'];
 
 export function Analytics() {
   const { user } = useAuth();
@@ -117,6 +117,17 @@ export function Analytics() {
   const getUniqueLocations = () => {
     const locations = new Set(opportunities.map(opp => opp.location || 'Remoto'));
     return Array.from(locations).length;
+  };
+
+  const getServiceTypeData = () => {
+    const serviceMap = new Map<string, number>();
+    opportunities.forEach(opp => {
+      const service = opp.service_type || 'Não definido';
+      serviceMap.set(service, (serviceMap.get(service) || 0) + 1);
+    });
+    return Array.from(serviceMap.entries())
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value);
   };
 
   const getContractData = () => {
@@ -177,6 +188,7 @@ export function Analytics() {
     },
   ];
 
+  const serviceTypeData = getServiceTypeData();
   const contractData = getContractData();
   const levelData = getLevelData();
   const companyData = getCompanyOpportunities();
@@ -303,14 +315,14 @@ export function Analytics() {
                     <p>Nenhuma oportunidade encontrada</p>
                     <p className="analytics-chart-empty-sub">Raspe vagas no Dashboard para começar</p>
                   </div>
-                ) : contractData.length === 0 && levelData.length === 0 ? (
+                ) : serviceTypeData.length === 0 ? (
                   <div className="analytics-chart-empty">
                     <AlertCircle size={32} />
                     <p>Dados de áreas não disponíveis</p>
                   </div>
                 ) : (
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={[...contractData, ...levelData]} layout="vertical" margin={{ left: 80, right: 20, top: 10, bottom: 10 }}>
+                    <BarChart data={serviceTypeData} layout="vertical" margin={{ left: 100, right: 20, top: 10, bottom: 10 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#222" />
                       <XAxis type="number" stroke="#444" tick={{ fill: '#444', fontSize: 11 }} />
                       <YAxis 
@@ -318,14 +330,14 @@ export function Analytics() {
                         dataKey="name" 
                         stroke="#444" 
                         tick={{ fill: '#666', fontSize: 11 }}
-                        width={90}
+                        width={100}
                       />
                       <Tooltip 
                         contentStyle={{ background: '#0a0a0a', border: '1px solid #1a1a1a', borderRadius: 6 }}
                         itemStyle={{ color: '#fff', fontSize: 12 }}
                       />
                       <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={18}>
-                        {[...contractData, ...levelData].map((entry, index) => (
+                        {serviceTypeData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                         ))}
                       </Bar>
