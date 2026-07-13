@@ -508,6 +508,31 @@ export function Landing() {
 
       <div className="section-divider" />
 
+      <section id="enviar-oportunidades" className="section section-alt">
+        <div className="section-container">
+          <div className="opportunity-simple-cta reveal">
+            <div className="opportunity-simple-content">
+              <div className="opportunity-simple-icon">
+                <Building2 size={40} />
+              </div>
+              <div className="opportunity-simple-text">
+                <h2 className="opportunity-simple-title">Quer enviar uma oportunidade?</h2>
+                <p className="opportunity-simple-subtitle">
+                  Compartilhe vagas, projetos ou contratos com nossa comunidade de designers
+                </p>
+              </div>
+              <Link to="/enviar-oportunidade">
+                <Button size="lg" icon={<ArrowRight size={18} />}>
+                  Enviar oportunidade
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="section-divider" />
+
       <section className="section cta-section">
         <div className="section-container">
           <div
