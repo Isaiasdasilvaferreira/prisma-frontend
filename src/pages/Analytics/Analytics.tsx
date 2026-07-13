@@ -74,10 +74,22 @@ export function Analytics() {
 
   useEffect(() => {
     if (token) {
-      fetchOpportunities();
-      fetchStats();
+      fetchData();
+    } else {
+      setLoading(false);
     }
   }, [token]);
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      await Promise.all([fetchOpportunities(), fetchStats()]);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchOpportunities = async () => {
     try {
@@ -102,8 +114,6 @@ export function Analytics() {
       }
     } catch (error) {
       console.error('Error fetching stats:', error);
-    } finally {
-      setLoading(false);
     }
   };
 
