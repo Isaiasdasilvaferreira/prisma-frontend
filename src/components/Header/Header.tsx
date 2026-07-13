@@ -9,7 +9,7 @@ interface HeaderProps {
 }
 
 export function Header({ onMenuClick }: HeaderProps) {
-  const { user, logout } = useAuth();
+  const { user, logout, token } = useAuth();
   const location = useLocation();
 
   const getPageTitle = () => {
@@ -31,13 +31,25 @@ export function Header({ onMenuClick }: HeaderProps) {
   };
 
   const getUserName = () => {
-    if (user?.name) {
-      const firstName = user.name.split(' ')[0];
-      return firstName;
+    if (user?.name && user.name !== '') {
+      return user.name.split(' ')[0];
     }
+    
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const name = payload?.user_metadata?.name || payload?.name || '';
+        if (name) {
+          return name.split(' ')[0];
+        }
+      } catch (e) {
+      }
+    }
+    
     if (user?.email) {
       return user.email.split('@')[0];
     }
+    
     return 'Usuário';
   };
 
