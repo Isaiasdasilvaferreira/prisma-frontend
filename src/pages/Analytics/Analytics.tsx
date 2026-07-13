@@ -120,7 +120,7 @@ export function Analytics() {
   };
 
   const getContractData = () => {
-    if (!stats) return [];
+    if (!stats || !stats.by_contract) return [];
     return Object.entries(stats.by_contract).map(([name, value]) => ({
       name,
       value
@@ -128,7 +128,7 @@ export function Analytics() {
   };
 
   const getLevelData = () => {
-    if (!stats) return [];
+    if (!stats || !stats.by_level) return [];
     return Object.entries(stats.by_level).map(([name, value]) => ({
       name,
       value
@@ -180,6 +180,8 @@ export function Analytics() {
   const contractData = getContractData();
   const levelData = getLevelData();
   const companyData = getCompanyOpportunities();
+
+  const hasData = opportunities.length > 0;
 
   return (
     <div className="dashboard-page">
@@ -295,10 +297,16 @@ export function Analytics() {
                     <Loader2 size={32} className="spinning" />
                     <p>Carregando dados...</p>
                   </div>
-                ) : contractData.length === 0 && levelData.length === 0 ? (
+                ) : !hasData ? (
                   <div className="analytics-chart-empty">
                     <AlertCircle size={32} />
                     <p>Nenhuma oportunidade encontrada</p>
+                    <p className="analytics-chart-empty-sub">Raspe vagas no Dashboard para começar</p>
+                  </div>
+                ) : contractData.length === 0 && levelData.length === 0 ? (
+                  <div className="analytics-chart-empty">
+                    <AlertCircle size={32} />
+                    <p>Dados de áreas não disponíveis</p>
                   </div>
                 ) : (
                   <ResponsiveContainer width="100%" height="100%">
