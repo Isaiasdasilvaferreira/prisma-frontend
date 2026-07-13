@@ -1568,6 +1568,7 @@
   border-radius: 24px;
   padding: 48px 40px;
   transition: all 0.4s ease;
+  margin-top: 0;
 }
 
 .opportunity-simple-cta:hover {
@@ -1608,8 +1609,8 @@
 
 .opportunity-simple-title {
   font-family: 'Inter', sans-serif;
-  font-size: 24px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 600;
   color: #1a1a2e;
   margin: 0 0 4px 0;
   letter-spacing: -0.3px;
@@ -1617,7 +1618,7 @@
 
 .opportunity-simple-subtitle {
   font-family: 'Inter', sans-serif;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 400;
   color: #64748b;
   margin: 0;
@@ -1635,11 +1636,11 @@
   }
   
   .opportunity-simple-title {
-    font-size: 20px;
+    font-size: 18px;
   }
   
   .opportunity-simple-subtitle {
-    font-size: 15px;
+    font-size: 14px;
   }
   
   .opportunity-simple-icon {
@@ -1654,11 +1655,11 @@
   }
   
   .opportunity-simple-title {
-    font-size: 18px;
+    font-size: 16px;
   }
   
   .opportunity-simple-subtitle {
-    font-size: 14px;
+    font-size: 13px;
   }
   
   .opportunity-simple-icon {
