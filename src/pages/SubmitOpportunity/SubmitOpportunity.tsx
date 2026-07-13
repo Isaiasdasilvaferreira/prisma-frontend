@@ -4,7 +4,7 @@ import { Navbar } from '../../components/Navbar/Navbar';
 import { Footer } from '../../components/Footer/Footer';
 import { Button } from '../../components/Button/Button';
 import {
-  ArrowLeft, CheckCircle, Briefcase, MapPin, DollarSign, Mail, Building2
+  ArrowLeft, CheckCircle, Briefcase, MapPin, DollarSign, Mail, Building2, Users
 } from 'lucide-react';
 import './SubmitOpportunity.css';
 
@@ -18,6 +18,7 @@ export function SubmitOpportunity() {
     descricao: '',
     localizacao: '',
     salario: '',
+    quantidade: '1',
     email: '',
     contato: '',
   });
@@ -74,17 +75,17 @@ export function SubmitOpportunity() {
       <div className="submit-container">
         <div className="submit-card">
           <Link to="/" className="back-link">
-            <ArrowLeft size={20} />
+            <ArrowLeft size={18} />
             Voltar
           </Link>
 
           <div className="submit-header">
             <div className="submit-icon-wrapper">
-              <Briefcase size={28} />
+              <Briefcase size={24} />
             </div>
             <div>
               <h1>Enviar Oportunidade</h1>
-              <p>Preencha os campos abaixo para publicar sua vaga ou projeto</p>
+              <p>Preencha os dados para publicar sua vaga ou projeto</p>
             </div>
           </div>
 
@@ -133,18 +134,6 @@ export function SubmitOpportunity() {
               </div>
             </div>
 
-            <div className="form-group">
-              <label>Descrição *</label>
-              <textarea
-                name="descricao"
-                value={formData.descricao}
-                onChange={handleChange}
-                placeholder="Descreva a oportunidade, responsabilidades e requisitos..."
-                rows={4}
-                required
-              />
-            </div>
-
             <div className="form-row">
               <div className="form-group">
                 <label>Localização</label>
@@ -169,12 +158,49 @@ export function SubmitOpportunity() {
               </div>
             </div>
 
-            <div className="form-divider" />
+            <div className="form-row">
+              <div className="form-group">
+                <label>Quantidade de vagas *</label>
+                <select name="quantidade" value={formData.quantidade} onChange={handleChange} required>
+                  <option value="1">1 vaga</option>
+                  <option value="2">2 vagas</option>
+                  <option value="3">3 vagas</option>
+                  <option value="4">4 vagas</option>
+                  <option value="5">5 vagas</option>
+                  <option value="6">6 vagas</option>
+                  <option value="7">7 vagas</option>
+                  <option value="8">8 vagas</option>
+                  <option value="9">9 vagas</option>
+                  <option value="10">10+ vagas</option>
+                </select>
+              </div>
 
-            <h3 className="contact-title">Contato</h3>
+              <div className="form-group">
+                <label>Contato / WhatsApp</label>
+                <input
+                  type="text"
+                  name="contato"
+                  value={formData.contato}
+                  onChange={handleChange}
+                  placeholder="Ex: (11) 99999-9999"
+                />
+              </div>
+            </div>
 
             <div className="form-group">
-              <label>E-mail *</label>
+              <label>Descrição *</label>
+              <textarea
+                name="descricao"
+                value={formData.descricao}
+                onChange={handleChange}
+                placeholder="Descreva a oportunidade, responsabilidades e requisitos..."
+                rows={4}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>E-mail para contato *</label>
               <input
                 type="email"
                 name="email"
@@ -185,21 +211,8 @@ export function SubmitOpportunity() {
               />
             </div>
 
-            <div className="form-group">
-              <label>Telefone / WhatsApp</label>
-              <input
-                type="text"
-                name="contato"
-                value={formData.contato}
-                onChange={handleChange}
-                placeholder="Ex: (11) 99999-9999"
-              />
-            </div>
-
             <div className="form-footer">
-              <p className="form-disclaimer">
-                Ao enviar, você concorda que as informações são precisas.
-              </p>
+              <p className="form-disclaimer">Ao enviar, você concorda que as informações são precisas.</p>
               <Button type="submit" size="lg" disabled={isSubmitting}>
                 {isSubmitting ? 'Enviando...' : 'Publicar Oportunidade'}
               </Button>
