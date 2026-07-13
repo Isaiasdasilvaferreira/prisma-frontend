@@ -255,29 +255,29 @@ export function Plans() {
             <div className="plans-trust-item">
               <Shield size={20} />
               <div>
-                <h4>Segurança garantida</h4>
-                <p>Dados criptografados</p>
+                <h4>***</h4>
+                <p>***</p>
               </div>
             </div>
             <div className="plans-trust-item">
               <Lock size={20} />
               <div>
-                <h4>Pagamento seguro</h4>
-                <p>Certificado SSL</p>
+                <h4>***</h4>
+                <p>***</p>
               </div>
             </div>
             <div className="plans-trust-item">
               <TrendingUp size={20} />
               <div>
-                <h4>Sem fidelidade</h4>
-                <p>Cancele quando quiser</p>
+                <h4>***</h4>
+                <p>***</p>
               </div>
             </div>
             <div className="plans-trust-item">
               <Headphones size={20} />
               <div>
-                <h4>Suporte humano</h4>
-                <p>Resposta em minutos</p>
+                <h4>***</h4>
+                <p>***</p>
               </div>
             </div>
           </div>
