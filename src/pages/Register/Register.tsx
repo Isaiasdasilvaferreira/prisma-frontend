@@ -134,7 +134,7 @@ export function Register() {
     setLoading(true);
     try {
       await register(name, email, password);
-      navigate('/onboarding');
+      navigate('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Erro ao criar conta. Tente novamente.');
     } finally {
