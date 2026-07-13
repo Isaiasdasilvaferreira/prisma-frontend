@@ -7,6 +7,10 @@ export interface UserData {
   email: string;
   role?: string;
   name?: string;
+  user_metadata?: {
+    name?: string;
+    [key: string]: any;
+  };
 }
 
 interface ApiResponse<T> {
@@ -19,13 +23,22 @@ interface LoginResponse {
   success: boolean;
   data?: {
     token: string;
-    user: UserData;
+    user: {
+      id: string;
+      email: string;
+      role?: string;
+      user_metadata?: {
+        name?: string;
+        [key: string]: any;
+      };
+    };
   };
   error?: string;
 }
 
 class Api {
   private client: AxiosInstance;
+  private currentToken: string | null = null;
 
   constructor() {
     this.client = axios.create({
@@ -34,6 +47,7 @@ class Api {
       headers: {
         'Content-Type': 'application/json',
       },
+      withCredentials: true,
     });
 
     this.setupInterceptors();
@@ -95,8 +109,21 @@ class Api {
     }
   }
 
+  setToken(token: string | null): void {
+    this.currentToken = token;
+    if (token) {
+      localStorage.setItem('auth_token', token);
+    } else {
+      localStorage.removeItem('auth_token');
+    }
+  }
+
+  getToken(): string | null {
+    return this.currentToken || localStorage.getItem('auth_token');
+  }
+
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('auth_token');
+    return !!this.getToken();
   }
 
   async login(email: string, password: string): Promise<ApiResponse<UserData>> {
@@ -106,7 +133,17 @@ class Api {
       if (response.data.success && response.data.data) {
         const { token, user } = response.data.data;
         localStorage.setItem('auth_token', token);
-        return { data: user, token };
+        this.currentToken = token;
+        
+        const userData: UserData = {
+          id: user.id,
+          email: user.email,
+          role: user.role,
+          name: user.user_metadata?.name || '',
+          user_metadata: user.user_metadata
+        };
+        
+        return { data: userData, token };
       }
       
       return { data: null, error: 'Erro ao fazer login' };
@@ -133,7 +170,17 @@ class Api {
       if (response.data.success && response.data.data) {
         const { token, user } = response.data.data;
         localStorage.setItem('auth_token', token);
-        return { data: user, token };
+        this.currentToken = token;
+        
+        const userData: UserData = {
+          id: user.id,
+          email: user.email,
+          role: user.role,
+          name: user.user_metadata?.name || metadata?.name || '',
+          user_metadata: user.user_metadata
+        };
+        
+        return { data: userData, token };
       }
       
       return { data: null, error: 'Erro ao criar conta' };
@@ -156,6 +203,7 @@ class Api {
       // silent
     } finally {
       localStorage.removeItem('auth_token');
+      this.currentToken = null;
     }
   }
 
