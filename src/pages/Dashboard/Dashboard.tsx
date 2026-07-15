@@ -15,7 +15,7 @@ import {
   ArrowUpRight, Bookmark, DollarSign, Globe, Building2,
   AlertCircle, ChevronRight, TrendingDown, Activity,
   LayoutDashboard, PieChart, Send, GraduationCap, Settings,
-  Sliders, ListFilter, Lock, Sparkle, Heart, Loader2
+  Sliders, ListFilter, Lock, Sparkle, Heart, Loader2, Users
 } from 'lucide-react';
 import './Dashboard.css';
 
@@ -32,6 +32,42 @@ interface Opportunity {
   application_url: string;
   is_active: boolean;
   created_at: string;
+}
+
+interface UserOpportunity {
+  id: string;
+  title: string;
+  company: string;
+  contract_type: string;
+  modality: string;
+  location: string | null;
+  salary: string | null;
+  available_registration: number | null;
+  whatsapp: string | null;
+  email: string;
+  description: string;
+  responsibilities: string | null;
+  requirements: string | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+interface CombinedOpportunity {
+  id: string;
+  external_id: string;
+  source: string;
+  company: string;
+  title: string;
+  contract_type: string;
+  modality: string;
+  location: string;
+  application_url: string;
+  is_active: boolean;
+  created_at: string;
+  salary?: string | null;
+  whatsapp?: string | null;
+  email?: string;
 }
 
 interface Stats {
@@ -92,6 +128,7 @@ export function Dashboard() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedContractType, setSelectedContractType] = useState<'clt' | 'freelancer' | null>(null);
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
+  const [userOpportunities, setUserOpportunities] = useState<UserOpportunity[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
   const [scraping, setScraping] = useState(false);
@@ -118,6 +155,7 @@ export function Dashboard() {
 
   useEffect(() => {
     fetchOpportunities();
+    fetchUserOpportunities();
     fetchStats();
   }, []);
 
@@ -128,12 +166,28 @@ export function Dashboard() {
       if (response.data && response.data.data) {
         const opportunitiesData = response.data.data;
         setOpportunities(opportunitiesData);
-        updateDashboardStats(opportunitiesData);
+        updateDashboardStats(opportunitiesData, userOpportunities);
       }
     } catch (error) {
       console.error('Error fetching opportunities:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchUserOpportunities = async () => {
+    try {
+      const response = await api.getUserOpportunities(true);
+      
+      if (response.data && Array.isArray(response.data)) {
+        setUserOpportunities(response.data);
+        updateDashboardStats(opportunities, response.data);
+      } else {
+        setUserOpportunities([]);
+      }
+    } catch (error) {
+      console.error('Error fetching user opportunities:', error);
+      setUserOpportunities([]);
     }
   };
 
@@ -148,8 +202,8 @@ export function Dashboard() {
     }
   };
 
-  const updateDashboardStats = (opps: Opportunity[]) => {
-    const total = opps.length;
+  const updateDashboardStats = (opps: Opportunity[], userOpps: UserOpportunity[]) => {
+    const total = opps.length + userOpps.length;
     const matchRate = total > 0 ? Math.min(100, Math.round((total / 10) * 100)) : 0;
 
     setDashboardStats({
@@ -204,8 +258,43 @@ export function Dashboard() {
     );
   };
 
-  const getFilteredOpportunities = () => {
-    let filtered = opportunities;
+  const getAllOpportunities = (): CombinedOpportunity[] => {
+    const cltOpps: CombinedOpportunity[] = opportunities.map(opp => ({
+      id: opp.id,
+      external_id: opp.external_id,
+      source: opp.source,
+      company: opp.company,
+      title: opp.title,
+      contract_type: opp.contract_type,
+      modality: opp.modality,
+      location: opp.location || 'Remoto',
+      application_url: opp.application_url,
+      is_active: opp.is_active,
+      created_at: opp.created_at
+    }));
+
+    const freelanceOpps: CombinedOpportunity[] = userOpportunities.map(opp => ({
+      id: opp.id,
+      external_id: opp.id,
+      source: 'freelancer',
+      company: opp.company,
+      title: opp.title,
+      contract_type: opp.contract_type,
+      modality: opp.modality,
+      location: opp.location || 'Remoto',
+      application_url: opp.whatsapp || `mailto:${opp.email}`,
+      is_active: opp.is_active,
+      created_at: opp.created_at,
+      salary: opp.salary,
+      whatsapp: opp.whatsapp,
+      email: opp.email
+    }));
+
+    return [...cltOpps, ...freelanceOpps];
+  };
+
+  const getFilteredOpportunities = (): CombinedOpportunity[] => {
+    let filtered = getAllOpportunities();
 
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
@@ -230,6 +319,7 @@ export function Dashboard() {
   };
 
   const getSourceIcon = (source: string) => {
+    if (source === 'freelancer') return <Users size={14} />;
     switch(source) {
       case 'ashby': return <Building2 size={14} />;
       case 'greenhouse': return <Globe size={14} />;
@@ -239,12 +329,18 @@ export function Dashboard() {
   };
 
   const getSourceColor = (source: string) => {
+    if (source === 'freelancer') return '#8b5cf6';
     switch(source) {
       case 'ashby': return '#ec4899';
       case 'greenhouse': return '#10b981';
       case 'lever': return '#f59e0b';
       default: return '#6b7280';
     }
+  };
+
+  const getSourceLabel = (source: string) => {
+    if (source === 'freelancer') return 'Freelancer';
+    return source.charAt(0).toUpperCase() + source.slice(1);
   };
 
   const statsCards = [
@@ -428,50 +524,59 @@ export function Dashboard() {
                   </div>
                 ) : (
                   <div className="dashboard-opportunities-list">
-                    {filteredOpportunities.slice(0, 10).map((opp) => (
-                      <div key={opp.external_id} className="dashboard-opportunity-item">
-                        <div className="dashboard-opportunity-main">
-                          <div className="dashboard-opportunity-source">
-                            {getSourceIcon(opp.source)}
-                            <span style={{ color: getSourceColor(opp.source) }}>
-                              {opp.source.charAt(0).toUpperCase() + opp.source.slice(1)}
-                            </span>
+                    {filteredOpportunities.slice(0, 10).map((opp) => {
+                      const isFreelancer = opp.source === 'freelancer';
+                      return (
+                        <div key={opp.external_id} className="dashboard-opportunity-item">
+                          <div className="dashboard-opportunity-main">
+                            <div className="dashboard-opportunity-source">
+                              {getSourceIcon(opp.source)}
+                              <span style={{ color: getSourceColor(opp.source) }}>
+                                {getSourceLabel(opp.source)}
+                              </span>
+                            </div>
+                            <h4 className="dashboard-opportunity-title">{opp.title}</h4>
+                            <div className="dashboard-opportunity-meta">
+                              <span className="dashboard-opportunity-company">
+                                <Building2 size={14} />
+                                {opp.company}
+                              </span>
+                              <span className="dashboard-opportunity-location">
+                                <MapPin size={14} />
+                                {opp.location || 'Remoto'}
+                              </span>
+                              <span className="dashboard-opportunity-contract">
+                                <Briefcase size={14} />
+                                {opp.contract_type || 'CLT'}
+                              </span>
+                              {isFreelancer && opp.salary && (
+                                <span className="dashboard-opportunity-salary">
+                                  <DollarSign size={14} />
+                                  {opp.salary}
+                                </span>
+                              )}
+                            </div>
                           </div>
-                          <h4 className="dashboard-opportunity-title">{opp.title}</h4>
-                          <div className="dashboard-opportunity-meta">
-                            <span className="dashboard-opportunity-company">
-                              <Building2 size={14} />
-                              {opp.company}
-                            </span>
-                            <span className="dashboard-opportunity-location">
-                              <MapPin size={14} />
-                              {opp.location || 'Remoto'}
-                            </span>
-                            <span className="dashboard-opportunity-contract">
-                              <Briefcase size={14} />
-                              {opp.contract_type || 'CLT'}
-                            </span>
+                          <div className="dashboard-opportunity-actions">
+                            <button 
+                              className={`dashboard-save-button ${savedOpps.includes(opp.external_id) ? 'saved' : ''}`}
+                              onClick={() => toggleSave(opp.external_id)}
+                            >
+                              <Heart size={18} fill={savedOpps.includes(opp.external_id) ? '#ec4899' : 'none'} />
+                            </button>
+                            <a 
+                              href={opp.application_url} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="dashboard-apply-button"
+                            >
+                              {isFreelancer ? 'Contatar' : 'Ver Vaga'}
+                              <ArrowUpRight size={14} />
+                            </a>
                           </div>
                         </div>
-                        <div className="dashboard-opportunity-actions">
-                          <button 
-                            className={`dashboard-save-button ${savedOpps.includes(opp.external_id) ? 'saved' : ''}`}
-                            onClick={() => toggleSave(opp.external_id)}
-                          >
-                            <Heart size={18} fill={savedOpps.includes(opp.external_id) ? '#ec4899' : 'none'} />
-                          </button>
-                          <a 
-                            href={opp.application_url} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="dashboard-apply-button"
-                          >
-                            Ver Vaga
-                            <ArrowUpRight size={14} />
-                          </a>
-                        </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                     {filteredOpportunities.length > 10 && (
                       <div className="dashboard-view-more">
                         <Button variant="outline" size="sm">
