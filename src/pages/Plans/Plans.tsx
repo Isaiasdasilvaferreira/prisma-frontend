@@ -3,14 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { Sidebar } from '../../components/Sidebar/Sidebar';
 import { Header } from '../../components/Header/Header';
 import { Button } from '../../components/Button/Button';
-import { Card } from '../../components/Card/Card';
 import { 
   Check, Star, Zap, Sparkles, Crown, Shield, ArrowRight,
   ChevronDown, ChevronUp, HelpCircle, TrendingUp,
   Lock, Headphones, MessageSquare, Building2, Clock,
-  Filter, Mail, LayoutDashboard, Zap as ZapIcon, 
-  Infinity, Search, Headphones as HeadphonesIcon,
-  BarChart, Send, Sliders
 } from 'lucide-react';
 import './Plans.css';
 
