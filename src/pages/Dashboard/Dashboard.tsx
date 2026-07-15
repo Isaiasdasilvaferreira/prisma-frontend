@@ -269,8 +269,6 @@ function ContactModal({ opportunity, isOpen, onClose }: ContactModalProps) {
         onClose();
       }, 3000);
     } catch (error: any) {
-      console.error('Error:', error);
-      
       const errorMessage = error?.response?.data?.error || error?.message || '';
       
       if (errorMessage.includes('already applied')) {
@@ -302,7 +300,7 @@ function ContactModal({ opportunity, isOpen, onClose }: ContactModalProps) {
         return;
       }
       
-      setApplyError('Erro ao se candidatar. Tente novamente.');
+      setApplyError(errorMessage || 'Erro ao se candidatar. Tente novamente.');
       setIsSubmitting(false);
     }
   };
