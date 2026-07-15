@@ -536,13 +536,19 @@ export function Dashboard() {
                     {filteredOpportunities.slice(0, 10).map((opp) => {
                       const isFreelancer = opp.source === 'freelancer';
                       return (
-                        <div key={opp.external_id} className="dashboard-opportunity-item">
+                        <div 
+                          key={opp.external_id} 
+                          className={`dashboard-opportunity-item ${isFreelancer ? 'freelancer-item' : ''}`}
+                        >
                           <div className="dashboard-opportunity-main">
                             <div className="dashboard-opportunity-source">
                               {getSourceIcon(opp.source)}
                               <span style={{ color: getSourceColor(opp.source) }}>
                                 {getSourceLabel(opp.source)}
                               </span>
+                              {isFreelancer && (
+                                <span className="freelancer-badge">🚀 Freelancer</span>
+                              )}
                             </div>
                             <h4 className="dashboard-opportunity-title">{opp.title}</h4>
                             <div className="dashboard-opportunity-meta">
@@ -578,7 +584,12 @@ export function Dashboard() {
                             )}
                             {isFreelancer && opp.responsibilities && (
                               <div className="dashboard-opportunity-responsibilities">
-                                <span>Responsabilidades: {opp.responsibilities}</span>
+                                <span>📋 Responsabilidades: {opp.responsibilities}</span>
+                              </div>
+                            )}
+                            {isFreelancer && opp.requirements && (
+                              <div className="dashboard-opportunity-requirements">
+                                <span>✅ Requisitos: {opp.requirements}</span>
                               </div>
                             )}
                           </div>
@@ -595,7 +606,7 @@ export function Dashboard() {
                               rel="noopener noreferrer"
                               className="dashboard-apply-button"
                             >
-                              {isFreelancer ? 'Contatar' : 'Ver Vaga'}
+                              {isFreelancer ? '💬 Contatar' : 'Ver Vaga'}
                               <ArrowUpRight size={14} />
                             </a>
                           </div>
