@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { 
   Briefcase, BarChart3, Send, GraduationCap, Settings, 
@@ -20,6 +20,18 @@ const menuItems = [
 ];
 
 export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('sidebar-open');
+    } else {
+      document.body.classList.remove('sidebar-open');
+    }
+
+    return () => {
+      document.body.classList.remove('sidebar-open');
+    };
+  }, [isOpen]);
+
   const handleClose = () => {
     if (onClose) onClose();
   };
