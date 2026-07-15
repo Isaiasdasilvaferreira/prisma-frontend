@@ -99,8 +99,6 @@
   background: #fafbfc;
   transition: all 0.2s ease;
   color: #1a1a2e;
-  width: 100%;
-  box-sizing: border-box;
 }
 
 .form-group input:hover,
@@ -143,34 +141,17 @@
   margin-top: 8px;
   padding-top: 20px;
   border-top: 1px solid #eef2f6;
-  flex-wrap: wrap;
 }
 
 .form-footer .btn {
   background: linear-gradient(135deg, #ec4899, #f472b6);
   color: #ffffff;
-  padding: 12px 32px;
-  font-size: 15px;
-  font-weight: 600;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-  min-width: 200px;
 }
 
 .form-footer .btn:hover {
   background: linear-gradient(135deg, #f472b6, #ec4899);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(236, 72, 153, 0.3);
-}
-
-.form-footer .btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(236, 72, 153, 0.25);
 }
 
 .form-disclaimer {
@@ -179,7 +160,6 @@
   font-weight: 400;
   color: #94a3b8;
   margin: 0;
-  flex: 1;
 }
 
 .submit-success {
@@ -236,7 +216,17 @@
 .submit-layout {
   display: flex;
   gap: 40px;
-  align-items: stretch;
+  align-items: flex-start;
+}
+
+.submit-card {
+  flex: 1;
+  min-width: 0;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 32px 48px 40px;
+  border: 1px solid rgba(236, 72, 153, 0.06);
+  box-shadow: 0 4px 40px rgba(0, 0, 0, 0.04);
 }
 
 .submit-preview {
@@ -244,7 +234,6 @@
   min-width: 0;
   position: sticky;
   top: 110px;
-  align-self: flex-start;
 }
 
 .submit-preview-header {
@@ -279,39 +268,20 @@
   margin: 0;
 }
 
-.error-message {
-  background: #fee2e2;
-  border: 1px solid #fecaca;
-  border-radius: 10px;
-  padding: 12px 16px;
-  margin-bottom: 16px;
-}
-
-.error-message p {
-  color: #dc2626;
-  font-family: 'Inter', sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  margin: 0;
-}
-
 @media (max-width: 1100px) {
   .submit-layout {
     flex-direction: column;
-    align-items: stretch;
   }
 
   .submit-preview {
     width: 100%;
     position: static;
-    align-self: auto;
   }
 }
 
 @media (max-width: 768px) {
   .submit-container {
     padding: 8px 16px 60px;
-    margin-top: 90px;
   }
 
   .submit-card {
@@ -343,14 +313,6 @@
     gap: 14px;
   }
 
-  .form-footer .btn {
-    width: 100%;
-    min-width: auto;
-    padding: 14px 20px;
-    font-size: 14px;
-    white-space: normal;
-  }
-
   .form-disclaimer {
     text-align: center;
   }
@@ -373,7 +335,6 @@
 @media (max-width: 480px) {
   .submit-container {
     padding: 4px 12px 48px;
-    margin-top: 80px;
   }
 
   .submit-card {
@@ -428,11 +389,6 @@
   }
 
   .submit-success p {
-    font-size: 13px;
-  }
-
-  .form-footer .btn {
-    padding: 12px 16px;
     font-size: 13px;
   }
 }
