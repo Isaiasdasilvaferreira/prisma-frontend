@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { 
   Briefcase, BarChart3, Send, GraduationCap, Settings, 
-  Crown, Sparkles, Menu, X
+  Crown, Sparkles, X
 } from 'lucide-react';
 import logoImage from '../../assets/losango - prisma.png';
 import './Sidebar.css';
@@ -42,10 +42,6 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
 
   return (
     <>
-      <button className="sidebar-hamburger" onClick={handleClose}>
-        {isOpen ? <X size={24} /> : <Menu size={24} />}
-      </button>
-
       <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
           <NavLink to="/dashboard" className="sidebar-logo-link" onClick={handleLinkClick}>
