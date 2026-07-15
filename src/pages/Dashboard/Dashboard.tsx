@@ -161,12 +161,10 @@ export function Dashboard() {
 
   const fetchOpportunities = async () => {
     try {
-      const response = await api.get<{ data: Opportunity[] }>('/opportunities');
-      
-      if (response.data && response.data.data) {
-        const opportunitiesData = response.data.data;
-        setOpportunities(opportunitiesData);
-        updateDashboardStats(opportunitiesData, userOpportunities);
+      const response = await api.get<Opportunity[]>('/opportunities');
+      if (response.data && Array.isArray(response.data)) {
+        setOpportunities(response.data);
+        updateDashboardStats(response.data, userOpportunities);
       }
     } catch (error) {
       console.error('Error fetching opportunities:', error);
@@ -177,12 +175,10 @@ export function Dashboard() {
 
   const fetchUserOpportunities = async () => {
     try {
-      const response = await api.get<UserOpportunity[]>('/user-opportunities?is_active=true');
-      
-      if (response.data) {
-        const userOppsData = Array.isArray(response.data) ? response.data : [];
-        setUserOpportunities(userOppsData);
-        updateDashboardStats(opportunities, userOppsData);
+      const response = await api.get<UserOpportunity[]>('/user-opportunities');
+      if (response.data && Array.isArray(response.data)) {
+        setUserOpportunities(response.data);
+        updateDashboardStats(opportunities, response.data);
       }
     } catch (error) {
       console.error('Error fetching user opportunities:', error);
