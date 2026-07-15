@@ -15,7 +15,7 @@ import {
   ArrowUpRight, Bookmark, DollarSign, Globe, Building2,
   AlertCircle, ChevronRight, TrendingDown, Activity,
   LayoutDashboard, PieChart, Send, GraduationCap, Settings,
-  Sliders, ListFilter, Lock, Sparkle, Heart, Loader2, Users, X, MessageCircle, Mail
+  Sliders, ListFilter, Lock, Sparkle, Heart, Loader2, Users, X, MessageCircle, Mail, Info
 } from 'lucide-react';
 import './Dashboard.css';
 
@@ -97,6 +97,13 @@ interface ContactModalProps {
   onClose: () => void;
 }
 
+interface DetailModalProps {
+  opportunity: CombinedOpportunity | null;
+  isOpen: boolean;
+  onClose: () => void;
+  onContact: () => void;
+}
+
 const filterOptions = {
   modalidades: [
     'Remoto',
@@ -129,6 +136,72 @@ const filterOptions = {
     'Urgente'
   ]
 };
+
+function DetailModal({ opportunity, isOpen, onClose, onContact }: DetailModalProps) {
+  if (!isOpen || !opportunity) return null;
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content detail-modal" onClick={(e) => e.stopPropagation()}>
+        <button className="modal-close" onClick={onClose}>
+          <X size={20} />
+        </button>
+        
+        <div className="detail-modal-header">
+          <span className="detail-modal-source" style={{ color: '#ec4899' }}>
+            {opportunity.source === 'user_posted' ? 'Postada por usuário' : opportunity.source.toUpperCase()}
+          </span>
+          <h2>{opportunity.title}</h2>
+          <p className="detail-modal-company">{opportunity.company}</p>
+        </div>
+
+        <div className="detail-modal-meta">
+          <span><MapPin size={16} /> {opportunity.location || 'Remoto'}</span>
+          <span><Briefcase size={16} /> {opportunity.contract_type || 'CLT'}</span>
+          {opportunity.salary && <span><DollarSign size={16} /> {opportunity.salary}</span>}
+          {opportunity.available_registration && (
+            <span><Users size={16} /> {opportunity.available_registration} vagas</span>
+          )}
+        </div>
+
+        {opportunity.description && (
+          <div className="detail-modal-section">
+            <h4>Descrição</h4>
+            <p>{opportunity.description}</p>
+          </div>
+        )}
+
+        {opportunity.responsibilities && (
+          <div className="detail-modal-section">
+            <h4>Responsabilidades</h4>
+            <p>{opportunity.responsibilities}</p>
+          </div>
+        )}
+
+        {opportunity.requirements && (
+          <div className="detail-modal-section">
+            <h4>Requisitos</h4>
+            <p>{opportunity.requirements}</p>
+          </div>
+        )}
+
+        {opportunity.source === 'user_posted' && (
+          <div className="detail-modal-contact">
+            <Button 
+              variant="primary" 
+              size="lg" 
+              icon={<MessageCircle size={18} />}
+              onClick={onContact}
+              fullWidth
+            >
+              Contatar
+            </Button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 function ContactModal({ opportunity, isOpen, onClose }: ContactModalProps) {
   const [contactMethod, setContactMethod] = useState<'whatsapp' | 'email'>('whatsapp');
@@ -291,7 +364,8 @@ export function Dashboard() {
     matchRate: '0%'
   });
   const [selectedOpportunity, setSelectedOpportunity] = useState<CombinedOpportunity | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   const [filters, setFilters] = useState({
     modalidades: [] as string[],
@@ -413,9 +487,14 @@ export function Dashboard() {
     );
   };
 
-  const handleContactClick = (opp: CombinedOpportunity) => {
+  const handleCardClick = (opp: CombinedOpportunity) => {
     setSelectedOpportunity(opp);
-    setIsModalOpen(true);
+    setIsDetailModalOpen(true);
+  };
+
+  const handleContactFromDetail = () => {
+    setIsDetailModalOpen(false);
+    setIsContactModalOpen(true);
   };
 
   const getAllOpportunities = (): CombinedOpportunity[] => {
@@ -694,6 +773,7 @@ export function Dashboard() {
                         <div 
                           key={opp.external_id} 
                           className={`dashboard-opportunity-item ${isUserPosted ? 'user-posted-item' : ''}`}
+                          onClick={() => handleCardClick(opp)}
                         >
                           <div className="dashboard-opportunity-main">
                             <div className="dashboard-opportunity-source">
@@ -732,23 +812,8 @@ export function Dashboard() {
                                 </span>
                               )}
                             </div>
-                            {isUserPosted && opp.description && (
-                              <div className="dashboard-opportunity-description">
-                                <p>{opp.description}</p>
-                              </div>
-                            )}
-                            {isUserPosted && opp.responsibilities && (
-                              <div className="dashboard-opportunity-responsibilities">
-                                <span>Responsabilidades: {opp.responsibilities}</span>
-                              </div>
-                            )}
-                            {isUserPosted && opp.requirements && (
-                              <div className="dashboard-opportunity-requirements">
-                                <span>Requisitos: {opp.requirements}</span>
-                              </div>
-                            )}
                           </div>
-                          <div className="dashboard-opportunity-actions">
+                          <div className="dashboard-opportunity-actions" onClick={(e) => e.stopPropagation()}>
                             <button 
                               className={`dashboard-save-button ${savedOpps.includes(opp.external_id) ? 'saved' : ''}`}
                               onClick={() => toggleSave(opp.external_id)}
@@ -758,7 +823,10 @@ export function Dashboard() {
                             {isUserPosted ? (
                               <button 
                                 className="dashboard-contact-button"
-                                onClick={() => handleContactClick(opp)}
+                                onClick={() => {
+                                  setSelectedOpportunity(opp);
+                                  setIsContactModalOpen(true);
+                                }}
                               >
                                 Contatar
                                 <ArrowUpRight size={14} />
@@ -769,6 +837,7 @@ export function Dashboard() {
                                 target="_blank" 
                                 rel="noopener noreferrer"
                                 className="dashboard-apply-button"
+                                onClick={(e) => e.stopPropagation()}
                               >
                                 Ver Vaga
                                 <ArrowUpRight size={14} />
@@ -892,11 +961,21 @@ export function Dashboard() {
         </div>
       </div>
 
+      <DetailModal 
+        opportunity={selectedOpportunity}
+        isOpen={isDetailModalOpen}
+        onClose={() => {
+          setIsDetailModalOpen(false);
+          setSelectedOpportunity(null);
+        }}
+        onContact={handleContactFromDetail}
+      />
+
       <ContactModal 
         opportunity={selectedOpportunity}
-        isOpen={isModalOpen}
+        isOpen={isContactModalOpen}
         onClose={() => {
-          setIsModalOpen(false);
+          setIsContactModalOpen(false);
           setSelectedOpportunity(null);
         }}
       />
