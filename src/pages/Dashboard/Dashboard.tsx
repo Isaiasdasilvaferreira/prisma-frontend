@@ -547,7 +547,7 @@ export function Dashboard() {
                                 {getSourceLabel(opp.source)}
                               </span>
                               {isFreelancer && (
-                                <span className="freelancer-badge">🚀 Freelancer</span>
+                                <span className="freelancer-badge">Freelancer</span>
                               )}
                             </div>
                             <h4 className="dashboard-opportunity-title">{opp.title}</h4>
@@ -579,17 +579,17 @@ export function Dashboard() {
                             </div>
                             {isFreelancer && opp.description && (
                               <div className="dashboard-opportunity-description">
-                                <p>{opp.description.substring(0, 120)}...</p>
+                                <p>{opp.description}</p>
                               </div>
                             )}
                             {isFreelancer && opp.responsibilities && (
                               <div className="dashboard-opportunity-responsibilities">
-                                <span>📋 Responsabilidades: {opp.responsibilities}</span>
+                                <span>Responsabilidades: {opp.responsibilities}</span>
                               </div>
                             )}
                             {isFreelancer && opp.requirements && (
                               <div className="dashboard-opportunity-requirements">
-                                <span>✅ Requisitos: {opp.requirements}</span>
+                                <span>Requisitos: {opp.requirements}</span>
                               </div>
                             )}
                           </div>
@@ -606,7 +606,7 @@ export function Dashboard() {
                               rel="noopener noreferrer"
                               className="dashboard-apply-button"
                             >
-                              {isFreelancer ? '💬 Contatar' : 'Ver Vaga'}
+                              {isFreelancer ? 'Contatar' : 'Ver Vaga'}
                               <ArrowUpRight size={14} />
                             </a>
                           </div>
