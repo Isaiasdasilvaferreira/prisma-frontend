@@ -334,9 +334,13 @@ function ContactModal({ opportunity, isOpen, onClose }: ContactModalProps) {
               <p className="modal-disclaimer">
                 Ao enviar, você concorda que a Prisma Analytics encaminhará seus dados para o contratante.
               </p>
-              <Button type="submit" size="lg" disabled={isSubmitting} variant="primary">
+              <button 
+                type="submit" 
+                className="modal-submit-button"
+                disabled={isSubmitting}
+              >
                 {isSubmitting ? 'Enviando...' : `Enviar via ${contactMethod === 'whatsapp' ? 'WhatsApp' : 'E-mail'}`}
-              </Button>
+              </button>
             </div>
           </form>
         )}
