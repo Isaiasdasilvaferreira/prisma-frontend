@@ -533,7 +533,7 @@ export function Dashboard() {
                   </div>
                 ) : (
                   <div className="dashboard-opportunities-list">
-                    {filteredOpportunities.slice(0, 10).map((opp) => {
+                    {filteredOpportunities.map((opp) => {
                       const isFreelancer = opp.source === 'freelancer';
                       return (
                         <div 
@@ -613,14 +613,6 @@ export function Dashboard() {
                         </div>
                       );
                     })}
-                    {filteredOpportunities.length > 10 && (
-                      <div className="dashboard-view-more">
-                        <Button variant="outline" size="sm">
-                          Ver todas ({filteredOpportunities.length})
-                          <ChevronRight size={14} />
-                        </Button>
-                      </div>
-                    )}
                   </div>
                 )}
               </div>
