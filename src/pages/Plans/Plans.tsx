@@ -116,7 +116,7 @@ export function Plans() {
     <div className="plans-page">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="plans-main">
-        <Header onMenuClick={toggleSidebar} />
+        <Header onMenuClick={toggleSidebar} isMenuOpen={sidebarOpen} />
         <div className="plans-content">
           <div className="plans-hero">
             <div className="plans-hero-bg">
