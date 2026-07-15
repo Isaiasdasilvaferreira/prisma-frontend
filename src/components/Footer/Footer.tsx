@@ -33,16 +33,32 @@ export function Footer() {
           <div className="footer-section">
             <h3 className="footer-section-title">Produto</h3>
             <ul className="footer-links">
-              <li><Link to="/#planos">Planos</Link></li>
-              <li><a href="#">Comunidade</a></li>
+              <li>
+                <a href="#planos">Planos</a>
+              </li>
+              <li>
+                <a 
+                  href="https://www.linkedin.com/groups/32800069/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                >
+                  Comunidade
+                </a>
+              </li>
             </ul>
           </div>
 
           <div className="footer-section">
             <h3 className="footer-section-title">Empresa</h3>
             <ul className="footer-links">
-              <li><Link to="/#quem-somos">Quem somos</Link></li>
-              <li><a href="#">Contato</a></li>
+              <li>
+                <a href="#quem-somos">Quem somos</a>
+              </li>
+              <li>
+                <a href="mailto:prismaanalytics80@gmail.com">
+                  Contato
+                </a>
+              </li>
             </ul>
           </div>
         </div>
