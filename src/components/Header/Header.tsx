@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useLocation } from 'react-router-dom';
-import { LogOut, ChevronDown, Menu, X } from 'lucide-react';
+import { LogOut, ChevronDown, Menu } from 'lucide-react';
 import './Header.css';
 
 interface HeaderProps {
@@ -58,7 +58,7 @@ export function Header({ onMenuClick, isMenuOpen }: HeaderProps) {
     <header className="header">
       <div className="header-left">
         <button className="header-hamburger" onClick={onMenuClick} aria-label="Menu">
-          {isMenuOpen ? <X size={20} color="#ec4899" /> : <Menu size={20} color="#ec4899" />}
+          <Menu size={20} color="#ec4899" />
         </button>
         <h1 className="header-title">{getPageTitle()}</h1>
       </div>
