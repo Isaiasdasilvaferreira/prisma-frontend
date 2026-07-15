@@ -334,7 +334,7 @@ function ContactModal({ opportunity, isOpen, onClose }: ContactModalProps) {
               <p className="modal-disclaimer">
                 Ao enviar, você concorda que a Prisma Analytics encaminhará seus dados para o contratante.
               </p>
-              <Button type="submit" size="lg" disabled={isSubmitting}>
+              <Button type="submit" size="lg" disabled={isSubmitting} variant="primary">
                 {isSubmitting ? 'Enviando...' : `Enviar via ${contactMethod === 'whatsapp' ? 'WhatsApp' : 'E-mail'}`}
               </Button>
             </div>
@@ -781,9 +781,6 @@ export function Dashboard() {
                               <span style={{ color: getSourceColor(opp.source) }}>
                                 {getSourceLabel(opp.source)}
                               </span>
-                              {isUserPosted && (
-                                <span className="user-posted-badge">Postada por usuário</span>
-                              )}
                             </div>
                             <h4 className="dashboard-opportunity-title">{opp.title}</h4>
                             <div className="dashboard-opportunity-meta">
