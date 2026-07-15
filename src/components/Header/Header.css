@@ -104,23 +104,25 @@
   color: #dc2626;
 }
 
-.header-menu-btn {
+.header-hamburger {
   display: none;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
-  color: #ec4899;
-  background: rgba(236, 72, 153, 0.06);
+  background: none;
   border: none;
+  color: #ec4899;
   cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
   flex-shrink: 0;
-  transition: background 0.2s ease;
 }
 
-.header-menu-btn:hover {
-  background: rgba(236, 72, 153, 0.1);
+.header-hamburger:hover {
+  background: rgba(236, 72, 153, 0.08);
+  color: #db2777;
+}
+
+.header-hamburger svg {
+  color: #ec4899;
 }
 
 .dashboard-container {
@@ -138,8 +140,10 @@
     height: 64px;
   }
 
-  .header-menu-btn {
+  .header-hamburger {
     display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .header-title {
@@ -159,29 +163,5 @@
     margin-top: 64px;
     padding: 16px;
     min-height: calc(100vh - 64px);
-  }
-}
-
-
-.header-hamburger {
-  display: none;
-  background: none;
-  border: none;
-  color: #1a1a2e;
-  cursor: pointer;
-  padding: 8px;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-}
-
-.header-hamburger:hover {
-  background: rgba(0, 0, 0, 0.04);
-}
-
-@media (max-width: 768px) {
-  .header-hamburger {
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 }
