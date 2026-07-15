@@ -343,7 +343,7 @@ class Api {
       return { data: response.data };
     } catch (error: any) {
       const errorMessage = error?.response?.data?.error || error?.message || '';
-      return { data: null, error: errorMessage || 'Erro ao se candidatar' };
+      return { data: null, error: errorMessage };
     }
   }
 
