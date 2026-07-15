@@ -1,14 +1,15 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useLocation } from 'react-router-dom';
-import { LogOut, ChevronDown, Menu } from 'lucide-react';
+import { LogOut, ChevronDown, Menu, X } from 'lucide-react';
 import './Header.css';
 
 interface HeaderProps {
   onMenuClick: () => void;
+  isMenuOpen?: boolean;
 }
 
-export function Header({ onMenuClick }: HeaderProps) {
+export function Header({ onMenuClick, isMenuOpen }: HeaderProps) {
   const { user, logout, token } = useAuth();
   const location = useLocation();
 
@@ -56,8 +57,8 @@ export function Header({ onMenuClick }: HeaderProps) {
   return (
     <header className="header">
       <div className="header-left">
-        <button className="header-menu-btn" onClick={onMenuClick} aria-label="Menu">
-          <Menu size={20} />
+        <button className="header-hamburger" onClick={onMenuClick} aria-label="Menu">
+          {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
         <h1 className="header-title">{getPageTitle()}</h1>
       </div>
