@@ -183,13 +183,15 @@ export function Tutorial() {
                           tendências de contratação e oportunidades por categoria.
                         </li>
                         <li>
-                          <strong>Alertas Automáticos:</strong> Configure notificações para receber 
-                          vagas que correspondam ao seu perfil.
-                        </li>
-                        <li>
                           <strong>Análise de Mercado:</strong> Acesse dados agregados sobre o mercado 
                           de trabalho, incluindo distribuição de salários, tecnologias mais requisitadas 
                           e crescimento por segmento.
+                        </li>
+                        <li>
+                          <strong>Conexões entre Páginas:</strong> A plataforma integra perfeitamente 
+                          todas as seções: Dashboard para visualização de oportunidades, Analytics para 
+                          análises detalhadas do mercado, Envio de Mensagens para contato com 
+                          contratantes, Tutorial para aprendizado e Planos para escalar seu uso.
                         </li>
                       </ul>
                     </section>
@@ -198,24 +200,31 @@ export function Tutorial() {
                       <h2>Como Utilizar</h2>
                       <ol>
                         <li>
-                          <strong>Cadastro:</strong> Crie sua conta com email e senha ou utilize 
-                          autenticação via Google/LinkedIn.
+                          <strong>Cadastro:</strong> Crie sua conta com email e senha
                         </li>
                         <li>
-                          <strong>Configuração de Perfil:</strong> Defina suas preferências de busca 
-                          incluindo tecnologias de interesse, nível de senioridade e localização.
+                          <strong>Login:</strong> Acesse a plataforma utilizando seu email e senha 
+                          cadastrados. O sistema não utiliza login via Google ou LinkedIn.
                         </li>
                         <li>
-                          <strong>Exploração:</strong> Navegue pelas vagas utilizando os filtros 
-                          disponíveis ou visualize recomendações personalizadas.
+                          <strong>Dashboard:</strong> Visualize todas as oportunidades disponíveis, 
+                          utilize os filtros para refinar sua busca e explore as vagas que mais se 
+                          adequam ao seu perfil.
                         </li>
                         <li>
-                          <strong>Favoritos e Alertas:</strong> Salve vagas de interesse e configure 
-                          alertas para ser notificado quando novas vagas compatíveis surgirem.
+                          <strong>Analytics:</strong> Acesse análises detalhadas sobre o mercado de 
+                          trabalho, incluindo distribuição de vagas por tipo de contrato, modalidade 
+                          de trabalho e outras métricas relevantes.
                         </li>
                         <li>
-                          <strong>Aplicação:</strong> Acesse a vaga diretamente na plataforma de 
-                          origem através do link fornecido e candidate-se.
+                          <strong>Envio de Mensagens:</strong> Entre em contato diretamente com os 
+                          contratantes através da plataforma, utilizando o formulário de contato 
+                          disponível em cada oportunidade.
+                        </li>
+                        <li>
+                          <strong>Planos:</strong> Escolha o plano que melhor atende às suas 
+                          necessidades para desbloquear recursos avançados e aumentar suas 
+                          chances de encontrar a oportunidade ideal.
                         </li>
                       </ol>
                     </section>
@@ -226,7 +235,7 @@ export function Tutorial() {
                         Para dúvidas, sugestões ou reportar problemas, entre em contato pelo e-mail:
                       </p>
                       <p>
-                        <strong>suporte@prisma.com</strong>
+                        <strong>prismaanalytics80@gmail.com</strong>
                       </p>
                     </section>
                   </div>
