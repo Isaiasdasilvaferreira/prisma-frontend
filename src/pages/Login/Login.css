@@ -536,3 +536,17 @@
     height: 40px;
   }
 }
+
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-credentials-auto-fill-button:hover,
+input[type="password"]::-webkit-textfield-decoration-container {
+  display: none !important;
+}
+
+input[type="password"]::-ms-reveal {
+  display: none !important;
+}
+
+input[type="password"]::-ms-clear {
+  display: none !important;
+}
