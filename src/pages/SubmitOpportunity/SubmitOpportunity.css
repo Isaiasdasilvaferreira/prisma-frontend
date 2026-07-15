@@ -1,6 +1,7 @@
 .submit-container {
-  max-width: 1000px;
+  max-width: 1260px;
   margin: 0 auto;
+  margin-top: 110px;
   padding: 8px 24px 80px;
 }
 
@@ -27,19 +28,22 @@
 
 .back-link:hover {
   color: #ec4899;
+  gap: 8px;
 }
 
 .submit-header {
   display: flex;
   align-items: center;
   gap: 14px;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f1f5f9;
 }
 
 .submit-icon-wrapper {
   width: 48px;
   height: 48px;
-  background: linear-gradient(135deg, rgba(236, 72, 153, 0.08), rgba(244, 114, 182, 0.04));
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(244, 114, 182, 0.05));
   border-radius: 14px;
   display: flex;
   align-items: center;
@@ -68,13 +72,13 @@
 .submit-form {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .form-group label {
@@ -89,12 +93,18 @@
 .form-group textarea {
   font-family: 'Inter', sans-serif;
   font-size: 14px;
-  padding: 10px 14px;
+  padding: 11px 14px;
   border: 2px solid #eef2f6;
   border-radius: 10px;
   background: #fafbfc;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   color: #1a1a2e;
+}
+
+.form-group input:hover,
+.form-group select:hover,
+.form-group textarea:hover {
+  border-color: #e2e8f0;
 }
 
 .form-group input:focus,
@@ -102,7 +112,7 @@
 .form-group textarea:focus {
   outline: none;
   border-color: #ec4899;
-  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.06);
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.08);
   background: #ffffff;
 }
 
@@ -113,13 +123,14 @@
 
 .form-group textarea {
   resize: vertical;
-  min-height: 90px;
+  min-height: 100px;
+  line-height: 1.5;
 }
 
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  gap: 16px;
 }
 
 .form-footer {
@@ -127,9 +138,20 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-top: 4px;
-  padding-top: 16px;
+  margin-top: 8px;
+  padding-top: 20px;
   border-top: 1px solid #eef2f6;
+}
+
+.form-footer .btn {
+  background: linear-gradient(135deg, #ec4899, #f472b6);
+  color: #ffffff;
+}
+
+.form-footer .btn:hover {
+  background: linear-gradient(135deg, #f472b6, #ec4899);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(236, 72, 153, 0.25);
 }
 
 .form-disclaimer {
@@ -155,12 +177,12 @@
   width: 72px;
   height: 72px;
   margin: 0 auto 20px;
-  background: rgba(236, 72, 153, 0.06);
+  background: rgba(34, 197, 94, 0.08);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ec4899;
+  color: #22c55e;
 }
 
 .submit-success h2 {
@@ -191,6 +213,72 @@
   min-width: 140px;
 }
 
+.submit-layout {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.submit-card {
+  flex: 1;
+  min-width: 0;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 32px 48px 40px;
+  border: 1px solid rgba(236, 72, 153, 0.06);
+  box-shadow: 0 4px 40px rgba(0, 0, 0, 0.04);
+}
+
+.submit-preview {
+  flex: 1;
+  min-width: 0;
+  position: sticky;
+  top: 110px;
+}
+
+.submit-preview-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.submit-preview-badge {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #ec4899;
+  background: rgba(236, 72, 153, 0.08);
+  padding: 3px 10px;
+  border-radius: 50px;
+}
+
+.submit-preview-header h3 {
+  color: #1a1a2e;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 6px 0;
+}
+
+.submit-preview-header p {
+  color: #94a3b8;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+@media (max-width: 1100px) {
+  .submit-layout {
+    flex-direction: column;
+  }
+
+  .submit-preview {
+    width: 100%;
+    position: static;
+  }
+}
+
 @media (max-width: 768px) {
   .submit-container {
     padding: 8px 16px 60px;
@@ -199,6 +287,11 @@
   .submit-card {
     padding: 24px 20px 28px;
     border-radius: 16px;
+  }
+
+  .submit-header {
+    margin-bottom: 20px;
+    padding-bottom: 16px;
   }
 
   .submit-header h1 {
@@ -276,7 +369,7 @@
   .form-group select,
   .form-group textarea {
     font-size: 13px;
-    padding: 8px 12px;
+    padding: 9px 12px;
   }
 
   .form-group label {
