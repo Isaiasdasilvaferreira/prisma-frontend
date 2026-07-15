@@ -300,7 +300,7 @@ function ContactModal({ opportunity, isOpen, onClose }: ContactModalProps) {
         return;
       }
       
-      setApplyError(errorMessage || 'Erro ao se candidatar. Tente novamente.');
+      setApplyError(errorMessage);
       setIsSubmitting(false);
     }
   };
