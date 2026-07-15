@@ -91,15 +91,6 @@ const faqItems = [
   { q: '***', a: '***' },
 ];
 
-const comparisons = [
-  { feature: 'Oportunidades', starter: '10/semana', professional: '***', enterprise: '***' },
-  { feature: 'Busca', starter: 'Básica', professional: '***', enterprise: '***' },
-  { feature: 'Suporte', starter: 'Email', professional: '***', enterprise: '***' },
-  { feature: 'Dashboard', starter: 'Básico', professional: '***', enterprise: '***' },
-  { feature: 'Gerador de mensagens', starter: '—', professional: '***', enterprise: '***' },
-  { feature: 'Filtros', starter: 'Básicos', professional: '***', enterprise: '***' },
-];
-
 export function Plans() {
   const navigate = useNavigate();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -215,36 +206,6 @@ export function Plans() {
                 </div>
               );
             })}
-          </div>
-
-          <div className="plans-comparison">
-            <div className="plans-comparison-header">
-              <h2 className="plans-comparison-title">Tabela comparativa</h2>
-              <p className="plans-comparison-subtitle">Compare todos os recursos detalhadamente</p>
-            </div>
-            
-            <div className="plans-comparison-table-wrapper">
-              <table className="plans-comparison-table">
-                <thead>
-                  <tr>
-                    <th>Recurso</th>
-                    <th><Zap size={13} /> Starter</th>
-                    <th className="col-pro"><Star size={13} /> Professional</th>
-                    <th><Building2 size={13} /> Enterprise</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {comparisons.map((row, i) => (
-                    <tr key={i}>
-                      <td className="col-feature">{row.feature}</td>
-                      <td>{row.starter}</td>
-                      <td className="col-pro">{row.professional}</td>
-                      <td>{row.enterprise}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
           </div>
 
           <div className="plans-trust">
