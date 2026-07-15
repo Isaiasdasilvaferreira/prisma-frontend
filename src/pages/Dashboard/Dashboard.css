@@ -775,20 +775,6 @@
   box-shadow: 0 2px 10px rgba(236, 72, 153, 0.1);
 }
 
-.user-posted-badge {
-  display: inline-flex;
-  align-items: center;
-  background: #ec4899;
-  color: #fff;
-  font-size: 9px;
-  font-weight: 700;
-  padding: 2px 10px;
-  border-radius: 20px;
-  letter-spacing: 0.5px;
-  margin-left: 8px;
-  text-transform: uppercase;
-}
-
 .dashboard-opportunity-item.user-posted-item .dashboard-opportunity-source span {
   color: #ec4899 !important;
   font-weight: 600;
