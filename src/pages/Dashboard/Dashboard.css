@@ -220,6 +220,7 @@
   background: #fff;
   border: 1px solid rgba(236, 72, 153, 0.06);
   border-radius: 12px;
+  flex: 1;
 }
 
 .dashboard-section-header {
@@ -228,6 +229,7 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 12px;
+  flex-shrink: 0;
 }
 
 .dashboard-section-header-left {
@@ -302,9 +304,10 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-height: 520px;
+  flex: 1;
   overflow-y: auto;
   padding-right: 4px;
+  min-height: 0;
 }
 
 .dashboard-opportunities-container::-webkit-scrollbar {
@@ -1025,7 +1028,8 @@
   }
 
   .dashboard-opportunities-container {
-    max-height: 400px;
+    max-height: none;
+    min-height: 200px;
   }
 }
 
@@ -1074,6 +1078,6 @@
   }
 
   .dashboard-opportunities-container {
-    max-height: 320px;
+    min-height: 150px;
   }
 }
