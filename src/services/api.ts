@@ -339,16 +339,10 @@ class Api {
       return { data: null, error: 'Opportunity ID is required' };
     }
     try {
-      const response = await this.post<UserOpportunityResponse>(`/user-opportunities/${id}/apply`);
-      if (response.error && (response.error.includes('fully booked') || response.error.includes('deactivated'))) {
-        return { data: null, error: 'OPPORTUNITY_FULLY_BOOKED' };
-      }
-      return response;
+      const response = await this.client.post<UserOpportunityResponse>(`/user-opportunities/${id}/apply`);
+      return { data: response.data };
     } catch (error: any) {
       const errorMessage = error?.response?.data?.error || error?.message || '';
-      if (errorMessage.includes('fully booked') || errorMessage.includes('deactivated') || errorMessage.includes('no vacancies')) {
-        return { data: null, error: 'OPPORTUNITY_FULLY_BOOKED' };
-      }
       return { data: null, error: errorMessage || 'Erro ao se candidatar' };
     }
   }
