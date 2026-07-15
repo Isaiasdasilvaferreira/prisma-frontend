@@ -53,6 +53,23 @@ interface UserOpportunity {
   updated_at: string;
 }
 
+interface CombinedOpportunity {
+  id: string;
+  external_id: string;
+  source: string;
+  company: string;
+  title: string;
+  contract_type: string;
+  modality: string;
+  location: string;
+  application_url: string;
+  is_active: boolean;
+  created_at: string;
+  salary?: string | null;
+  whatsapp?: string | null;
+  email?: string;
+}
+
 interface Stats {
   total: number;
   plan_type: string;
@@ -239,22 +256,42 @@ export function Dashboard() {
     );
   };
 
-  const getAllOpportunities = (): (Opportunity | UserOpportunity)[] => {
-    const allOpps: (Opportunity | UserOpportunity)[] = [
-      ...opportunities,
-      ...userOpportunities.map(opp => ({
-        ...opp,
-        external_id: opp.id,
-        source: 'freelancer',
-        service_type: 'Freelancer',
-        application_url: opp.whatsapp || `mailto:${opp.email}`,
-        is_active: opp.is_active
-      }))
-    ];
-    return allOpps;
+  const getAllOpportunities = (): CombinedOpportunity[] => {
+    const cltOpps: CombinedOpportunity[] = opportunities.map(opp => ({
+      id: opp.id,
+      external_id: opp.external_id,
+      source: opp.source,
+      company: opp.company,
+      title: opp.title,
+      contract_type: opp.contract_type,
+      modality: opp.modality,
+      location: opp.location || 'Remoto',
+      application_url: opp.application_url,
+      is_active: opp.is_active,
+      created_at: opp.created_at
+    }));
+
+    const freelanceOpps: CombinedOpportunity[] = userOpportunities.map(opp => ({
+      id: opp.id,
+      external_id: opp.id,
+      source: 'freelancer',
+      company: opp.company,
+      title: opp.title,
+      contract_type: opp.contract_type,
+      modality: opp.modality,
+      location: opp.location || 'Remoto',
+      application_url: opp.whatsapp || `mailto:${opp.email}`,
+      is_active: opp.is_active,
+      created_at: opp.created_at,
+      salary: opp.salary,
+      whatsapp: opp.whatsapp,
+      email: opp.email
+    }));
+
+    return [...cltOpps, ...freelanceOpps];
   };
 
-  const getFilteredOpportunities = () => {
+  const getFilteredOpportunities = (): CombinedOpportunity[] => {
     let filtered = getAllOpportunities();
 
     if (searchTerm) {
@@ -262,7 +299,7 @@ export function Dashboard() {
       filtered = filtered.filter(opp => 
         opp.title.toLowerCase().includes(term) ||
         opp.company.toLowerCase().includes(term) ||
-        (opp.location && opp.location.toLowerCase().includes(term))
+        opp.location.toLowerCase().includes(term)
       );
     }
 
