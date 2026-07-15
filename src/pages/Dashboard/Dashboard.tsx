@@ -163,6 +163,10 @@ export function Dashboard() {
     fetchStats();
   }, []);
 
+  useEffect(() => {
+    updateDashboardStats(opportunities, userOpportunities);
+  }, [opportunities, userOpportunities]);
+
   const fetchOpportunities = async () => {
     try {
       const response = await api.get<{ data: Opportunity[] }>('/opportunities');
@@ -170,7 +174,6 @@ export function Dashboard() {
       if (response.data && response.data.data) {
         const opportunitiesData = response.data.data;
         setOpportunities(opportunitiesData);
-        updateDashboardStats(opportunitiesData, userOpportunities);
       }
     } catch (error) {
       console.error('Error fetching opportunities:', error);
@@ -185,7 +188,6 @@ export function Dashboard() {
       
       if (response.data && Array.isArray(response.data)) {
         setUserOpportunities(response.data);
-        updateDashboardStats(opportunities, response.data);
       } else {
         setUserOpportunities([]);
       }
