@@ -393,7 +393,7 @@
 
 .plans-comparison-table thead tr {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr; /* Todas as colunas com a mesma proporção */
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
@@ -417,7 +417,7 @@
 
 .plans-comparison-table tbody tr {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr; /* Todas as colunas com a mesma proporção */
   border-bottom: 1px solid rgba(0, 0, 0, 0.03);
 }
 
@@ -436,10 +436,10 @@
 }
 
 .plans-comparison-table td.col-feature {
-  text-align: left;
+  text-align: center; /* Centralizado para ficar igual às outras colunas */
   color: #1a1a2e;
   font-weight: 500;
-  justify-content: flex-start;
+  justify-content: center; /* Centralizado para ficar igual às outras colunas */
 }
 
 .plans-comparison-table td.col-pro {
@@ -745,7 +745,7 @@
 
   .plans-comparison-table thead tr,
   .plans-comparison-table tbody tr {
-    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
   
   .plans-comparison-table th,
@@ -802,7 +802,7 @@
   
   .plans-comparison-table thead tr,
   .plans-comparison-table tbody tr {
-    grid-template-columns: 1.2fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
   
   .plans-comparison-table th,
@@ -1105,7 +1105,7 @@
 
   .plans-comparison-table thead tr,
   .plans-comparison-table tbody tr {
-    grid-template-columns: 1fr 0.8fr 0.8fr 0.8fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 
   .plans-comparison-table th,
