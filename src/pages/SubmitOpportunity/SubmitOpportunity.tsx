@@ -16,9 +16,43 @@ import {
 } from "lucide-react";
 import "./SubmitOpportunity.css";
 
+interface FormData {
+  titulo: string;
+  empresa: string;
+  tipo: string;
+  modalidade: string;
+  descricao: string;
+  responsabilidades: string;
+  requisitos: string;
+  localizacao: string;
+  salario: string;
+  quantidade: string;
+  email: string;
+  contato: string;
+}
+
+interface ApiResponse {
+  id: string;
+  title: string;
+  company: string;
+  contract_type: string;
+  modality: string;
+  location: string | null;
+  salary: string | null;
+  available_registration: number | null;
+  whatsapp: string | null;
+  email: string;
+  description: string;
+  responsibilities: string | null;
+  requirements: string | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export function SubmitOpportunity() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     titulo: "",
     empresa: "",
     tipo: "freelancer",
@@ -35,25 +69,65 @@ export function SubmitOpportunity() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
+    >
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    setError(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
-    setShowSuccess(true);
-    setTimeout(() => {
-      navigate("/");
-    }, 3000);
+    setError(null);
+
+    try {
+      const payload = {
+        title: formData.titulo,
+        company: formData.empresa,
+        contract_type: formData.tipo,
+        modality: formData.modalidade,
+        location: formData.localizacao || null,
+        salary: formData.salario || null,
+        available_registration: parseInt(formData.quantidade) || 1,
+        whatsapp: formData.contato || null,
+        email: formData.email,
+        description: formData.descricao,
+        responsibilities: formData.responsabilidades || null,
+        requirements: formData.requisitos || null,
+      };
+
+      const response = await fetch("http://localhost:8080/api/user-opportunities", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Erro ao enviar oportunidade");
+      }
+
+      const data: ApiResponse = await response.json();
+      console.log("Oportunidade enviada com sucesso:", data);
+
+      setIsSubmitting(false);
+      setShowSuccess(true);
+      setTimeout(() => {
+        navigate("/");
+      }, 3000);
+    } catch (err) {
+      console.error("Erro ao enviar:", err);
+      setError(err instanceof Error ? err.message : "Erro ao enviar oportunidade");
+      setIsSubmitting(false);
+    }
   };
 
   const previewOpportunity = {
@@ -99,8 +173,8 @@ export function SubmitOpportunity() {
             </div>
             <h2>Oportunidade enviada!</h2>
             <p>
-              Sua oportunidade foi publicada e já está visível para nossa
-              comunidade.
+              Sua oportunidade foi enviada e está aguardando aprovação da nossa
+              equipe. Você receberá um email quando for publicada.
             </p>
             <div className="success-actions">
               <Link to="/">
@@ -140,6 +214,12 @@ export function SubmitOpportunity() {
                 <p>Preencha os dados para publicar sua vaga ou projeto</p>
               </div>
             </div>
+
+            {error && (
+              <div className="error-message">
+                <p>{error}</p>
+              </div>
+            )}
 
             <form onSubmit={handleSubmit} className="submit-form">
               <div className="form-group">
@@ -311,7 +391,8 @@ export function SubmitOpportunity() {
 
               <div className="form-footer">
                 <p className="form-disclaimer">
-                  Ao enviar, você concorda que as informações são precisas.
+                  Ao enviar, você concorda que as informações são precisas. Sua
+                  oportunidade passará por uma análise antes de ser publicada.
                 </p>
                 <Button type="submit" size="lg" disabled={isSubmitting}>
                   {isSubmitting ? "Enviando..." : "Publicar Oportunidade"}
