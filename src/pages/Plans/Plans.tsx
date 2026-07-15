@@ -103,6 +103,10 @@ export function Plans() {
     navigate(plan.redirect);
   };
 
+  const handleSupportClick = () => {
+    window.location.href = 'mailto:prismaanalytics80@gmail.com';
+  };
+
   return (
     <div className="plans-page">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -273,7 +277,12 @@ export function Plans() {
               <p className="plans-cta-bottom-text">
                 Fale com nossa equipe de suporte. Respondemos em até 5 minutos.
               </p>
-              <Button variant="outline" size="lg" icon={<ArrowRight size={16} />}>
+              <Button 
+                variant="outline" 
+                size="lg" 
+                icon={<ArrowRight size={16} />}
+                onClick={handleSupportClick}
+              >
                 Falar com suporte
               </Button>
             </div>
