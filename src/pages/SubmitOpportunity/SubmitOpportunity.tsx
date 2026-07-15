@@ -367,9 +367,13 @@ export function SubmitOpportunity() {
                   Ao enviar, você concorda que as informações são precisas. Sua
                   oportunidade passará por uma análise antes de ser publicada.
                 </p>
-                <Button type="submit" size="lg" disabled={isSubmitting}>
+                <button 
+                  type="submit" 
+                  className="btn"
+                  disabled={isSubmitting}
+                >
                   {isSubmitting ? "Enviando..." : "Publicar Oportunidade"}
-                </Button>
+                </button>
               </div>
             </form>
           </div>
