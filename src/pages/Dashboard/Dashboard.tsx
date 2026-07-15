@@ -236,9 +236,17 @@ function ContactModal({ opportunity, isOpen, onClose }: ContactModalProps) {
       const applyResponse = await api.applyToOpportunity(opportunity.id);
       
       if (applyResponse.error) {
-        setApplyError(applyResponse.error);
-        setIsSubmitting(false);
-        return;
+        const isFullyBooked = applyResponse.error.includes('fully booked') || 
+                             applyResponse.error.includes('deactivated') ||
+                             applyResponse.error.includes('no vacancies');
+        
+        if (isFullyBooked) {
+          console.log('Oportunidade totalmente preenchida, continuando...');
+        } else {
+          setApplyError(applyResponse.error);
+          setIsSubmitting(false);
+          return;
+        }
       }
 
       const message = `Contato vindo da Prisma Analytics\n\nNome: ${formData.nome}\nPitch: ${formData.pitch}\nPortfólio: ${formData.portfolio}\nLinkedIn: ${formData.linkedin || 'Não informado'}\n\nOportunidade: ${opportunity.title} - ${opportunity.company}`;
@@ -256,8 +264,33 @@ function ContactModal({ opportunity, isOpen, onClose }: ContactModalProps) {
         setSuccess(false);
         onClose();
       }, 3000);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error applying to opportunity:', error);
+      
+      const errorMessage = error?.response?.data?.error || error?.message || '';
+      const isFullyBooked = errorMessage.includes('fully booked') || 
+                           errorMessage.includes('deactivated') ||
+                           errorMessage.includes('no vacancies');
+      
+      if (isFullyBooked) {
+        const message = `Contato vindo da Prisma Analytics\n\nNome: ${formData.nome}\nPitch: ${formData.pitch}\nPortfólio: ${formData.portfolio}\nLinkedIn: ${formData.linkedin || 'Não informado'}\n\nOportunidade: ${opportunity.title} - ${opportunity.company}`;
+
+        if (contactMethod === 'whatsapp' && opportunity.whatsapp) {
+          const phone = opportunity.whatsapp.replace(/\D/g, '');
+          window.open(`https://wa.me/55${phone}?text=${encodeURIComponent(message)}`, '_blank');
+        } else if (contactMethod === 'email' && opportunity.email) {
+          window.location.href = `mailto:${opportunity.email}?subject=Contato sobre oportunidade: ${opportunity.title}&body=${encodeURIComponent(message)}`;
+        }
+
+        setSuccess(true);
+        setIsSubmitting(false);
+        setTimeout(() => {
+          setSuccess(false);
+          onClose();
+        }, 3000);
+        return;
+      }
+      
       setApplyError('Erro ao se candidatar. Tente novamente.');
       setIsSubmitting(false);
     }
