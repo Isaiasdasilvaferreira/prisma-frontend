@@ -36,6 +36,56 @@ interface LoginResponse {
   error?: string;
 }
 
+export interface CreateUserOpportunityRequest {
+  title: string;
+  company: string;
+  contract_type: string;
+  modality: string;
+  location: string | null;
+  salary: string | null;
+  available_registration: number;
+  whatsapp: string | null;
+  email: string;
+  description: string;
+  responsibilities: string | null;
+  requirements: string | null;
+}
+
+export interface UpdateUserOpportunityRequest {
+  title?: string;
+  company?: string;
+  contract_type?: string;
+  modality?: string;
+  location?: string | null;
+  salary?: string | null;
+  available_registration?: number;
+  whatsapp?: string | null;
+  email?: string;
+  description?: string;
+  responsibilities?: string | null;
+  requirements?: string | null;
+  is_active?: boolean;
+}
+
+export interface UserOpportunityResponse {
+  id: string;
+  title: string;
+  company: string;
+  contract_type: string;
+  modality: string;
+  location: string | null;
+  salary: string | null;
+  available_registration: number | null;
+  whatsapp: string | null;
+  email: string;
+  description: string;
+  responsibilities: string | null;
+  requirements: string | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 class Api {
   private client: AxiosInstance;
   private currentToken: string | null = null;
@@ -251,6 +301,39 @@ class Api {
       responseType: 'blob',
     });
     return response.data;
+  }
+
+  async createUserOpportunity(data: CreateUserOpportunityRequest): Promise<ApiResponse<UserOpportunityResponse>> {
+    return this.post<UserOpportunityResponse>('/user-opportunities', data);
+  }
+
+  async getUserOpportunities(isActive?: boolean): Promise<ApiResponse<UserOpportunityResponse[]>> {
+    const query = isActive !== undefined ? `?is_active=${isActive}` : '';
+    return this.get<UserOpportunityResponse[]>(`/user-opportunities${query}`);
+  }
+
+  async getUserOpportunity(id: string): Promise<ApiResponse<UserOpportunityResponse>> {
+    return this.get<UserOpportunityResponse>(`/user-opportunities/${id}`);
+  }
+
+  async updateUserOpportunity(id: string, data: UpdateUserOpportunityRequest): Promise<ApiResponse<UserOpportunityResponse>> {
+    return this.put<UserOpportunityResponse>(`/user-opportunities/${id}`, data);
+  }
+
+  async deleteUserOpportunity(id: string): Promise<ApiResponse<void>> {
+    return this.delete<void>(`/user-opportunities/${id}`);
+  }
+
+  async approveUserOpportunity(id: string): Promise<ApiResponse<UserOpportunityResponse>> {
+    return this.patch<UserOpportunityResponse>(`/user-opportunities/${id}/approve`);
+  }
+
+  async rejectUserOpportunity(id: string): Promise<ApiResponse<UserOpportunityResponse>> {
+    return this.patch<UserOpportunityResponse>(`/user-opportunities/${id}/reject`);
+  }
+
+  private async patch<T>(endpoint: string, body?: unknown): Promise<ApiResponse<T>> {
+    return this.request<T>('PATCH', endpoint, body);
   }
 }
 
