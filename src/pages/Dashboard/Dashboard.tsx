@@ -43,6 +43,8 @@ interface UserOpportunity {
   location: string | null;
   salary: string | null;
   available_registration: number | null;
+  remaining_vacancies: number | null;
+  applicant_ids: string[];
   whatsapp: string | null;
   email: string;
   description: string;
@@ -72,6 +74,8 @@ interface CombinedOpportunity {
   responsibilities?: string | null;
   requirements?: string | null;
   available_registration?: number | null;
+  remaining_vacancies?: number | null;
+  applicant_ids?: string[];
 }
 
 interface Stats {
@@ -162,6 +166,9 @@ function DetailModal({ opportunity, isOpen, onClose, onContact }: DetailModalPro
           {opportunity.available_registration && (
             <span><Users size={16} /> {opportunity.available_registration} vagas</span>
           )}
+          {opportunity.remaining_vacancies !== undefined && opportunity.remaining_vacancies !== null && (
+            <span><Users size={16} /> Restam: {opportunity.remaining_vacancies}</span>
+          )}
         </div>
 
         {opportunity.description && (
@@ -186,16 +193,16 @@ function DetailModal({ opportunity, isOpen, onClose, onContact }: DetailModalPro
         )}
 
         {opportunity.source === 'user_posted' && (
-  <div className="detail-modal-contact">
-    <button 
-      className="modal-submit-button"
-      onClick={onContact}
-    >
-      <MessageCircle size={18} style={{ marginRight: '8px' }} />
-      Contatar
-    </button>
-  </div>
-)}
+          <div className="detail-modal-contact">
+            <button 
+              className="modal-submit-button"
+              onClick={onContact}
+            >
+              <MessageCircle size={18} style={{ marginRight: '8px' }} />
+              Contatar
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -211,6 +218,7 @@ function ContactModal({ opportunity, isOpen, onClose }: ContactModalProps) {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [applyError, setApplyError] = useState<string | null>(null);
 
   if (!isOpen || !opportunity) return null;
 
@@ -222,22 +230,37 @@ function ContactModal({ opportunity, isOpen, onClose }: ContactModalProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setApplyError(null);
 
-    const message = `Contato vindo da Prisma Analytics\n\nNome: ${formData.nome}\nPitch: ${formData.pitch}\nPortfólio: ${formData.portfolio}\nLinkedIn: ${formData.linkedin || 'Não informado'}\n\nOportunidade: ${opportunity.title} - ${opportunity.company}`;
+    try {
+      const applyResponse = await api.applyToOpportunity(opportunity.id);
+      
+      if (applyResponse.error) {
+        setApplyError(applyResponse.error);
+        setIsSubmitting(false);
+        return;
+      }
 
-    if (contactMethod === 'whatsapp' && opportunity.whatsapp) {
-      const phone = opportunity.whatsapp.replace(/\D/g, '');
-      window.open(`https://wa.me/55${phone}?text=${encodeURIComponent(message)}`, '_blank');
-    } else if (contactMethod === 'email' && opportunity.email) {
-      window.location.href = `mailto:${opportunity.email}?subject=Contato sobre oportunidade: ${opportunity.title}&body=${encodeURIComponent(message)}`;
+      const message = `Contato vindo da Prisma Analytics\n\nNome: ${formData.nome}\nPitch: ${formData.pitch}\nPortfólio: ${formData.portfolio}\nLinkedIn: ${formData.linkedin || 'Não informado'}\n\nOportunidade: ${opportunity.title} - ${opportunity.company}`;
+
+      if (contactMethod === 'whatsapp' && opportunity.whatsapp) {
+        const phone = opportunity.whatsapp.replace(/\D/g, '');
+        window.open(`https://wa.me/55${phone}?text=${encodeURIComponent(message)}`, '_blank');
+      } else if (contactMethod === 'email' && opportunity.email) {
+        window.location.href = `mailto:${opportunity.email}?subject=Contato sobre oportunidade: ${opportunity.title}&body=${encodeURIComponent(message)}`;
+      }
+
+      setSuccess(true);
+      setIsSubmitting(false);
+      setTimeout(() => {
+        setSuccess(false);
+        onClose();
+      }, 3000);
+    } catch (error) {
+      console.error('Error applying to opportunity:', error);
+      setApplyError('Erro ao se candidatar. Tente novamente.');
+      setIsSubmitting(false);
     }
-
-    setSuccess(true);
-    setIsSubmitting(false);
-    setTimeout(() => {
-      setSuccess(false);
-      onClose();
-    }, 3000);
   };
 
   return (
@@ -250,7 +273,25 @@ function ContactModal({ opportunity, isOpen, onClose }: ContactModalProps) {
         <div className="modal-header">
           <h3>Contatar sobre: {opportunity.title}</h3>
           <p className="modal-company">{opportunity.company}</p>
+          {opportunity.remaining_vacancies !== undefined && opportunity.remaining_vacancies !== null && (
+            <p style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>
+              Vagas restantes: {opportunity.remaining_vacancies}
+            </p>
+          )}
         </div>
+
+        {applyError && (
+          <div style={{ 
+            background: '#fee2e2', 
+            color: '#dc2626', 
+            padding: '10px 14px', 
+            borderRadius: '8px',
+            marginBottom: '16px',
+            fontSize: '14px'
+          }}>
+            {applyError}
+          </div>
+        )}
 
         {success ? (
           <div className="modal-success">
@@ -532,7 +573,9 @@ export function Dashboard() {
       description: opp.description,
       responsibilities: opp.responsibilities,
       requirements: opp.requirements,
-      available_registration: opp.available_registration
+      available_registration: opp.available_registration,
+      remaining_vacancies: opp.remaining_vacancies,
+      applicant_ids: opp.applicant_ids
     }));
 
     return [...cltOpps, ...freelanceOpps];
@@ -808,6 +851,12 @@ export function Dashboard() {
                                 <span className="dashboard-opportunity-vacancies">
                                   <Users size={14} />
                                   {opp.available_registration} vagas
+                                </span>
+                              )}
+                              {isUserPosted && opp.remaining_vacancies !== undefined && opp.remaining_vacancies !== null && (
+                                <span className="dashboard-opportunity-remaining">
+                                  <Users size={14} />
+                                  Restam: {opp.remaining_vacancies}
                                 </span>
                               )}
                             </div>
