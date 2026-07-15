@@ -15,7 +15,7 @@ import {
   ArrowUpRight, Bookmark, DollarSign, Globe, Building2,
   AlertCircle, ChevronRight, TrendingDown, Activity,
   LayoutDashboard, PieChart, Send, GraduationCap, Settings,
-  Sliders, ListFilter, Lock, Sparkle, Heart, Loader2, Users
+  Sliders, ListFilter, Lock, Sparkle, Heart, Loader2, Users, X, MessageCircle, Mail
 } from 'lucide-react';
 import './Dashboard.css';
 
@@ -91,6 +91,12 @@ interface DashboardStats {
   matchRate: string;
 }
 
+interface ContactModalProps {
+  opportunity: CombinedOpportunity | null;
+  isOpen: boolean;
+  onClose: () => void;
+}
+
 const filterOptions = {
   modalidades: [
     'Remoto',
@@ -124,6 +130,148 @@ const filterOptions = {
   ]
 };
 
+function ContactModal({ opportunity, isOpen, onClose }: ContactModalProps) {
+  const [contactMethod, setContactMethod] = useState<'whatsapp' | 'email'>('whatsapp');
+  const [formData, setFormData] = useState({
+    nome: '',
+    pitch: '',
+    portfolio: '',
+    linkedin: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  if (!isOpen || !opportunity) return null;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    const message = `Contato vindo da Prisma Analytics\n\nNome: ${formData.nome}\nPitch: ${formData.pitch}\nPortfólio: ${formData.portfolio}\nLinkedIn: ${formData.linkedin || 'Não informado'}\n\nOportunidade: ${opportunity.title} - ${opportunity.company}`;
+
+    if (contactMethod === 'whatsapp' && opportunity.whatsapp) {
+      const phone = opportunity.whatsapp.replace(/\D/g, '');
+      window.open(`https://wa.me/55${phone}?text=${encodeURIComponent(message)}`, '_blank');
+    } else if (contactMethod === 'email' && opportunity.email) {
+      window.location.href = `mailto:${opportunity.email}?subject=Contato sobre oportunidade: ${opportunity.title}&body=${encodeURIComponent(message)}`;
+    }
+
+    setSuccess(true);
+    setIsSubmitting(false);
+    setTimeout(() => {
+      setSuccess(false);
+      onClose();
+    }, 3000);
+  };
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <button className="modal-close" onClick={onClose}>
+          <X size={20} />
+        </button>
+        
+        <div className="modal-header">
+          <h3>Contatar sobre: {opportunity.title}</h3>
+          <p className="modal-company">{opportunity.company}</p>
+        </div>
+
+        {success ? (
+          <div className="modal-success">
+            <CheckCircle2 size={48} />
+            <h4>Mensagem enviada!</h4>
+            <p>Sua mensagem foi encaminhada com sucesso.</p>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="modal-form">
+            <div className="modal-contact-methods">
+              <button
+                type="button"
+                className={`modal-method-btn ${contactMethod === 'whatsapp' ? 'active' : ''}`}
+                onClick={() => setContactMethod('whatsapp')}
+                disabled={!opportunity.whatsapp}
+              >
+                <MessageCircle size={18} />
+                WhatsApp
+              </button>
+              <button
+                type="button"
+                className={`modal-method-btn ${contactMethod === 'email' ? 'active' : ''}`}
+                onClick={() => setContactMethod('email')}
+                disabled={!opportunity.email}
+              >
+                <Mail size={18} />
+                E-mail
+              </button>
+            </div>
+
+            <div className="modal-form-group">
+              <label>Nome Completo *</label>
+              <input
+                type="text"
+                name="nome"
+                value={formData.nome}
+                onChange={handleChange}
+                placeholder="Seu nome completo"
+                required
+              />
+            </div>
+
+            <div className="modal-form-group">
+              <label>Texto de Apresentação / Pitch *</label>
+              <textarea
+                name="pitch"
+                value={formData.pitch}
+                onChange={handleChange}
+                placeholder="Fale sobre você, sua experiência e por que se interessou pela oportunidade..."
+                rows={4}
+                required
+              />
+            </div>
+
+            <div className="modal-form-group">
+              <label>Link do Portfólio (Behance, Dribbble, etc) *</label>
+              <input
+                type="url"
+                name="portfolio"
+                value={formData.portfolio}
+                onChange={handleChange}
+                placeholder="https://behance.net/seu-portfolio"
+                required
+              />
+            </div>
+
+            <div className="modal-form-group">
+              <label>Link do LinkedIn (opcional)</label>
+              <input
+                type="url"
+                name="linkedin"
+                value={formData.linkedin}
+                onChange={handleChange}
+                placeholder="https://linkedin.com/in/seu-perfil"
+              />
+            </div>
+
+            <div className="modal-form-footer">
+              <p className="modal-disclaimer">
+                Ao enviar, você concorda que a Prisma Analytics encaminhará seus dados para o contratante.
+              </p>
+              <Button type="submit" size="lg" disabled={isSubmitting}>
+                {isSubmitting ? 'Enviando...' : `Enviar via ${contactMethod === 'whatsapp' ? 'WhatsApp' : 'E-mail'}`}
+              </Button>
+            </div>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export function Dashboard() {
   const { user } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -142,6 +290,8 @@ export function Dashboard() {
     messages: 0,
     matchRate: '0%'
   });
+  const [selectedOpportunity, setSelectedOpportunity] = useState<CombinedOpportunity | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [filters, setFilters] = useState({
     modalidades: [] as string[],
@@ -263,6 +413,11 @@ export function Dashboard() {
     );
   };
 
+  const handleContactClick = (opp: CombinedOpportunity) => {
+    setSelectedOpportunity(opp);
+    setIsModalOpen(true);
+  };
+
   const getAllOpportunities = (): CombinedOpportunity[] => {
     const cltOpps: CombinedOpportunity[] = opportunities.map(opp => ({
       id: opp.id,
@@ -281,7 +436,7 @@ export function Dashboard() {
     const freelanceOpps: CombinedOpportunity[] = userOpportunities.map(opp => ({
       id: opp.id,
       external_id: opp.id,
-      source: 'freelancer',
+      source: 'user_posted',
       company: opp.company,
       title: opp.title,
       contract_type: 'Freelancer',
@@ -328,7 +483,7 @@ export function Dashboard() {
   };
 
   const getSourceIcon = (source: string) => {
-    if (source === 'freelancer') return <Users size={14} />;
+    if (source === 'user_posted') return <Users size={14} />;
     switch(source) {
       case 'ashby': return <Building2 size={14} />;
       case 'greenhouse': return <Globe size={14} />;
@@ -338,7 +493,7 @@ export function Dashboard() {
   };
 
   const getSourceColor = (source: string) => {
-    if (source === 'freelancer') return '#8b5cf6';
+    if (source === 'user_posted') return '#ec4899';
     switch(source) {
       case 'ashby': return '#ec4899';
       case 'greenhouse': return '#10b981';
@@ -348,7 +503,7 @@ export function Dashboard() {
   };
 
   const getSourceLabel = (source: string) => {
-    if (source === 'freelancer') return 'Freelancer';
+    if (source === 'user_posted') return 'Postada por usuário';
     return source.charAt(0).toUpperCase() + source.slice(1);
   };
 
@@ -534,11 +689,11 @@ export function Dashboard() {
                 ) : (
                   <div className="dashboard-opportunities-list">
                     {filteredOpportunities.map((opp) => {
-                      const isFreelancer = opp.source === 'freelancer';
+                      const isUserPosted = opp.source === 'user_posted';
                       return (
                         <div 
                           key={opp.external_id} 
-                          className={`dashboard-opportunity-item ${isFreelancer ? 'freelancer-item' : ''}`}
+                          className={`dashboard-opportunity-item ${isUserPosted ? 'user-posted-item' : ''}`}
                         >
                           <div className="dashboard-opportunity-main">
                             <div className="dashboard-opportunity-source">
@@ -546,8 +701,8 @@ export function Dashboard() {
                               <span style={{ color: getSourceColor(opp.source) }}>
                                 {getSourceLabel(opp.source)}
                               </span>
-                              {isFreelancer && (
-                                <span className="freelancer-badge">Freelancer</span>
+                              {isUserPosted && (
+                                <span className="user-posted-badge">Postada por usuário</span>
                               )}
                             </div>
                             <h4 className="dashboard-opportunity-title">{opp.title}</h4>
@@ -564,30 +719,30 @@ export function Dashboard() {
                                 <Briefcase size={14} />
                                 {opp.contract_type || 'CLT'}
                               </span>
-                              {isFreelancer && opp.salary && (
+                              {isUserPosted && opp.salary && (
                                 <span className="dashboard-opportunity-salary">
                                   <DollarSign size={14} />
                                   {opp.salary}
                                 </span>
                               )}
-                              {isFreelancer && opp.available_registration && (
+                              {isUserPosted && opp.available_registration && (
                                 <span className="dashboard-opportunity-vacancies">
                                   <Users size={14} />
                                   {opp.available_registration} vagas
                                 </span>
                               )}
                             </div>
-                            {isFreelancer && opp.description && (
+                            {isUserPosted && opp.description && (
                               <div className="dashboard-opportunity-description">
                                 <p>{opp.description}</p>
                               </div>
                             )}
-                            {isFreelancer && opp.responsibilities && (
+                            {isUserPosted && opp.responsibilities && (
                               <div className="dashboard-opportunity-responsibilities">
                                 <span>Responsabilidades: {opp.responsibilities}</span>
                               </div>
                             )}
-                            {isFreelancer && opp.requirements && (
+                            {isUserPosted && opp.requirements && (
                               <div className="dashboard-opportunity-requirements">
                                 <span>Requisitos: {opp.requirements}</span>
                               </div>
@@ -600,15 +755,25 @@ export function Dashboard() {
                             >
                               <Heart size={18} fill={savedOpps.includes(opp.external_id) ? '#ec4899' : 'none'} />
                             </button>
-                            <a 
-                              href={opp.application_url} 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                              className="dashboard-apply-button"
-                            >
-                              {isFreelancer ? 'Contatar' : 'Ver Vaga'}
-                              <ArrowUpRight size={14} />
-                            </a>
+                            {isUserPosted ? (
+                              <button 
+                                className="dashboard-contact-button"
+                                onClick={() => handleContactClick(opp)}
+                              >
+                                Contatar
+                                <ArrowUpRight size={14} />
+                              </button>
+                            ) : (
+                              <a 
+                                href={opp.application_url} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="dashboard-apply-button"
+                              >
+                                Ver Vaga
+                                <ArrowUpRight size={14} />
+                              </a>
+                            )}
                           </div>
                         </div>
                       );
@@ -726,6 +891,15 @@ export function Dashboard() {
           </div>
         </div>
       </div>
+
+      <ContactModal 
+        opportunity={selectedOpportunity}
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedOpportunity(null);
+        }}
+      />
     </div>
   );
 }
