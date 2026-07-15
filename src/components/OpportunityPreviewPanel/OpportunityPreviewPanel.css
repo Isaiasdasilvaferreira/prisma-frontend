@@ -1,0 +1,241 @@
+.opportunity-preview-panel {
+  margin-top: 12px;
+  background: #ffffff;
+  border: 1px solid rgba(236, 72, 153, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(236, 72, 153, 0.05);
+  overflow: hidden;
+  animation: panelAppear 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+  container-type: inline-size;
+  container-name: preview-panel;
+}
+
+/* Header */
+
+.preview-header {
+  position: relative;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(236, 72, 153, 0.06);
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.03), rgba(244, 114, 182, 0.01));
+}
+
+.preview-company-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ec4899, #f472b6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.preview-header-info {
+  flex: 1;
+}
+
+.preview-company {
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.preview-header h2 {
+  margin-top: 4px;
+  margin-bottom: 10px;
+  color: #1a1a2e;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.preview-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.preview-badges span {
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: rgba(236, 72, 153, 0.06);
+  border: 1px solid rgba(236, 72, 153, 0.1);
+  color: #ec4899;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Body */
+
+.preview-body {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 18px;
+  padding: 20px 24px;
+}
+
+/* Main */
+
+.preview-main {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.preview-main section {
+  background: #fafbfc;
+  border: 1px solid rgba(236, 72, 153, 0.05);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.preview-main h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #1a1a2e;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.preview-main h3 svg {
+  color: #ec4899;
+}
+
+.preview-main p {
+  color: #64748b;
+  line-height: 1.6;
+  font-size: 13px;
+}
+
+.preview-main ul {
+  margin-left: 16px;
+  color: #64748b;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  line-height: 1.5;
+  font-size: 13px;
+}
+
+/* Sidebar */
+
+.preview-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.preview-card {
+  background: #fafbfc;
+  border: 1px solid rgba(236, 72, 153, 0.05);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.preview-card h4 {
+  color: #1a1a2e;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.preview-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.preview-info:last-child {
+  margin-bottom: 0;
+}
+
+.preview-info svg {
+  color: #ec4899;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.preview-info div {
+  display: flex;
+  flex-direction: column;
+}
+
+.preview-info span {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.preview-info strong {
+  color: #1a1a2e;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+/* Botão */
+
+.preview-apply-button {
+  width: 100%;
+  margin-top: 4px;
+}
+
+/* Responsivo (reage à largura do PRÓPRIO painel, não da tela) */
+
+@container preview-panel (max-width: 550px) {
+  .preview-body {
+    grid-template-columns: 1fr;
+  }
+}
+
+@container preview-panel (max-width: 420px) {
+  .preview-header {
+    padding: 18px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .preview-header h2 {
+    font-size: 20px;
+  }
+
+  .preview-body {
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .preview-main section {
+    padding: 14px;
+  }
+
+  .preview-card {
+    padding: 14px;
+  }
+}
+
+/* Animação */
+
+@keyframes panelAppear {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.preview-empty-hint {
+  color: #b0b8c4;
+  font-style: italic;
+  font-size: 13px;
+}
