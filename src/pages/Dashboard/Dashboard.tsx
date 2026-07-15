@@ -284,7 +284,7 @@ export function Dashboard() {
       source: 'freelancer',
       company: opp.company,
       title: opp.title,
-      contract_type: opp.contract_type,
+      contract_type: 'Freelancer',
       modality: opp.modality,
       location: opp.location || 'Remoto',
       application_url: opp.whatsapp || `mailto:${opp.email}`,
