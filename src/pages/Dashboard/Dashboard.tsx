@@ -186,18 +186,16 @@ function DetailModal({ opportunity, isOpen, onClose, onContact }: DetailModalPro
         )}
 
         {opportunity.source === 'user_posted' && (
-          <div className="detail-modal-contact">
-            <Button 
-              variant="primary" 
-              size="lg" 
-              icon={<MessageCircle size={18} />}
-              onClick={onContact}
-              fullWidth
-            >
-              Contatar
-            </Button>
-          </div>
-        )}
+  <div className="detail-modal-contact">
+    <button 
+      className="modal-submit-button"
+      onClick={onContact}
+    >
+      <MessageCircle size={18} style={{ marginRight: '8px' }} />
+      Contatar
+    </button>
+  </div>
+)}
       </div>
     </div>
   );
