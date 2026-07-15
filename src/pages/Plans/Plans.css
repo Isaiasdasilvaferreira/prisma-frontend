@@ -356,6 +356,7 @@
   margin: 0 auto;
   width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .plans-comparison-header {
@@ -381,18 +382,19 @@
   border-radius: 12px;
   background: #ffffff;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
-  min-width: 0;
+  -webkit-overflow-scrolling: touch;
 }
 
 .plans-comparison-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 500px;
+  min-width: 600px;
 }
 
 .plans-comparison-table thead tr {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .plans-comparison-table th {
@@ -403,7 +405,6 @@
   color: #94a3b8;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -417,6 +418,11 @@
 .plans-comparison-table tbody tr {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.plans-comparison-table tbody tr:last-child {
+  border-bottom: none;
 }
 
 .plans-comparison-table td {
@@ -424,13 +430,16 @@
   text-align: center;
   font-size: 13px;
   color: #64748b;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .plans-comparison-table td.col-feature {
   text-align: left;
   color: #1a1a2e;
   font-weight: 500;
+  justify-content: flex-start;
 }
 
 .plans-comparison-table td.col-pro {
@@ -440,10 +449,6 @@
 
 .plans-comparison-table tbody tr:hover {
   background: rgba(236, 72, 153, 0.02);
-}
-
-.plans-comparison-table tbody tr:last-child td {
-  border-bottom: none;
 }
 
 .plans-trust {
@@ -672,7 +677,7 @@
   }
 
   .plans-comparison-table {
-    min-width: 400px;
+    min-width: 500px;
   }
 }
 
@@ -735,7 +740,7 @@
   }
 
   .plans-comparison-table {
-    min-width: 380px;
+    min-width: 480px;
   }
 
   .plans-comparison-table thead tr,
@@ -787,6 +792,27 @@
 
   .plans-hero-grid {
     background-size: 24px 24px;
+  }
+}
+
+@media (max-width: 580px) {
+  .plans-comparison-table {
+    min-width: 380px;
+  }
+  
+  .plans-comparison-table thead tr,
+  .plans-comparison-table tbody tr {
+    grid-template-columns: 1.2fr 1fr 1fr 1fr;
+  }
+  
+  .plans-comparison-table th,
+  .plans-comparison-table td {
+    padding: 8px 10px;
+    font-size: 10px;
+  }
+  
+  .plans-comparison-table td.col-feature {
+    font-size: 10px;
   }
 }
 
@@ -941,17 +967,21 @@
   .plans-comparison-table th,
   .plans-comparison-table td {
     padding: 8px 8px;
-    font-size: 10px;
+    font-size: 9px;
   }
 
   .plans-comparison-table th {
-    font-size: 9px;
+    font-size: 8px;
     padding: 10px 8px;
   }
 
   .plans-comparison-table th svg {
     width: 10px;
     height: 10px;
+  }
+
+  .plans-comparison-table td.col-feature {
+    font-size: 9px;
   }
 
   .plans-faq-header {
@@ -1073,13 +1103,22 @@
     min-width: 280px;
   }
 
+  .plans-comparison-table thead tr,
+  .plans-comparison-table tbody tr {
+    grid-template-columns: 1fr 0.8fr 0.8fr 0.8fr;
+  }
+
   .plans-comparison-table th,
   .plans-comparison-table td {
     padding: 6px 6px;
-    font-size: 9px;
+    font-size: 8px;
   }
 
   .plans-comparison-table th {
+    font-size: 7px;
+  }
+
+  .plans-comparison-table td.col-feature {
     font-size: 8px;
   }
 
