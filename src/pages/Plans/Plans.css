@@ -339,10 +339,23 @@
   font-weight: 600;
 }
 
+.plan-gradient-starter .btn {
+  background: rgba(148, 163, 184, 0.15) !important;
+  color: #475569 !important;
+  border: 1px solid rgba(148, 163, 184, 0.20) !important;
+}
+
+.plan-gradient-starter .btn:hover {
+  background: rgba(148, 163, 184, 0.25) !important;
+  border-color: rgba(148, 163, 184, 0.30) !important;
+  box-shadow: 0 8px 32px rgba(148, 163, 184, 0.10) !important;
+}
+
 .plans-comparison {
   max-width: 900px;
   margin: 0 auto;
   width: 100%;
+  overflow-x: auto;
 }
 
 .plans-comparison-header {
@@ -368,12 +381,13 @@
   border-radius: 12px;
   background: #ffffff;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+  min-width: 0;
 }
 
 .plans-comparison-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 400px;
+  min-width: 500px;
 }
 
 .plans-comparison-table thead tr {
@@ -656,6 +670,10 @@
   .plans-hero-title {
     font-size: 30px;
   }
+
+  .plans-comparison-table {
+    min-width: 400px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -705,13 +723,19 @@
     grid-template-columns: 1fr 1fr;
   }
 
-  .plans-comparison-table-wrapper {
+  .plans-comparison {
     margin: 0 -16px;
+  }
+
+  .plans-comparison-table-wrapper {
+    margin: 0;
     border-radius: 0;
+    border-left: none;
+    border-right: none;
   }
 
   .plans-comparison-table {
-    min-width: 350px;
+    min-width: 380px;
   }
 
   .plans-comparison-table thead tr,
@@ -890,6 +914,18 @@
     height: 16px;
   }
 
+  .plans-comparison {
+    margin: 0 -12px;
+  }
+
+  .plans-comparison-table {
+    min-width: 320px;
+  }
+
+  .plans-comparison-table-wrapper {
+    border-radius: 0;
+  }
+
   .plans-comparison-header {
     margin-bottom: 16px;
   }
@@ -900,14 +936,6 @@
 
   .plans-comparison-subtitle {
     font-size: 12px;
-  }
-
-  .plans-comparison-table-wrapper {
-    margin: 0 -12px;
-  }
-
-  .plans-comparison-table {
-    min-width: 300px;
   }
 
   .plans-comparison-table th,
@@ -1042,7 +1070,7 @@
   }
 
   .plans-comparison-table {
-    min-width: 260px;
+    min-width: 280px;
   }
 
   .plans-comparison-table th,
