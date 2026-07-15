@@ -233,6 +233,26 @@ function ContactModal({ opportunity, isOpen, onClose }: ContactModalProps) {
     setApplyError(null);
 
     try {
+      const applyResponse = await api.applyToOpportunity(opportunity.id);
+      
+      if (applyResponse.error) {
+        if (applyResponse.error.includes('already applied')) {
+          setApplyError('Você já enviou uma proposta para esta oportunidade.');
+          setIsSubmitting(false);
+          return;
+        }
+        
+        const isFullyBooked = applyResponse.error.includes('fully booked') || 
+                             applyResponse.error.includes('deactivated') ||
+                             applyResponse.error.includes('no vacancies');
+        
+        if (!isFullyBooked) {
+          setApplyError(applyResponse.error);
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
       const message = `Contato vindo da Prisma Analytics\n\nNome: ${formData.nome}\nPitch: ${formData.pitch}\nPortfólio: ${formData.portfolio}\nLinkedIn: ${formData.linkedin || 'Não informado'}\n\nOportunidade: ${opportunity.title} - ${opportunity.company}`;
 
       if (contactMethod === 'whatsapp' && opportunity.whatsapp) {
@@ -240,12 +260,6 @@ function ContactModal({ opportunity, isOpen, onClose }: ContactModalProps) {
         window.open(`https://wa.me/55${phone}?text=${encodeURIComponent(message)}`, '_blank');
       } else if (contactMethod === 'email' && opportunity.email) {
         window.location.href = `mailto:${opportunity.email}?subject=Contato sobre oportunidade: ${opportunity.title}&body=${encodeURIComponent(message)}`;
-      }
-
-      const applyResponse = await api.applyToOpportunity(opportunity.id);
-      
-      if (applyResponse.error && applyResponse.error !== 'OPPORTUNITY_FULLY_BOOKED') {
-        console.warn('Erro ao registrar candidatura:', applyResponse.error);
       }
 
       setSuccess(true);
@@ -256,12 +270,40 @@ function ContactModal({ opportunity, isOpen, onClose }: ContactModalProps) {
       }, 3000);
     } catch (error: any) {
       console.error('Error:', error);
-      setSuccess(true);
+      
+      const errorMessage = error?.response?.data?.error || error?.message || '';
+      
+      if (errorMessage.includes('already applied')) {
+        setApplyError('Você já enviou uma proposta para esta oportunidade.');
+        setIsSubmitting(false);
+        return;
+      }
+      
+      const isFullyBooked = errorMessage.includes('fully booked') || 
+                           errorMessage.includes('deactivated') ||
+                           errorMessage.includes('no vacancies');
+      
+      if (isFullyBooked) {
+        const message = `Contato vindo da Prisma Analytics\n\nNome: ${formData.nome}\nPitch: ${formData.pitch}\nPortfólio: ${formData.portfolio}\nLinkedIn: ${formData.linkedin || 'Não informado'}\n\nOportunidade: ${opportunity.title} - ${opportunity.company}`;
+
+        if (contactMethod === 'whatsapp' && opportunity.whatsapp) {
+          const phone = opportunity.whatsapp.replace(/\D/g, '');
+          window.open(`https://wa.me/55${phone}?text=${encodeURIComponent(message)}`, '_blank');
+        } else if (contactMethod === 'email' && opportunity.email) {
+          window.location.href = `mailto:${opportunity.email}?subject=Contato sobre oportunidade: ${opportunity.title}&body=${encodeURIComponent(message)}`;
+        }
+
+        setSuccess(true);
+        setIsSubmitting(false);
+        setTimeout(() => {
+          setSuccess(false);
+          onClose();
+        }, 3000);
+        return;
+      }
+      
+      setApplyError('Erro ao se candidatar. Tente novamente.');
       setIsSubmitting(false);
-      setTimeout(() => {
-        setSuccess(false);
-        onClose();
-      }, 3000);
     }
   };
 
