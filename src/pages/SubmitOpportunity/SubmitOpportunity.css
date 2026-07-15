@@ -184,7 +184,7 @@
   color: #94a3b8;
   margin: 0;
   flex: 1;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .submit-success {
@@ -251,6 +251,7 @@
   top: 110px;
   align-self: flex-start;
   height: fit-content;
+  max-width: 100%;
 }
 
 .submit-preview-header {
