@@ -2,13 +2,20 @@
   display: none;
   position: fixed;
   inset: 0;
+  width: 100vw;
+  height: 100vh;
   background: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   z-index: 40;
+  top: 0;
+  left: 0;
+  pointer-events: none;
 }
 
 .sidebar-overlay.visible {
   display: block;
+  pointer-events: auto;
 }
 
 .sidebar-close {
@@ -39,6 +46,8 @@
   top: 0;
   z-index: 50;
   transition: transform 0.3s ease;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .sidebar-header {
@@ -47,6 +56,7 @@
   justify-content: space-between;
   padding: 20px 20px;
   border-bottom: 1px solid rgba(236, 72, 153, 0.06);
+  flex-shrink: 0;
 }
 
 .sidebar-logo-link {
@@ -90,6 +100,7 @@
   opacity: 0;
   position: relative;
   z-index: 51;
+  cursor: pointer;
 }
 
 .sidebar-item:hover {
@@ -107,11 +118,13 @@
   width: 20px;
   height: 20px;
   color: currentColor;
+  flex-shrink: 0;
 }
 
 .sidebar-sparkle {
   margin-left: auto;
   opacity: 0.4;
+  flex-shrink: 0;
 }
 
 .sidebar-footer {
@@ -119,6 +132,7 @@
   border-top: 1px solid rgba(236, 72, 153, 0.06);
   position: relative;
   z-index: 51;
+  flex-shrink: 0;
 }
 
 .sidebar-upgrade {
@@ -154,6 +168,7 @@
   border-radius: 8px;
   background: rgba(236, 72, 153, 0.1);
   color: #ec4899;
+  flex-shrink: 0;
 }
 
 .sidebar-upgrade-title {
@@ -171,6 +186,11 @@
 .sidebar-upgrade-sparkle {
   margin-left: auto;
   animation: sparkle 1.5s infinite;
+  flex-shrink: 0;
+}
+
+body.sidebar-open {
+  overflow: hidden;
 }
 
 @keyframes fadeInUp {
@@ -192,6 +212,11 @@
 @media (max-width: 768px) {
   .sidebar-overlay {
     z-index: 40;
+    pointer-events: none;
+  }
+
+  .sidebar-overlay.visible {
+    pointer-events: auto;
   }
   
   .sidebar {
