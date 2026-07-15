@@ -58,7 +58,7 @@ export function Header({ onMenuClick, isMenuOpen }: HeaderProps) {
     <header className="header">
       <div className="header-left">
         <button className="header-hamburger" onClick={onMenuClick} aria-label="Menu">
-          {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          {isMenuOpen ? <X size={20} color="#ec4899" /> : <Menu size={20} color="#ec4899" />}
         </button>
         <h1 className="header-title">{getPageTitle()}</h1>
       </div>
