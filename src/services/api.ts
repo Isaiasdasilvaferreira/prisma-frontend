@@ -76,6 +76,8 @@ export interface UserOpportunityResponse {
   location: string | null;
   salary: string | null;
   available_registration: number | null;
+  remaining_vacancies: number | null;
+  applicant_ids: string[];
   whatsapp: string | null;
   email: string;
   description: string;
@@ -330,6 +332,14 @@ class Api {
 
   async rejectUserOpportunity(id: string): Promise<ApiResponse<UserOpportunityResponse>> {
     return this.patch<UserOpportunityResponse>(`/user-opportunities/${id}/reject`);
+  }
+
+  async applyToOpportunity(id: string): Promise<ApiResponse<UserOpportunityResponse>> {
+    return this.post<UserOpportunityResponse>(`/user-opportunities/${id}/apply`);
+  }
+
+  async getUserApplications(): Promise<ApiResponse<UserOpportunityResponse[]>> {
+    return this.get<UserOpportunityResponse[]>('/user-applications');
   }
 
   private async patch<T>(endpoint: string, body?: unknown): Promise<ApiResponse<T>> {
