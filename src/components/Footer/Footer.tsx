@@ -33,9 +33,7 @@ export function Footer() {
           <div className="footer-section">
             <h3 className="footer-section-title">Produto</h3>
             <ul className="footer-links">
-              <li><Link to="/#como-funciona">Como funciona</Link></li>
               <li><Link to="/#planos">Planos</Link></li>
-              <li><Link to="/#beneficios">Benefícios</Link></li>
               <li><a href="#">Comunidade</a></li>
             </ul>
           </div>
@@ -45,15 +43,6 @@ export function Footer() {
             <ul className="footer-links">
               <li><Link to="/#quem-somos">Quem somos</Link></li>
               <li><a href="#">Contato</a></li>
-            </ul>
-          </div>
-
-          <div className="footer-section">
-            <h3 className="footer-section-title">Legal</h3>
-            <ul className="footer-links">
-              <li><a href="#">Política de Privacidade</a></li>
-              <li><a href="#">Termos de Uso</a></li>
-              <li><a href="#">Cookies</a></li>
             </ul>
           </div>
         </div>
