@@ -335,6 +335,9 @@ class Api {
   }
 
   async applyToOpportunity(id: string): Promise<ApiResponse<UserOpportunityResponse>> {
+    if (!id) {
+      return { data: null, error: 'Opportunity ID is required' };
+    }
     return this.post<UserOpportunityResponse>(`/user-opportunities/${id}/apply`);
   }
 
