@@ -63,50 +63,50 @@ export function Landing() {
   const testimonials = [
     {
       name: 'Ana Silva',
-      role: 'UI Designer Freelancer',
-      text: 'A Prisma mudou completamente minha forma de encontrar clientes. Em um mês, consegui três projetos que pagaram mais do que eu ganhava em três meses.',
+      role: 'UI Designer',
+      text: 'A Prisma transformou completamente a forma como encontro trabalho. Em um mês, consegui três projetos incríveis que pagaram muito melhor do que eu estava acostumada.',
       avatar: 'AS',
-      stats: 'Faturamento 3x maior',
+      stats: 'Faturamento triplicou',
       color: '#ec4899'
     },
     {
       name: 'Carlos Mendes',
-      role: 'Design Director na StudioX',
-      text: 'Nossa agência reduziu o tempo de prospecção em 80%. Agora focamos no que realmente importa: criar designs incríveis para nossos clientes.',
+      role: 'Design Gráfico',
+      text: 'Reduzi o tempo que gastava procurando clientes em 80%. Agora posso dedicar mais tempo ao que realmente importa: criar designs incríveis.',
       avatar: 'CM',
       stats: '80% menos tempo',
       color: '#f472b6'
     },
     {
       name: 'Julia Costa',
-      role: 'Motion Designer Sênior',
-      text: 'As oportunidades que a IA encontra são extremamente relevantes. Não perco mais tempo filtrando vagas que não têm nada a ver comigo.',
+      role: 'Motion Designer',
+      text: 'As oportunidades que chegam até mim são sempre relevantes. Não perco mais tempo com projetos que não combinam com meu estilo e habilidades.',
       avatar: 'JC',
-      stats: '95% de relevância',
+      stats: 'Projetos relevantes',
       color: '#db2777'
     },
     {
       name: 'Pedro Santos',
       role: 'Brand Designer',
-      text: 'Consegui clientes internacionais que eu jamais alcançaria sozinho. A plataforma expandiu meus horizontes profissionais.',
+      text: 'Consegui clientes internacionais que eu jamais alcançaria sozinho. A plataforma abriu portas que eu nem sabia que existiam.',
       avatar: 'PS',
-      stats: 'Clientes em 5 países',
+      stats: 'Clientes no exterior',
       color: '#ec4899'
     },
     {
       name: 'Marina Lima',
-      role: 'UX Designer Pleno',
-      text: 'Desde que comecei a usar a Prisma, minha carteira de clientes nunca mais ficou vazia. A IA encontra projetos que realmente combinam comigo.',
+      role: 'UX Designer',
+      text: 'Minha carteira de clientes nunca mais ficou vazia. A ferramenta encontra projetos que realmente fazem sentido para minha carreira.',
       avatar: 'ML',
-      stats: '100% de ocupação',
+      stats: 'Sempre com projetos',
       color: '#be185d'
     },
     {
       name: 'Lucas Ferreira',
       role: 'Product Designer',
-      text: 'A melhor ferramenta de prospecção que já usei. A IA é precisa e as oportunidades são de alta qualidade. Recomendo para todo designer.',
+      text: 'A melhor ferramenta de prospecção que já usei. As oportunidades são de alta qualidade e sempre alinhadas com meu perfil profissional.',
       avatar: 'LF',
-      stats: '98% de satisfação',
+      stats: 'Recomendo para todos',
       color: '#f472b6'
     }
   ];
@@ -226,7 +226,7 @@ export function Landing() {
               <h2 className="section-title">O que é a Prisma?</h2>
               <p className="about-text">
                 Somos uma plataforma que <strong>inverte o processo de prospecção</strong>.
-                Em vez de você perder horas procurando clientes, nossa IA trabalha
+                Em vez de você perder horas procurando clientes, nossa ferramenta trabalha
                 incansavelmente para encontrar as oportunidades certas para você.
               </p>
               <div className="about-highlights">
@@ -268,14 +268,14 @@ export function Landing() {
                 icon: MousePointer2,
                 title: 'Configure seu perfil',
                 desc: 'Defina seus serviços, habilidades e preferências de trabalho.',
-                details: 'Escolha sua área de atuação, habilidades e preferências para que nossa IA encontre oportunidades compatíveis com seu perfil.'
+                details: 'Escolha sua área de atuação, habilidades e preferências para que nossa ferramenta encontre oportunidades compatíveis com seu perfil.'
               },
               {
                 num: '02',
                 icon: Zap,
-                title: 'IA monitora 24/7',
+                title: 'Monitoramento 24/7',
                 desc: 'Monitoramos milhares de fontes simultaneamente.',
-                details: 'Nossa IA analisa constantemente editais, redes sociais e plataformas de freelancers em busca das melhores oportunidades.'
+                details: 'Nossa plataforma analisa constantemente editais, redes sociais e plataformas de freelancers em busca das melhores oportunidades.'
               },
               {
                 num: '03',
@@ -341,7 +341,7 @@ export function Landing() {
       <section id="depoimentos" className="section section-alt">
         <div className="section-container">
           <div className="section-header reveal">
-            <span className="section-label">Social proof</span>
+            <span className="section-label">Depoimentos</span>
             <h2 className="section-title">O que eles dizem</h2>
             <p className="section-subtitle">Designers reais, resultados reais</p>
           </div>
@@ -565,7 +565,7 @@ export function Landing() {
                 Pronto para parar de procurar?
               </h2>
               <p className="cta-card-subtitle">
-                Deixe a IA encontrar as melhores oportunidades para você.
+                Deixe a ferramenta encontrar as melhores oportunidades para você.
               </p>
               <div className="cta-card-actions">
                 <Link to="/register">
