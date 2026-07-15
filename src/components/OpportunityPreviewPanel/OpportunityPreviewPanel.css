@@ -12,8 +12,6 @@
   container-name: preview-panel;
 }
 
-/* Header */
-
 .preview-header {
   position: relative;
   display: flex;
@@ -71,16 +69,12 @@
   font-weight: 500;
 }
 
-/* Body */
-
 .preview-body {
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 18px;
   padding: 20px 24px;
 }
-
-/* Main */
 
 .preview-main {
   display: flex;
@@ -124,8 +118,6 @@
   line-height: 1.5;
   font-size: 13px;
 }
-
-/* Sidebar */
 
 .preview-sidebar {
   display: flex;
@@ -181,14 +173,10 @@
   margin-top: 2px;
 }
 
-/* Botão */
-
 .preview-apply-button {
   width: 100%;
   margin-top: 4px;
 }
-
-/* Responsivo (reage à largura do PRÓPRIO painel, não da tela) */
 
 @container preview-panel (max-width: 550px) {
   .preview-body {
@@ -220,8 +208,6 @@
     padding: 14px;
   }
 }
-
-/* Animação */
 
 @keyframes panelAppear {
   from {
