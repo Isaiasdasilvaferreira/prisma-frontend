@@ -338,7 +338,19 @@ class Api {
     if (!id) {
       return { data: null, error: 'Opportunity ID is required' };
     }
-    return this.post<UserOpportunityResponse>(`/user-opportunities/${id}/apply`);
+    try {
+      const response = await this.post<UserOpportunityResponse>(`/user-opportunities/${id}/apply`);
+      if (response.error && (response.error.includes('fully booked') || response.error.includes('deactivated'))) {
+        return { data: null, error: 'OPPORTUNITY_FULLY_BOOKED' };
+      }
+      return response;
+    } catch (error: any) {
+      const errorMessage = error?.response?.data?.error || error?.message || '';
+      if (errorMessage.includes('fully booked') || errorMessage.includes('deactivated') || errorMessage.includes('no vacancies')) {
+        return { data: null, error: 'OPPORTUNITY_FULLY_BOOKED' };
+      }
+      return { data: null, error: errorMessage || 'Erro ao se candidatar' };
+    }
   }
 
   async getUserApplications(): Promise<ApiResponse<UserOpportunityResponse[]>> {
