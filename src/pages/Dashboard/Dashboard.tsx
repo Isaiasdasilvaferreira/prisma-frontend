@@ -68,6 +68,10 @@ interface CombinedOpportunity {
   salary?: string | null;
   whatsapp?: string | null;
   email?: string;
+  description?: string;
+  responsibilities?: string | null;
+  requirements?: string | null;
+  available_registration?: number | null;
 }
 
 interface Stats {
@@ -204,13 +208,12 @@ export function Dashboard() {
 
   const updateDashboardStats = (opps: Opportunity[], userOpps: UserOpportunity[]) => {
     const total = opps.length + userOpps.length;
-    const matchRate = total > 0 ? Math.min(100, Math.round((total / 10) * 100)) : 0;
 
     setDashboardStats({
       opportunities: total,
       newThisWeek: total,
       messages: 0,
-      matchRate: `${matchRate}%`
+      matchRate: total > 0 ? `${Math.min(100, Math.round((total / 10) * 100))}%` : '0%'
     });
   };
 
@@ -287,7 +290,11 @@ export function Dashboard() {
       created_at: opp.created_at,
       salary: opp.salary,
       whatsapp: opp.whatsapp,
-      email: opp.email
+      email: opp.email,
+      description: opp.description,
+      responsibilities: opp.responsibilities,
+      requirements: opp.requirements,
+      available_registration: opp.available_registration
     }));
 
     return [...cltOpps, ...freelanceOpps];
@@ -555,7 +562,23 @@ export function Dashboard() {
                                   {opp.salary}
                                 </span>
                               )}
+                              {isFreelancer && opp.available_registration && (
+                                <span className="dashboard-opportunity-vacancies">
+                                  <Users size={14} />
+                                  {opp.available_registration} vagas
+                                </span>
+                              )}
                             </div>
+                            {isFreelancer && opp.description && (
+                              <div className="dashboard-opportunity-description">
+                                <p>{opp.description.substring(0, 120)}...</p>
+                              </div>
+                            )}
+                            {isFreelancer && opp.responsibilities && (
+                              <div className="dashboard-opportunity-responsibilities">
+                                <span>Responsabilidades: {opp.responsibilities}</span>
+                              </div>
+                            )}
                           </div>
                           <div className="dashboard-opportunity-actions">
                             <button 
