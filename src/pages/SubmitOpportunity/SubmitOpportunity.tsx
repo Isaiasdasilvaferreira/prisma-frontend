@@ -14,6 +14,7 @@ import {
   Building2,
   Users,
 } from "lucide-react";
+import { api, CreateUserOpportunityRequest } from "../../services/api";
 import "./SubmitOpportunity.css";
 
 interface FormData {
@@ -29,25 +30,6 @@ interface FormData {
   quantidade: string;
   email: string;
   contato: string;
-}
-
-interface ApiResponse {
-  id: string;
-  title: string;
-  company: string;
-  contract_type: string;
-  modality: string;
-  location: string | null;
-  salary: string | null;
-  available_registration: number | null;
-  whatsapp: string | null;
-  email: string;
-  description: string;
-  responsibilities: string | null;
-  requirements: string | null;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
 }
 
 export function SubmitOpportunity() {
@@ -87,7 +69,7 @@ export function SubmitOpportunity() {
     setError(null);
 
     try {
-      const payload = {
+      const payload: CreateUserOpportunityRequest = {
         title: formData.titulo,
         company: formData.empresa,
         contract_type: formData.tipo,
@@ -102,22 +84,13 @@ export function SubmitOpportunity() {
         requirements: formData.requisitos || null,
       };
 
-      const response = await fetch("http://localhost:8080/api/user-opportunities", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
+      const response = await api.createUserOpportunity(payload);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Erro ao enviar oportunidade");
+      if (response.error) {
+        throw new Error(response.error);
       }
 
-      const data: ApiResponse = await response.json();
-      console.log("Oportunidade enviada com sucesso:", data);
-
+      console.log("Oportunidade enviada com sucesso:", response.data);
       setIsSubmitting(false);
       setShowSuccess(true);
       setTimeout(() => {
