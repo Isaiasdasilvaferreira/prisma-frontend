@@ -4,7 +4,7 @@ import { Header } from '../../components/Header/Header';
 import { Card } from '../../components/Card/Card';
 import { Button } from '../../components/Button/Button';
 import { 
-  Send, MessageSquare, Sparkles,Copy, CheckCircle,
+  Send, MessageSquare, Sparkles, Copy, CheckCircle,
   Building2, User, Mail, Briefcase, Globe, Phone
 } from 'lucide-react';
 import messagesData from '../../data/messages.json';
@@ -44,23 +44,23 @@ export function Messages() {
       const randomMessage = filteredMessages[Math.floor(Math.random() * filteredMessages.length)];
       
       let personalizedMessage = randomMessage.text
-        .replace(/{contactName}/g, formData.contactName || 'cliente')
-        .replace(/{companyName}/g, formData.companyName || 'sua empresa');
+        .replace(/{contactName}/g, formData.contactName || 'client')
+        .replace(/{companyName}/g, formData.companyName || 'your company');
 
       if (formData.contactType === 'whatsapp') {
         personalizedMessage = personalizedMessage
-          .replace(/Prezado\(a\)/g, 'Oi')
-          .replace(/Atenciosamente,/g, 'Abraço,')
-          .replace(/Vamos conversar\?/g, 'Bora conversar?')
-          .replace(/Gostaria de/g, 'Quero')
-          .replace(/Podemos agendar/g, 'Bora marcar')
-          .replace(/Ficarei feliz em/g, 'Adoraria');
+          .replace(/Dear/g, 'Hi')
+          .replace(/Sincerely,/g, 'Cheers,')
+          .replace(/Let's talk\?/g, 'Let\'s chat?')
+          .replace(/I would like to/g, 'I want to')
+          .replace(/We can schedule/g, 'Let\'s schedule')
+          .replace(/I will be happy to/g, 'I would love to');
       } else if (formData.contactType === 'linkedin') {
         personalizedMessage = personalizedMessage
-          .replace(/Olá,/g, 'Olá,')
-          .replace(/Atenciosamente,/g, 'Atenciosamente,')
-          .replace(/Gostaria de/g, 'Gostaria de')
-          .replace(/Vamos conversar\?/g, 'Vamos nos conectar e conversar?');
+          .replace(/Hello,/g, 'Hello,')
+          .replace(/Sincerely,/g, 'Sincerely,')
+          .replace(/I would like to/g, 'I would like to')
+          .replace(/Let's talk\?/g, 'Let\'s connect and chat?');
       }
 
       setGeneratedMessage(personalizedMessage);
@@ -77,7 +77,7 @@ export function Messages() {
   const sendEmail = () => {
     if (!formData.email || !generatedMessage) return;
     
-    const subject = formData.subject || `Proposta de trabalho - ${formData.companyName || 'Design'}`;
+    const subject = formData.subject || `Work proposal - ${formData.companyName || 'Design'}`;
     const mailtoLink = `mailto:${formData.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(generatedMessage)}`;
     window.open(mailtoLink, '_blank');
   };
@@ -97,7 +97,7 @@ export function Messages() {
       sendWhatsApp();
     } else if (formData.contactType === 'linkedin') {
       copyToClipboard();
-      alert('Mensagem copiada! Cole no LinkedIn para enviar.');
+      alert('Message copied! Paste it on LinkedIn to send.');
     }
   };
 
@@ -109,11 +109,11 @@ export function Messages() {
   };
 
   const getSendButtonText = () => {
-    if (!generatedMessage) return 'Gere uma mensagem primeiro';
-    if (formData.contactType === 'email') return 'Enviar por E-mail';
-    if (formData.contactType === 'whatsapp') return 'Enviar por WhatsApp';
-    if (formData.contactType === 'linkedin') return 'Copiar para LinkedIn';
-    return 'Enviar mensagem';
+    if (!generatedMessage) return 'Generate a message first';
+    if (formData.contactType === 'email') return 'Send by Email';
+    if (formData.contactType === 'whatsapp') return 'Send by WhatsApp';
+    if (formData.contactType === 'linkedin') return 'Copy to LinkedIn';
+    return 'Send message';
   };
 
   return (
@@ -124,9 +124,9 @@ export function Messages() {
         <div className="dashboard-content messages-content">
           <div className="messages-header">
             <div>
-              <h1 className="messages-title">Mensagens</h1>
+              <h1 className="messages-title">Messages</h1>
               <p className="messages-subtitle">
-                Gere mensagens personalizadas e envie diretamente pelo E-mail ou WhatsApp.
+                Generate personalized messages and send them directly via Email or WhatsApp.
               </p>
             </div>
           </div>
@@ -134,22 +134,22 @@ export function Messages() {
           <div className="messages-layout">
             <Card className="messages-form-card">
               <div className="messages-form-header">
-                <h3>Gerar mensagem personalizada</h3>
+                <h3>Generate personalized message</h3>
               </div>
 
               <form className="messages-form" onSubmit={(e) => { e.preventDefault(); generateMessage(); }}>
                 <div className="messages-form-row">
                   <div className="messages-form-group">
-                    <label>Tipo de trabalho</label>
+                    <label>Job type</label>
                     <select name="jobType" value={formData.jobType} onChange={handleChange} className="messages-form-select">
                       <option value="freelance">Freelance</option>
                       <option value="clt">CLT</option>
                     </select>
                   </div>
                   <div className="messages-form-group">
-                    <label>Tipo de contato</label>
+                    <label>Contact type</label>
                     <select name="contactType" value={formData.contactType} onChange={handleChange} className="messages-form-select">
-                      <option value="email">E-mail</option>
+                      <option value="email">Email</option>
                       <option value="whatsapp">WhatsApp</option>
                       <option value="linkedin">LinkedIn</option>
                     </select>
@@ -157,13 +157,13 @@ export function Messages() {
                 </div>
 
                 <div className="messages-form-group">
-                  <label>Nome da empresa / contratante</label>
+                  <label>Company / Client name</label>
                   <div className="messages-form-input-wrapper">
                     <Building2 size={16} className="messages-form-icon" />
                     <input 
                       type="text" 
                       name="companyName" 
-                      placeholder="Ex: TechCorp Brasil" 
+                      placeholder="Ex: TechCorp Brazil" 
                       value={formData.companyName}
                       onChange={handleChange}
                       className="messages-form-input"
@@ -172,13 +172,13 @@ export function Messages() {
                 </div>
 
                 <div className="messages-form-group">
-                  <label>Nome completo do contato</label>
+                  <label>Full contact name</label>
                   <div className="messages-form-input-wrapper">
                     <User size={16} className="messages-form-icon" />
                     <input 
                       type="text" 
                       name="contactName" 
-                      placeholder="Ex: João Silva" 
+                      placeholder="Ex: John Smith" 
                       value={formData.contactName}
                       onChange={handleChange}
                       className="messages-form-input"
@@ -189,13 +189,13 @@ export function Messages() {
                 {formData.contactType === 'email' && (
                   <>
                     <div className="messages-form-group">
-                      <label>E-mail do destinatário</label>
+                      <label>Recipient email</label>
                       <div className="messages-form-input-wrapper">
                         <Mail size={16} className="messages-form-icon" />
                         <input 
                           type="email" 
                           name="email" 
-                          placeholder="Ex: joao@empresa.com" 
+                          placeholder="Ex: john@company.com" 
                           value={formData.email}
                           onChange={handleChange}
                           className="messages-form-input"
@@ -204,13 +204,13 @@ export function Messages() {
                       </div>
                     </div>
                     <div className="messages-form-group">
-                      <label>Assunto do e-mail</label>
+                      <label>Email subject</label>
                       <div className="messages-form-input-wrapper">
                         <Briefcase size={16} className="messages-form-icon" />
                         <input 
                           type="text" 
                           name="subject" 
-                          placeholder="Ex: Proposta de trabalho - Design" 
+                          placeholder="Ex: Work proposal - Design" 
                           value={formData.subject}
                           onChange={handleChange}
                           className="messages-form-input"
@@ -222,7 +222,7 @@ export function Messages() {
 
                 {formData.contactType === 'whatsapp' && (
                   <div className="messages-form-group">
-                    <label>Número do WhatsApp (com DDD)</label>
+                    <label>WhatsApp number (with area code)</label>
                     <div className="messages-form-input-wrapper">
                       <Phone size={16} className="messages-form-icon" />
                       <input 
@@ -239,11 +239,11 @@ export function Messages() {
                 )}
 
                 <div className="messages-form-group">
-                  <label>Objetivo da mensagem</label>
+                  <label>Message goal</label>
                   <select name="messageGoal" value={formData.messageGoal} onChange={handleChange} className="messages-form-select">
-                    <option value="proposal">Proposta de trabalho</option>
-                    <option value="pitch">Pitch profissional</option>
-                    <option value="negotiation">Mensagem para negociação</option>
+                    <option value="proposal">Work proposal</option>
+                    <option value="pitch">Professional pitch</option>
+                    <option value="negotiation">Negotiation message</option>
                   </select>
                 </div>
 
@@ -258,10 +258,10 @@ export function Messages() {
                   {isGenerating ? (
                     <>
                       <span className="messages-spinner" />
-                      Gerando mensagem...
+                      Generating message...
                     </>
                   ) : (
-                    'Gerar mensagem'
+                    'Generate message'
                   )}
                 </Button>
               </form>
@@ -269,12 +269,12 @@ export function Messages() {
 
             <Card className="messages-result-card">
               <div className="messages-result-header">
-                <h3>Mensagem gerada</h3>
+                <h3>Generated message</h3>
                 <div className="messages-result-actions">
                   {generatedMessage && (
                     <button onClick={copyToClipboard} className="messages-result-btn">
                       {copied ? <CheckCircle size={16} /> : <Copy size={16} />}
-                      {copied ? 'Copiado!' : 'Copiar'}
+                      {copied ? 'Copied!' : 'Copy'}
                     </button>
                   )}
                 </div>
@@ -285,7 +285,7 @@ export function Messages() {
                 ) : (
                   <div className="messages-result-empty">
                     <MessageSquare size={40} />
-                    <p>Preencha os campos e clique em "Gerar mensagem"</p>
+                    <p>Fill in the fields and click "Generate message"</p>
                   </div>
                 )}
               </div>
