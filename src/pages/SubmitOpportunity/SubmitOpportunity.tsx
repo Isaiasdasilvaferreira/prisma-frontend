@@ -84,15 +84,15 @@ export function SubmitOpportunity() {
         throw new Error(response.error);
       }
 
-      console.log("Oportunidade enviada com sucesso:", response.data);
+      console.log("Opportunity submitted successfully:", response.data);
       setIsSubmitting(false);
       setShowSuccess(true);
       setTimeout(() => {
         navigate("/");
       }, 3000);
     } catch (err) {
-      console.error("Erro ao enviar:", err);
-      setError(err instanceof Error ? err.message : "Erro ao enviar oportunidade");
+      console.error("Error submitting:", err);
+      setError(err instanceof Error ? err.message : "Error submitting opportunity");
       setIsSubmitting(false);
     }
   };
@@ -106,19 +106,19 @@ export function SubmitOpportunity() {
             <div className="success-icon">
               <CheckCircle size={64} />
             </div>
-            <h2>Oportunidade enviada!</h2>
+            <h2>Opportunity submitted!</h2>
             <p>
-              Sua oportunidade foi enviada e está aguardando aprovação da nossa
-              equipe. Você receberá um email quando for publicada.
+              Your opportunity has been submitted and is awaiting approval from our
+              team. You will receive an email when it is published.
             </p>
             <div className="success-actions">
               <Link to="/">
                 <Button variant="outline" size="lg">
-                  Voltar para home
+                  Back to home
                 </Button>
               </Link>
               <Link to="/enviar-oportunidade">
-                <Button size="lg">Enviar outra</Button>
+                <Button size="lg">Submit another</Button>
               </Link>
             </div>
           </div>
@@ -136,7 +136,7 @@ export function SubmitOpportunity() {
         <div className="submit-card">
           <Link to="/" className="back-link">
             <ArrowLeft size={18} />
-            Voltar
+            Back
           </Link>
 
           <div className="submit-header">
@@ -144,8 +144,8 @@ export function SubmitOpportunity() {
               <Briefcase size={24} />
             </div>
             <div>
-              <h1>Enviar Oportunidade</h1>
-              <p>Preencha os dados para publicar sua vaga ou projeto</p>
+              <h1>Submit Opportunity</h1>
+              <p>Fill in the details to publish your job or project</p>
             </div>
           </div>
 
@@ -157,32 +157,32 @@ export function SubmitOpportunity() {
 
           <form onSubmit={handleSubmit} className="submit-form">
             <div className="form-group">
-              <label>Título da Oportunidade *</label>
+              <label>Opportunity Title *</label>
               <input
                 type="text"
                 name="titulo"
                 value={formData.titulo}
                 onChange={handleChange}
-                placeholder="Ex: Designer UI/UX para Startup"
+                placeholder="E.g.: UI/UX Designer for Startup"
                 required
               />
             </div>
 
             <div className="form-group">
-              <label>Empresa / Cliente *</label>
+              <label>Company / Client *</label>
               <input
                 type="text"
                 name="empresa"
                 value={formData.empresa}
                 onChange={handleChange}
-                placeholder="Ex: TechCorp"
+                placeholder="E.g.: TechCorp"
                 required
               />
             </div>
 
             <div className="form-row">
               <div className="form-group">
-                <label>Tipo *</label>
+                <label>Type *</label>
                 <select
                   name="tipo"
                   value={formData.tipo}
@@ -190,105 +190,105 @@ export function SubmitOpportunity() {
                   required
                 >
                   <option value="freelancer">Freelancer</option>
-                  <option value="vaga">Vaga de Emprego</option>
-                  <option value="projeto">Projeto</option>
+                  <option value="vaga">Job Opening</option>
+                  <option value="projeto">Project</option>
                 </select>
               </div>
 
               <div className="form-group">
-                <label>Modalidade *</label>
+                <label>Modality *</label>
                 <select
                   name="modalidade"
                   value={formData.modalidade}
                   onChange={handleChange}
                   required
                 >
-                  <option value="remoto">Remoto</option>
-                  <option value="presencial">Presencial</option>
-                  <option value="hibrido">Híbrido</option>
+                  <option value="remoto">Remote</option>
+                  <option value="presencial">On-site</option>
+                  <option value="hibrido">Hybrid</option>
                 </select>
               </div>
             </div>
 
             <div className="form-row">
               <div className="form-group">
-                <label>Localização</label>
+                <label>Location</label>
                 <input
                   type="text"
                   name="localizacao"
                   value={formData.localizacao}
                   onChange={handleChange}
-                  placeholder="Ex: São Paulo, SP"
+                  placeholder="E.g.: São Paulo, SP"
                 />
               </div>
 
               <div className="form-group">
-                <label>Salário (opcional)</label>
+                <label>Salary (optional)</label>
                 <input
                   type="text"
                   name="salario"
                   value={formData.salario}
                   onChange={handleChange}
-                  placeholder="Ex: R$ 5.000 - R$ 8.000"
+                  placeholder="E.g.: $5,000 - $8,000"
                 />
               </div>
             </div>
 
             <div className="form-row">
               <div className="form-group">
-                <label>Quantidade de inscrições *</label>
+                <label>Number of registrations *</label>
                 <select
                   name="quantidade"
                   value={formData.quantidade}
                   onChange={handleChange}
                   required
                 >
-                  <option value="1">1 inscrição</option>
-                  <option value="10">10 inscrições</option>
-                  <option value="20">20 inscrições</option>
-                  <option value="30">30 inscrições</option>
-                  <option value="40">40 inscrições</option>
-                  <option value="50">50 inscrições</option>
-                  <option value="60">60 inscrições</option>
-                  <option value="70">70 inscrições</option>
-                  <option value="80">80 inscrições</option>
-                  <option value="90">90 inscrições</option>
-                  <option value="100">100 inscrições</option>
+                  <option value="1">1 registration</option>
+                  <option value="10">10 registrations</option>
+                  <option value="20">20 registrations</option>
+                  <option value="30">30 registrations</option>
+                  <option value="40">40 registrations</option>
+                  <option value="50">50 registrations</option>
+                  <option value="60">60 registrations</option>
+                  <option value="70">70 registrations</option>
+                  <option value="80">80 registrations</option>
+                  <option value="90">90 registrations</option>
+                  <option value="100">100 registrations</option>
                 </select>
               </div>
 
               <div className="form-group">
-                <label>Contato / WhatsApp</label>
+                <label>Contact / WhatsApp</label>
                 <input
                   type="text"
                   name="contato"
                   value={formData.contato}
                   onChange={handleChange}
-                  placeholder="Ex: (11) 99999-9999"
+                  placeholder="E.g.: (11) 99999-9999"
                 />
               </div>
             </div>
 
             <div className="form-group">
-              <label>Descrição *</label>
+              <label>Description *</label>
               <textarea
                 name="descricao"
                 value={formData.descricao}
                 onChange={handleChange}
-                placeholder="Descreva a oportunidade, responsabilidades e requisitos..."
+                placeholder="Describe the opportunity, responsibilities, and requirements..."
                 rows={4}
                 required
               />
             </div>
 
             <div className="form-group">
-              <label>Responsabilidades *</label>
+              <label>Responsibilities *</label>
               <textarea
                 name="responsabilidades"
                 value={formData.responsabilidades}
                 onChange={handleChange}
                 placeholder={
-                  "Uma responsabilidade por linha. Ex:\nDesenvolver interfaces de usuário\nColaborar com o time de produto"
+                  "One responsibility per line. E.g.:\nDevelop user interfaces\nCollaborate with product team"
                 }
                 rows={4}
                 required
@@ -296,13 +296,13 @@ export function SubmitOpportunity() {
             </div>
 
             <div className="form-group">
-              <label>Requisitos *</label>
+              <label>Requirements *</label>
               <textarea
                 name="requisitos"
                 value={formData.requisitos}
                 onChange={handleChange}
                 placeholder={
-                  "Um requisito por linha. Ex:\nExperiência com Figma\nPortfólio atualizado"
+                  "One requirement per line. E.g.:\nExperience with Figma\nUpdated portfolio"
                 }
                 rows={4}
                 required
@@ -310,28 +310,28 @@ export function SubmitOpportunity() {
             </div>
 
             <div className="form-group">
-              <label>E-mail para contato *</label>
+              <label>Contact email *</label>
               <input
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="seu@email.com"
+                placeholder="you@email.com"
                 required
               />
             </div>
 
             <div className="form-footer">
               <p className="form-disclaimer">
-                Ao enviar, você concorda que as informações são precisas. Sua
-                oportunidade passará por uma análise antes de ser publicada.
+                By submitting, you agree that the information is accurate. Your
+                opportunity will go through a review before being published.
               </p>
               <button 
                 type="submit" 
                 className="btn"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? "Enviando..." : "Publicar Oportunidade"}
+                {isSubmitting ? "Submitting..." : "Publish Opportunity"}
               </button>
             </div>
           </form>
