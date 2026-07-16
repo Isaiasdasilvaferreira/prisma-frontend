@@ -15,7 +15,7 @@ export function Footer() {
               <span className="footer-logo-text">Prisma</span>
             </Link>
             <p className="footer-description">
-              A plataforma que conecta designers às melhores oportunidades do mercado.
+              The platform that connects designers to the best opportunities in the market.
             </p>
             <div className="footer-social">
               <a href="#" className="footer-social-link" aria-label="Instagram">
@@ -31,10 +31,10 @@ export function Footer() {
           </div>
 
           <div className="footer-section">
-            <h3 className="footer-section-title">Produto</h3>
+            <h3 className="footer-section-title">Product</h3>
             <ul className="footer-links">
               <li>
-                <a href="#planos">Planos</a>
+                <a href="#planos">Plans</a>
               </li>
               <li>
                 <a 
@@ -42,21 +42,21 @@ export function Footer() {
                   target="_blank" 
                   rel="noopener noreferrer"
                 >
-                  Comunidade
+                  Community
                 </a>
               </li>
             </ul>
           </div>
 
           <div className="footer-section">
-            <h3 className="footer-section-title">Empresa</h3>
+            <h3 className="footer-section-title">Company</h3>
             <ul className="footer-links">
               <li>
-                <a href="#quem-somos">Quem somos</a>
+                <a href="#quem-somos">About us</a>
               </li>
               <li>
                 <a href="mailto:prismaanalytics80@gmail.com">
-                  Contato
+                  Contact
                 </a>
               </li>
             </ul>
@@ -65,7 +65,7 @@ export function Footer() {
 
         <div className="footer-bottom">
           <p className="footer-copyright">
-            © {new Date().getFullYear()} Prisma. Todos os direitos reservados.
+            © {new Date().getFullYear()} Prisma. All rights reserved.
           </p>
         </div>
       </div>
