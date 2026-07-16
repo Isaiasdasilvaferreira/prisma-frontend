@@ -75,7 +75,7 @@ export function Navbar() {
               EN
             </button>
             <Link to="/login" className="navbar-login-btn">
-              Sign in
+              Login
             </Link>
             <Link to="/register" className="navbar-btn">
               <Sparkles size={14} />
