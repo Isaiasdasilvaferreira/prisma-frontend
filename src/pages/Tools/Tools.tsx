@@ -13,66 +13,66 @@ import './Tools.css';
 const toolsConfig = {
   'find-opportunities': {
     icon: Search,
-    title: 'Encontrar Oportunidades',
-    description: 'Busca inteligente com IA que encontra as melhores oportunidades para você.',
+    title: 'Find Opportunities',
+    description: 'AI-powered intelligent search that finds the best opportunities for you.',
     gradient: 'linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))',
     features: [
-      { icon: Target, title: 'Busca precisa', desc: 'Filtros avançados para encontrar exatamente o que procura' },
-      { icon: Globe, title: 'Múltiplas fontes', desc: 'Monitoramento de diversas plataformas simultaneamente' },
-      { icon: Zap, title: 'Resultados rápidos', desc: 'IA processa milhares de oportunidades em segundos' }
+      { icon: Target, title: 'Precise search', desc: 'Advanced filters to find exactly what you are looking for' },
+      { icon: Globe, title: 'Multiple sources', desc: 'Monitors multiple platforms simultaneously' },
+      { icon: Zap, title: 'Fast results', desc: 'AI processes thousands of opportunities in seconds' }
     ],
     stats: [
-      { value: '15k+', label: 'Oportunidades/mês' },
-      { value: '98%', label: 'Precisão' },
-      { value: '< 2min', label: 'Tempo de busca' }
+      { value: '15k+', label: 'Opportunities/month' },
+      { value: '98%', label: 'Accuracy' },
+      { value: '< 2min', label: 'Search time' }
     ]
   },
   'proposal-generator': {
     icon: FileText,
-    title: 'Gerador de Propostas',
-    description: 'Crie propostas comerciais profissionais e personalizadas em segundos.',
+    title: 'Proposal Generator',
+    description: 'Create professional and personalized business proposals in seconds.',
     gradient: 'linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))',
     features: [
-      { icon: PenTool, title: 'Templates profissionais', desc: 'Modelos prontos e personalizáveis para cada tipo de projeto' },
-      { icon: Sparkles, title: 'IA generativa', desc: 'Conteúdo gerado automaticamente baseado no briefing do cliente' },
-      { icon: Clock, title: 'Economia de tempo', desc: 'Crie propostas em minutos, não em horas' }
+      { icon: PenTool, title: 'Professional templates', desc: 'Ready-to-use and customizable templates for each project type' },
+      { icon: Sparkles, title: 'Generative AI', desc: 'Content automatically generated based on client briefings' },
+      { icon: Clock, title: 'Time savings', desc: 'Create proposals in minutes, not hours' }
     ],
     stats: [
       { value: '50+', label: 'Templates' },
-      { value: '5min', label: 'Tempo médio' },
-      { value: '80%', label: 'Taxa de conversão' }
+      { value: '5min', label: 'Average time' },
+      { value: '80%', label: 'Conversion rate' }
     ]
   },
   'message-generator': {
     icon: MessageSquare,
-    title: 'Gerador de Mensagens',
-    description: 'Mensagens de prospecção inteligentes que convertem mais.',
+    title: 'Message Generator',
+    description: 'Intelligent prospecting messages that convert better.',
     gradient: 'linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))',
     features: [
-      { icon: Target, title: 'Personalização', desc: 'Mensagens adaptadas ao perfil de cada oportunidade' },
-      { icon: Zap, title: 'Resposta rápida', desc: 'Gere mensagens em segundos com um clique' },
-      { icon: Star, title: 'Alta conversão', desc: 'Templates testados e otimizados para resultados' }
+      { icon: Target, title: 'Personalization', desc: 'Messages adapted to each opportunity\'s profile' },
+      { icon: Zap, title: 'Quick response', desc: 'Generate messages in seconds with one click' },
+      { icon: Star, title: 'High conversion', desc: 'Tested and optimized templates for results' }
     ],
     stats: [
       { value: '200+', label: 'Templates' },
-      { value: '3x', label: 'Mais respostas' },
-      { value: '45%', label: 'Taxa de resposta' }
+      { value: '3x', label: 'More responses' },
+      { value: '45%', label: 'Response rate' }
     ]
   },
   'profile': {
     icon: User,
-    title: 'Meu Perfil',
-    description: 'Gerencie suas informações, habilidades e preferências de busca.',
+    title: 'My Profile',
+    description: 'Manage your information, skills, and search preferences.',
     gradient: 'linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))',
     features: [
-      { icon: SlidersHorizontal, title: 'Preferências', desc: 'Configure suas áreas de interesse e especialidades' },
-      { icon: Filter, title: 'Filtros salvos', desc: 'Salve combinações de filtros para buscas rápidas' },
-      { icon: Star, title: 'Portfolio', desc: 'Adicione seu portfolio para melhorar os matches' }
+      { icon: SlidersHorizontal, title: 'Preferences', desc: 'Set up your areas of interest and specialties' },
+      { icon: Filter, title: 'Saved filters', desc: 'Save filter combinations for quick searches' },
+      { icon: Star, title: 'Portfolio', desc: 'Add your portfolio to improve matches' }
     ],
     stats: [
-      { value: '100%', label: 'Personalizado' },
-      { value: '24/7', label: 'Atualizado' },
-      { value: '∞', label: 'Possibilidades' }
+      { value: '100%', label: 'Customized' },
+      { value: '24/7', label: 'Updated' },
+      { value: '∞', label: 'Possibilities' }
     ]
   }
 };
@@ -93,8 +93,8 @@ export function Tools() {
           <div className="tools-content">
             <div className="tools-empty">
               <Search size={48} />
-              <h2>Ferramenta não encontrada</h2>
-              <p>Selecione uma ferramenta no menu lateral para começar.</p>
+              <h2>Tool not found</h2>
+              <p>Select a tool from the sidebar to get started.</p>
             </div>
           </div>
         </div>
@@ -125,10 +125,10 @@ export function Tools() {
                 <p className="tools-hero-desc">{tool.description}</p>
                 <div className="tools-hero-actions">
                   <Button size="md" icon={<ArrowRight size={16} />}>
-                    Começar agora
+                    Get started now
                   </Button>
                   <Button variant="outline" size="md" icon={<Sparkles size={16} />}>
-                    Ver tutorial
+                    View tutorial
                   </Button>
                 </div>
               </div>
@@ -145,7 +145,7 @@ export function Tools() {
           </div>
           
           <div className="tools-features">
-            <h2 className="tools-features-title">Funcionalidades</h2>
+            <h2 className="tools-features-title">Features</h2>
             <div className="tools-features-grid">
               {tool.features.map((feature, index) => (
                 <div key={index} className="tools-feature-card">
@@ -163,8 +163,8 @@ export function Tools() {
           
           <div className="tools-preview">
             <div className="tools-preview-header">
-              <h2 className="tools-preview-title">Prévia</h2>
-              <p className="tools-preview-subtitle">Veja como a ferramenta funciona na prática</p>
+              <h2 className="tools-preview-title">Preview</h2>
+              <p className="tools-preview-subtitle">See how the tool works in practice</p>
             </div>
             <div className="tools-preview-window">
               <div className="tools-preview-window-header">
@@ -178,8 +178,8 @@ export function Tools() {
                   <div className="tools-preview-icon">
                     <Icon size={48} />
                   </div>
-                  <p>Esta ferramenta está sendo preparada para você.</p>
-                  <p className="tools-preview-eta">Disponível em breve</p>
+                  <p>This tool is being prepared for you.</p>
+                  <p className="tools-preview-eta">Coming soon</p>
                   <div className="tools-preview-progress">
                     <div className="tools-preview-progress-bar" />
                   </div>
