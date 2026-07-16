@@ -31,7 +31,7 @@ export function Landing() {
   const scrollPosition = useRef(0);
   const lastTimeRef = useRef(0);
 
-  const typewriterWords = ['VELOCIDADE', 'ELEGÂNCIA', 'PRATICIDADE', 'DINAMISMO'];
+  const typewriterWords = ['SPEED', 'ELEGANCE', 'EFFICIENCY', 'DYNAMISM'];
 
   useEffect(() => {
     const currentWord = typewriterWords[wordIndex];
@@ -64,49 +64,49 @@ export function Landing() {
     {
       name: 'Ana Silva',
       role: 'UI Designer',
-      text: 'A Prisma transformou completamente a forma como encontro trabalho. Em um mês, consegui três projetos incríveis que pagaram muito melhor do que eu estava acostumada.',
+      text: 'Prisma completely transformed how I find work. In one month, I landed three amazing projects that paid much better than what I was used to.',
       avatar: 'AS',
-      stats: 'Faturamento triplicou',
+      stats: 'Revenue tripled',
       color: '#ec4899'
     },
     {
       name: 'Carlos Mendes',
-      role: 'Design Gráfico',
-      text: 'Reduzi o tempo que gastava procurando clientes em 80%. Agora posso dedicar mais tempo ao que realmente importa: criar designs incríveis.',
+      role: 'Graphic Designer',
+      text: 'I reduced the time I spent looking for clients by 80%. Now I can dedicate more time to what really matters: creating amazing designs.',
       avatar: 'CM',
-      stats: '80% menos tempo',
+      stats: '80% less time',
       color: '#f472b6'
     },
     {
       name: 'Julia Costa',
       role: 'Motion Designer',
-      text: 'As oportunidades que chegam até mim são sempre relevantes. Não perco mais tempo com projetos que não combinam com meu estilo e habilidades.',
+      text: 'The opportunities that come to me are always relevant. I no longer waste time on projects that don\'t match my style and skills.',
       avatar: 'JC',
-      stats: 'Projetos relevantes',
+      stats: 'Relevant projects',
       color: '#db2777'
     },
     {
       name: 'Pedro Santos',
       role: 'Brand Designer',
-      text: 'Consegui clientes internacionais que eu jamais alcançaria sozinho. A plataforma abriu portas que eu nem sabia que existiam.',
+      text: 'I got international clients that I would never have reached on my own. The platform opened doors I didn\'t even know existed.',
       avatar: 'PS',
-      stats: 'Clientes no exterior',
+      stats: 'International clients',
       color: '#ec4899'
     },
     {
       name: 'Marina Lima',
       role: 'UX Designer',
-      text: 'Minha carteira de clientes nunca mais ficou vazia. A ferramenta encontra projetos que realmente fazem sentido para minha carreira.',
+      text: 'My client pipeline has never been empty. The tool finds projects that truly make sense for my career.',
       avatar: 'ML',
-      stats: 'Sempre com projetos',
+      stats: 'Always booked',
       color: '#be185d'
     },
     {
       name: 'Lucas Ferreira',
       role: 'Product Designer',
-      text: 'A melhor ferramenta de prospecção que já usei. As oportunidades são de alta qualidade e sempre alinhadas com meu perfil profissional.',
+      text: 'The best prospecting tool I\'ve ever used. The opportunities are high quality and always aligned with my professional profile.',
       avatar: 'LF',
-      stats: 'Recomendo para todos',
+      stats: 'Highly recommended',
       color: '#f472b6'
     }
   ];
@@ -186,29 +186,28 @@ export function Landing() {
         <div className="hero-container hero-container-centered">
           <div className="hero-content hero-content-centered">
             <h1 className="hero-title animate-fade-in-up delay-100">
-              <span className="hero-title-highlight">Perdeu</span>
-              <span className="hero-title-normal">horas em outros</span>
+              <span className="hero-title-highlight">Tired</span>
+              <span className="hero-title-normal">of spending hours on other</span>
               <span className="hero-title-highlight">sites</span>
-              <span className="hero-title-highlight">procurando</span>
-              <span className="hero-title-highlight">trabalho</span>
+              <span className="hero-title-highlight">searching</span>
+              <span className="hero-title-highlight">for work</span>
               <span className="hero-title-normal">?</span>
             </h1>
 
             <h2 className="hero-subtitle-typewriter animate-fade-in-up delay-200">
-              A Prisma resolve o seu problema com{' '}
+              Prisma solves your problem with{' '}
               <span className="typewriter-text">{typewriterText}</span>
               <span className="typewriter-cursor">|</span>
             </h2>
 
             <p className="hero-description animate-fade-in-up delay-300">
-              A Prisma utiliza tecnologia para procurar em diversos lugares da internet
-              quais vagas estão disponíveis e qual combina mais com você.
+              Prisma uses technology to search across multiple internet sources for available opportunities and finds the ones that best match your profile.
             </p>
 
             <div className="hero-actions animate-fade-in-up delay-400">
               <Link to="/register">
                 <Button size="lg" icon={<ArrowRight size={18} />}>
-                  Começar agora
+                  Get started now
                 </Button>
               </Link>
             </div>
@@ -222,28 +221,28 @@ export function Landing() {
         <div className="section-container">
           <div className="about-grid">
             <div className="about-content reveal">
-              <span className="section-label">Quem somos</span>
-              <h2 className="section-title">O que é a Prisma?</h2>
+              <span className="section-label">About us</span>
+              <h2 className="section-title">What is Prisma?</h2>
               <p className="about-text">
-                Somos uma plataforma que <strong>inverte o processo de prospecção</strong>.
-                Em vez de você perder horas procurando clientes, nossa ferramenta trabalha
-                incansavelmente para encontrar as oportunidades certas para você.
+                We are a platform that <strong>reverses the prospecting process</strong>.
+                Instead of you spending hours looking for clients, our tool works tirelessly
+                to find the right opportunities for you.
               </p>
               <div className="about-highlights">
-                <div className="about-highlight"><Globe size={16} /><span>+50 fontes monitoradas</span></div>
-                <div className="about-highlight"><Target size={16} /><span>Match por compatibilidade</span></div>
-                <div className="about-highlight"><Shield size={16} /><span>Dados 100% seguros</span></div>
+                <div className="about-highlight"><Globe size={16} /><span>+50 monitored sources</span></div>
+                <div className="about-highlight"><Target size={16} /><span>Compatibility matching</span></div>
+                <div className="about-highlight"><Shield size={16} /><span>100% secure data</span></div>
               </div>
               <div className="about-stats">
-                <div className="about-stat"><span className="about-stat-value">24/7</span><span className="about-stat-label">Monitoramento</span></div>
-                <div className="about-stat"><span className="about-stat-value">15k+</span><span className="about-stat-label">Oportunidades/mês</span></div>
-                <div className="about-stat"><span className="about-stat-value">98%</span><span className="about-stat-label">Precisão</span></div>
+                <div className="about-stat"><span className="about-stat-value">24/7</span><span className="about-stat-label">Monitoring</span></div>
+                <div className="about-stat"><span className="about-stat-value">15k+</span><span className="about-stat-label">Opportunities/month</span></div>
+                <div className="about-stat"><span className="about-stat-value">98%</span><span className="about-stat-label">Accuracy</span></div>
               </div>
             </div>
             <div className="about-visual reveal">
               <img
                 src={dashboardShowcase}
-                alt="Dashboard Prisma"
+                alt="Prisma Dashboard"
                 className="dashboard-showcase-image"
               />
             </div>
@@ -256,9 +255,9 @@ export function Landing() {
       <section id="como-funciona" className="section section-alt">
         <div className="section-container">
           <div className="section-header reveal">
-            <span className="section-label">Processo</span>
-            <h2 className="section-title">Como funciona</h2>
-            <p className="section-subtitle">Em três etapas simples, sua prospecção está automatizada</p>
+            <span className="section-label">Process</span>
+            <h2 className="section-title">How it works</h2>
+            <p className="section-subtitle">Three simple steps to automate your prospecting</p>
           </div>
 
           <div className="steps-grid">
@@ -266,23 +265,23 @@ export function Landing() {
               {
                 num: '01',
                 icon: MousePointer2,
-                title: 'Configure seu perfil',
-                desc: 'Defina seus serviços, habilidades e preferências de trabalho.',
-                details: 'Escolha sua área de atuação, habilidades e preferências para que nossa ferramenta encontre oportunidades compatíveis com seu perfil.'
+                title: 'Set up your profile',
+                desc: 'Define your services, skills, and work preferences.',
+                details: 'Choose your area of expertise, skills, and preferences so our tool can find opportunities compatible with your profile.'
               },
               {
                 num: '02',
                 icon: Zap,
-                title: 'Monitoramento 24/7',
-                desc: 'Monitoramos milhares de fontes simultaneamente.',
-                details: 'Nossa plataforma analisa constantemente editais, redes sociais e plataformas de freelancers em busca das melhores oportunidades.'
+                title: '24/7 monitoring',
+                desc: 'We monitor thousands of sources simultaneously.',
+                details: 'Our platform continuously analyzes job boards, social media, and freelance platforms to find the best opportunities.'
               },
               {
                 num: '03',
                 icon: MoveUpRight,
-                title: 'Receba no dashboard',
-                desc: 'Oportunidades ranqueadas por compatibilidade.',
-                details: 'Receba apenas oportunidades relevantes, organizadas por compatibilidade e prioridade para você.'
+                title: 'Receive on your dashboard',
+                desc: 'Opportunities ranked by compatibility.',
+                details: 'Get only relevant opportunities, organized by compatibility and priority for you.'
               }
             ].map((step, i) => (
               <div key={i} className="step-card-modern reveal">
@@ -309,19 +308,19 @@ export function Landing() {
       <section id="beneficios" className="section">
         <div className="section-container">
           <div className="section-header reveal">
-            <span className="section-label">Vantagens</span>
-            <h2 className="section-title">Benefícios</h2>
-            <p className="section-subtitle">Por que os melhores designers escolhem a Prisma</p>
+            <span className="section-label">Advantages</span>
+            <h2 className="section-title">Benefits</h2>
+            <p className="section-subtitle">Why the best designers choose Prisma</p>
           </div>
 
           <div className="benefits-grid">
             {[
-              { icon: Zap, color: '#ec4899', title: 'Automação total', desc: 'Nunca mais perca tempo procurando clientes manualmente.' },
-              { icon: Target, color: '#db2777', title: 'Match inteligente', desc: 'Algoritmo que entende seu perfil e encontra as oportunidades certas.' },
-              { icon: Globe, color: '#f472b6', title: 'Múltiplas fontes', desc: 'Redes sociais, portais de vagas e comunidades em um só lugar.' },
-              { icon: Palette, color: '#ec4899', title: 'Foco em design', desc: 'Plataforma pensada exclusivamente para profissionais criativos.' },
-              { icon: TrendingUp, color: '#be185d', title: 'Insights valiosos', desc: 'Dados e métricas do mercado de design.' },
-              { icon: FileText, color: '#f472b6', title: 'Propostas com IA', desc: 'Gere propostas e mensagens profissionais em segundos.' }
+              { icon: Zap, color: '#ec4899', title: 'Full automation', desc: 'Never waste time manually searching for clients again.' },
+              { icon: Target, color: '#db2777', title: 'Smart matching', desc: 'An algorithm that understands your profile and finds the right opportunities.' },
+              { icon: Globe, color: '#f472b6', title: 'Multiple sources', desc: 'Social media, job portals, and communities all in one place.' },
+              { icon: Palette, color: '#ec4899', title: 'Design-focused', desc: 'A platform built exclusively for creative professionals.' },
+              { icon: TrendingUp, color: '#be185d', title: 'Valuable insights', desc: 'Data and metrics about the design market.' },
+              { icon: FileText, color: '#f472b6', title: 'AI proposals', desc: 'Generate professional proposals and messages in seconds.' }
             ].map((benefit, index) => (
               <div key={index} className="benefit-card-modern reveal" style={{ animationDelay: `${index * 0.1}s` }}>
                 <div className="benefit-icon-modern" style={{ background: `${benefit.color}12` }}>
@@ -341,9 +340,9 @@ export function Landing() {
       <section id="depoimentos" className="section section-alt">
         <div className="section-container">
           <div className="section-header reveal">
-            <span className="section-label">Depoimentos</span>
-            <h2 className="section-title">O que eles dizem</h2>
-            <p className="section-subtitle">Designers reais, resultados reais</p>
+            <span className="section-label">Testimonials</span>
+            <h2 className="section-title">What they say</h2>
+            <p className="section-subtitle">Real designers, real results</p>
           </div>
 
           <div
@@ -391,36 +390,36 @@ export function Landing() {
       <section id="planos" className="section">
         <div className="section-container">
           <div className="section-header reveal">
-            <span className="section-label">Preços</span>
-            <h2 className="section-title">Planos</h2>
-            <p className="section-subtitle">Comece grátis e escale conforme sua necessidade</p>
+            <span className="section-label">Pricing</span>
+            <h2 className="section-title">Plans</h2>
+            <p className="section-subtitle">Start free and scale as you grow</p>
           </div>
 
           <div className="plans-grid">
             {[
               {
                 name: 'Starter',
-                price: 'Grátis',
+                price: 'Free',
                 period: '',
-                desc: 'Para começar a explorar',
+                desc: 'Start exploring',
                 icon: Zap,
                 color: '#94a3b8',
                 type: 'starter',
                 popular: false,
                 disabled: false,
                 features: [
-                  '10 oportunidades por semana',
-                  'Suporte por email',
-                  'Dashboard básico',
-                  'Filtros básicos'
+                  '10 opportunities per week',
+                  'Email support',
+                  'Basic dashboard',
+                  'Basic filters'
                 ],
-                cta: 'Começar grátis'
+                cta: 'Start free'
               },
               {
                 name: 'Professional',
-                price: 'Em breve',
+                price: 'Coming soon',
                 period: '',
-                desc: 'Para designers ativos',
+                desc: 'For active designers',
                 icon: Star,
                 color: '#d97706',
                 type: 'pro',
@@ -434,13 +433,13 @@ export function Landing() {
                   '***',
                   '***'
                 ],
-                cta: 'Assinar Professional'
+                cta: 'Subscribe to Professional'
               },
               {
                 name: 'Enterprise',
-                price: 'Em breve',
+                price: 'Coming soon',
                 period: '',
-                desc: 'Para times e agências',
+                desc: 'For teams and agencies',
                 icon: Building2,
                 color: '#7c3aed',
                 type: 'enterprise',
@@ -458,15 +457,15 @@ export function Landing() {
                   '***',
                   '***'
                 ],
-                cta: 'Em breve'
+                cta: 'Coming soon'
               }
             ].map((plan, i) => (
               <div
                 key={i}
                 className={`plan-card plan-card-${plan.type} ${plan.popular ? 'plan-card-featured' : ''} ${plan.disabled ? 'plan-card-disabled' : ''} reveal`}
               >
-                {plan.popular && <div className="plan-badge"><Star size={12} fill="#fff" />Mais popular</div>}
-                {plan.disabled && <div className="plan-overlay"><Clock size={20} /><span>Em breve</span></div>}
+                {plan.popular && <div className="plan-badge"><Star size={12} fill="#fff" />Most popular</div>}
+                {plan.disabled && <div className="plan-overlay"><Clock size={20} /><span>Coming soon</span></div>}
 
                 <div className="plan-card-top">
                   <div className="plan-icon"><plan.icon size={22} /></div>
@@ -511,9 +510,9 @@ export function Landing() {
       <section id="enviar-oportunidades" className="section section-alt">
         <div className="section-container">
           <div className="section-header reveal">
-            <span className="section-label">Anuncie</span>
-            <h2 className="section-title">Envie sua oportunidade</h2>
-            <p className="section-subtitle">Divulgue vagas, projetos freelancer e oportunidades para nossa comunidade</p>
+            <span className="section-label">Advertise</span>
+            <h2 className="section-title">Submit your opportunity</h2>
+            <p className="section-subtitle">Post jobs, freelance projects, and opportunities for our community</p>
           </div>
 
     <div className="opportunity-simple-cta reveal">
@@ -522,14 +521,14 @@ export function Landing() {
           <Building2 size={40} />
         </div>
         <div className="opportunity-simple-text">
-          <h3 className="opportunity-simple-title">Compartilhe com designers talentosos</h3>
+          <h3 className="opportunity-simple-title">Share with talented designers</h3>
           <p className="opportunity-simple-subtitle">
-            Encontre profissionais qualificados para suas vagas, propostas freelancer e oportunidades de trabalho
+            Find qualified professionals for your positions, freelance proposals, and work opportunities
           </p>
         </div>
         <Link to="/enviar-oportunidade">
           <Button size="lg" icon={<ArrowRight size={18} />}>
-            Enviar oportunidade
+            Submit opportunity
           </Button>
         </Link>
       </div>
@@ -562,15 +561,15 @@ export function Landing() {
 
             <div className="cta-card-content">
               <h2 className="cta-card-title">
-                Pronto para parar de procurar?
+                Ready to stop searching?
               </h2>
               <p className="cta-card-subtitle">
-                Deixe a ferramenta encontrar as melhores oportunidades para você.
+                Let the tool find the best opportunities for you.
               </p>
               <div className="cta-card-actions">
                 <Link to="/register">
                   <Button size="lg" icon={<ArrowRight size={18} />}>
-                    Criar conta gratuita
+                    Create free account
                   </Button>
                 </Link>
                 <Link to="/login">
@@ -584,7 +583,7 @@ export function Landing() {
                       border: '1px solid rgba(255, 255, 255, 0.3)'
                     }}
                   >
-                    Já tenho conta
+                    Already have an account
                   </Button>
                 </Link>
               </div>
