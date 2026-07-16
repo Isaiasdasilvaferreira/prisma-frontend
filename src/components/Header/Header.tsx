@@ -17,15 +17,15 @@ export function Header({ onMenuClick, isMenuOpen }: HeaderProps) {
     const path = location.pathname;
     
     if (path === '/dashboard' || path === '/') {
-      return 'Oportunidades';
+      return 'Opportunities';
     } else if (path === '/analytics') {
-      return 'Análises';
+      return 'Analytics';
     } else if (path === '/messages') {
-      return 'Enviar Mensagens';
+      return 'Send Messages';
     } else if (path === '/tutorial') {
       return 'Tutorial';
     } else if (path === '/plans') {
-      return 'Planos';
+      return 'Plans';
     }
     
     return 'Dashboard';
@@ -51,7 +51,7 @@ export function Header({ onMenuClick, isMenuOpen }: HeaderProps) {
       return user.email.split('@')[0];
     }
     
-    return 'Usuário';
+    return 'User';
   };
 
   return (
@@ -70,11 +70,11 @@ export function Header({ onMenuClick, isMenuOpen }: HeaderProps) {
           </div>
           <div className="header-user-info">
             <span className="header-username">{getUserName()}</span>
-            <span className="header-plan">Plano Gratuito</span>
+            <span className="header-plan">Free Plan</span>
           </div>
           <ChevronDown size={14} className="header-chevron" />
         </div>
-        <button onClick={logout} className="header-logout" title="Sair">
+        <button onClick={logout} className="header-logout" title="Sign out">
           <LogOut size={16} />
         </button>
       </div>
