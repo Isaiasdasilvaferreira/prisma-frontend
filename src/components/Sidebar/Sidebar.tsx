@@ -13,9 +13,9 @@ interface SidebarProps {
 }
 
 const menuItems = [
-  { icon: Briefcase, label: 'Oportunidades', path: '/dashboard' },
-  { icon: BarChart3, label: 'Análises', path: '/analytics' },
-  { icon: Send, label: 'Enviar Mensagem', path: '/messages' },
+  { icon: Briefcase, label: 'Opportunities', path: '/dashboard' },
+  { icon: BarChart3, label: 'Analytics', path: '/analytics' },
+  { icon: Send, label: 'Send Message', path: '/messages' },
   { icon: GraduationCap, label: 'Tutorial', path: '/tutorial' },
 ];
 
@@ -78,8 +78,8 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                 <Crown size={18} />
               </div>
               <div>
-                <span className="sidebar-upgrade-title">Upgrade para Pro</span>
-                <span className="sidebar-upgrade-subtitle">Acesse todos os recursos</span>
+                <span className="sidebar-upgrade-title">Upgrade to Pro</span>
+                <span className="sidebar-upgrade-subtitle">Access all features</span>
               </div>
               <Sparkles size={14} className="sidebar-upgrade-sparkle" />
             </div>
