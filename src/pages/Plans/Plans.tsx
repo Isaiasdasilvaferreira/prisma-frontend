@@ -14,8 +14,8 @@ const plans = [
   {
     id: 'starter',
     name: 'Starter',
-    subtitle: 'Para começar a explorar',
-    price: 'Grátis',
+    subtitle: 'Start exploring',
+    price: 'Free',
     period: '',
     icon: Zap,
     color: '#64748b',
@@ -23,20 +23,20 @@ const plans = [
     popular: false,
     disabled: false,
     features: [
-      { text: '10 oportunidades por semana', included: true },
-      { text: 'Suporte por email', included: true },
-      { text: 'Dashboard básico', included: true },
-      { text: 'Filtros básicos', included: true },
+      { text: '10 opportunities per week', included: true },
+      { text: 'Email support', included: true },
+      { text: 'Basic dashboard', included: true },
+      { text: 'Basic filters', included: true },
     ],
-    cta: 'Começar grátis',
+    cta: 'Get started free',
     variant: 'outline' as const,
     redirect: '/dashboard'
   },
   {
     id: 'professional',
     name: 'Professional',
-    subtitle: 'Para designers ativos',
-    price: 'Em breve',
+    subtitle: 'For active designers',
+    price: 'Coming soon',
     period: '',
     icon: Star,
     color: '#d97706',
@@ -51,15 +51,15 @@ const plans = [
       { text: '***', included: true, highlight: true },
       { text: '***', included: true },
     ],
-    cta: 'Assinar Professional',
+    cta: 'Subscribe to Professional',
     variant: 'primary' as const,
     redirect: '#'
   },
   {
     id: 'enterprise',
     name: 'Enterprise',
-    subtitle: 'Para times e agências',
-    price: 'Em breve',
+    subtitle: 'For teams and agencies',
+    price: 'Coming soon',
     period: '',
     icon: Building2,
     color: '#7c3aed',
@@ -76,7 +76,7 @@ const plans = [
       { text: '***', included: true, highlight: true },
       { text: '***', included: true },
     ],
-    cta: 'Em breve',
+    cta: 'Coming soon',
     variant: 'outline' as const,
     redirect: '#'
   }
@@ -122,11 +122,11 @@ export function Plans() {
             <div className="plans-hero-content">
               <div className="plans-hero-badge">
                 <Sparkles size={14} />
-                <span>Planos e preços</span>
+                <span>Plans & pricing</span>
               </div>
-              <h1 className="plans-hero-title">Escolha o plano ideal para você</h1>
+              <h1 className="plans-hero-title">Choose the perfect plan for you</h1>
               <p className="plans-hero-subtitle">
-                Comece grátis e escale conforme sua necessidade. Cancele quando quiser.
+                Start for free and scale as you grow. Cancel anytime.
               </p>
             </div>
           </div>
@@ -144,14 +144,14 @@ export function Plans() {
                     {plan.popular && (
                       <div className="plans-card-badge">
                         <Star size={12} fill="#0a0a0a" />
-                        Mais popular
+                        Most popular
                       </div>
                     )}
                     
                     {plan.disabled && (
                       <div className="plans-card-overlay">
                         <Clock size={20} />
-                        <span>Em breve</span>
+                        <span>Coming soon</span>
                       </div>
                     )}
                     
@@ -245,8 +245,8 @@ export function Plans() {
 
           <div className="plans-faq">
             <div className="plans-faq-header">
-              <h2 className="plans-faq-title">Dúvidas frequentes</h2>
-              <p className="plans-faq-subtitle">Respostas para as perguntas mais comuns</p>
+              <h2 className="plans-faq-title">Frequently asked questions</h2>
+              <p className="plans-faq-subtitle">Answers to the most common questions</p>
             </div>
             
             <div className="plans-faq-list">
@@ -273,9 +273,9 @@ export function Plans() {
             <div className="plans-cta-bottom-content">
               <div className="plans-cta-bottom-glow" />
               <MessageSquare size={24} className="plans-cta-bottom-icon" />
-              <h2 className="plans-cta-bottom-title">Ainda tem dúvidas?</h2>
+              <h2 className="plans-cta-bottom-title">Still have questions?</h2>
               <p className="plans-cta-bottom-text">
-                Fale com nossa equipe de suporte. Respondemos em até 5 minutos.
+                Talk to our support team. We respond within 5 minutes.
               </p>
               <Button 
                 variant="outline" 
@@ -283,7 +283,7 @@ export function Plans() {
                 icon={<ArrowRight size={16} />}
                 onClick={handleSupportClick}
               >
-                Falar com suporte
+                Contact support
               </Button>
             </div>
           </div>
