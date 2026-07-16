@@ -110,34 +110,34 @@ interface DetailModalProps {
 
 const filterOptions = {
   modalidades: [
-    'Remoto',
-    'Presencial',
-    'Híbrido'
+    'Remote',
+    'On-site',
+    'Hybrid'
   ],
   tipoServico: [
     'UI/UX Design',
-    'Branding / Identidade Visual',
+    'Branding / Visual Identity',
     'Social Media Design',
-    'Motion Graphics / Animação',
-    'Design Editorial',
+    'Motion Graphics / Animation',
+    'Editorial Design',
     'Packaging Design',
-    'Arte para Impressão',
+    'Print Art',
     'Landing Page Design'
   ],
   tipoCliente: [
     'Startup',
     'E-commerce',
-    'PME (Pequena e Média Empresa)',
-    'Corporação / Grande Empresa',
-    'Agência de Publicidade',
-    'Instituição Pública',
-    'Educacional',
-    'ONG / Terceiro Setor'
+    'SME (Small and Medium Enterprise)',
+    'Corporation / Large Company',
+    'Advertising Agency',
+    'Public Institution',
+    'Educational',
+    'NGO / Non-profit'
   ],
   urgencia: [
     'Normal',
-    'Moderado',
-    'Urgente'
+    'Moderate',
+    'Urgent'
   ]
 };
 
@@ -153,41 +153,41 @@ function DetailModal({ opportunity, isOpen, onClose, onContact }: DetailModalPro
         
         <div className="detail-modal-header">
           <span className="detail-modal-source" style={{ color: '#ec4899' }}>
-            {opportunity.source === 'user_posted' ? 'Postada por usuário' : opportunity.source.toUpperCase()}
+            {opportunity.source === 'user_posted' ? 'Posted by user' : opportunity.source.toUpperCase()}
           </span>
           <h2>{opportunity.title}</h2>
           <p className="detail-modal-company">{opportunity.company}</p>
         </div>
 
         <div className="detail-modal-meta">
-          <span><MapPin size={16} /> {opportunity.location || 'Remoto'}</span>
+          <span><MapPin size={16} /> {opportunity.location || 'Remote'}</span>
           <span><Briefcase size={16} /> {opportunity.contract_type || 'CLT'}</span>
           {opportunity.salary && <span><DollarSign size={16} /> {opportunity.salary}</span>}
           {opportunity.available_registration && (
-            <span><Users size={16} /> {opportunity.available_registration} vagas</span>
+            <span><Users size={16} /> {opportunity.available_registration} openings</span>
           )}
           {opportunity.remaining_vacancies !== undefined && opportunity.remaining_vacancies !== null && (
-            <span><Users size={16} /> Restam: {opportunity.remaining_vacancies}</span>
+            <span><Users size={16} /> Remaining: {opportunity.remaining_vacancies}</span>
           )}
         </div>
 
         {opportunity.description && (
           <div className="detail-modal-section">
-            <h4>Descrição</h4>
+            <h4>Description</h4>
             <p>{opportunity.description}</p>
           </div>
         )}
 
         {opportunity.responsibilities && (
           <div className="detail-modal-section">
-            <h4>Responsabilidades</h4>
+            <h4>Responsibilities</h4>
             <p>{opportunity.responsibilities}</p>
           </div>
         )}
 
         {opportunity.requirements && (
           <div className="detail-modal-section">
-            <h4>Requisitos</h4>
+            <h4>Requirements</h4>
             <p>{opportunity.requirements}</p>
           </div>
         )}
@@ -199,7 +199,7 @@ function DetailModal({ opportunity, isOpen, onClose, onContact }: DetailModalPro
               onClick={onContact}
             >
               <MessageCircle size={18} style={{ marginRight: '8px' }} />
-              Contatar
+              Contact
             </button>
           </div>
         )}
@@ -237,7 +237,7 @@ function ContactModal({ opportunity, isOpen, onClose }: ContactModalProps) {
       
       if (applyResponse.error) {
         if (applyResponse.error.includes('already applied')) {
-          setApplyError('Você já enviou uma proposta para esta oportunidade.');
+          setApplyError('You have already submitted a proposal for this opportunity.');
           setIsSubmitting(false);
           return;
         }
@@ -253,13 +253,13 @@ function ContactModal({ opportunity, isOpen, onClose }: ContactModalProps) {
         }
       }
 
-      const message = `Contato vindo da Prisma Analytics\n\nNome: ${formData.nome}\nPitch: ${formData.pitch}\nPortfólio: ${formData.portfolio}\nLinkedIn: ${formData.linkedin || 'Não informado'}\n\nOportunidade: ${opportunity.title} - ${opportunity.company}`;
+      const message = `Contact from Prisma Analytics\n\nName: ${formData.nome}\nPitch: ${formData.pitch}\nPortfolio: ${formData.portfolio}\nLinkedIn: ${formData.linkedin || 'Not provided'}\n\nOpportunity: ${opportunity.title} - ${opportunity.company}`;
 
       if (contactMethod === 'whatsapp' && opportunity.whatsapp) {
         const phone = opportunity.whatsapp.replace(/\D/g, '');
         window.open(`https://wa.me/55${phone}?text=${encodeURIComponent(message)}`, '_blank');
       } else if (contactMethod === 'email' && opportunity.email) {
-        window.location.href = `mailto:${opportunity.email}?subject=Contato sobre oportunidade: ${opportunity.title}&body=${encodeURIComponent(message)}`;
+        window.location.href = `mailto:${opportunity.email}?subject=Contact about opportunity: ${opportunity.title}&body=${encodeURIComponent(message)}`;
       }
 
       setSuccess(true);
@@ -272,7 +272,7 @@ function ContactModal({ opportunity, isOpen, onClose }: ContactModalProps) {
       const errorMessage = error?.response?.data?.error || error?.message || '';
       
       if (errorMessage.includes('already applied')) {
-        setApplyError('Você já enviou uma proposta para esta oportunidade.');
+        setApplyError('You have already submitted a proposal for this opportunity.');
         setIsSubmitting(false);
         return;
       }
@@ -282,13 +282,13 @@ function ContactModal({ opportunity, isOpen, onClose }: ContactModalProps) {
                            errorMessage.includes('no vacancies');
       
       if (isFullyBooked) {
-        const message = `Contato vindo da Prisma Analytics\n\nNome: ${formData.nome}\nPitch: ${formData.pitch}\nPortfólio: ${formData.portfolio}\nLinkedIn: ${formData.linkedin || 'Não informado'}\n\nOportunidade: ${opportunity.title} - ${opportunity.company}`;
+        const message = `Contact from Prisma Analytics\n\nName: ${formData.nome}\nPitch: ${formData.pitch}\nPortfolio: ${formData.portfolio}\nLinkedIn: ${formData.linkedin || 'Not provided'}\n\nOpportunity: ${opportunity.title} - ${opportunity.company}`;
 
         if (contactMethod === 'whatsapp' && opportunity.whatsapp) {
           const phone = opportunity.whatsapp.replace(/\D/g, '');
           window.open(`https://wa.me/55${phone}?text=${encodeURIComponent(message)}`, '_blank');
         } else if (contactMethod === 'email' && opportunity.email) {
-          window.location.href = `mailto:${opportunity.email}?subject=Contato sobre oportunidade: ${opportunity.title}&body=${encodeURIComponent(message)}`;
+          window.location.href = `mailto:${opportunity.email}?subject=Contact about opportunity: ${opportunity.title}&body=${encodeURIComponent(message)}`;
         }
 
         setSuccess(true);
@@ -313,11 +313,11 @@ function ContactModal({ opportunity, isOpen, onClose }: ContactModalProps) {
         </button>
         
         <div className="modal-header">
-          <h3>Contatar sobre: {opportunity.title}</h3>
+          <h3>Contact about: {opportunity.title}</h3>
           <p className="modal-company">{opportunity.company}</p>
           {opportunity.remaining_vacancies !== undefined && opportunity.remaining_vacancies !== null && (
             <p style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>
-              Vagas restantes: {opportunity.remaining_vacancies}
+              Remaining openings: {opportunity.remaining_vacancies}
             </p>
           )}
         </div>
@@ -338,8 +338,8 @@ function ContactModal({ opportunity, isOpen, onClose }: ContactModalProps) {
         {success ? (
           <div className="modal-success">
             <CheckCircle2 size={48} />
-            <h4>Mensagem enviada!</h4>
-            <p>Sua mensagem foi encaminhada com sucesso.</p>
+            <h4>Message sent!</h4>
+            <p>Your message has been forwarded successfully.</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="modal-form">
@@ -360,67 +360,67 @@ function ContactModal({ opportunity, isOpen, onClose }: ContactModalProps) {
                 disabled={!opportunity.email}
               >
                 <Mail size={18} />
-                E-mail
+                Email
               </button>
             </div>
 
             <div className="modal-form-group">
-              <label>Nome Completo *</label>
+              <label>Full Name *</label>
               <input
                 type="text"
                 name="nome"
                 value={formData.nome}
                 onChange={handleChange}
-                placeholder="Seu nome completo"
+                placeholder="Your full name"
                 required
               />
             </div>
 
             <div className="modal-form-group">
-              <label>Texto de Apresentação / Pitch *</label>
+              <label>Pitch / Introduction *</label>
               <textarea
                 name="pitch"
                 value={formData.pitch}
                 onChange={handleChange}
-                placeholder="Fale sobre você, sua experiência e por que se interessou pela oportunidade..."
+                placeholder="Tell us about yourself, your experience, and why you're interested in this opportunity..."
                 rows={4}
                 required
               />
             </div>
 
             <div className="modal-form-group">
-              <label>Link do Portfólio (Behance, Dribbble, etc) *</label>
+              <label>Portfolio Link (Behance, Dribbble, etc) *</label>
               <input
                 type="url"
                 name="portfolio"
                 value={formData.portfolio}
                 onChange={handleChange}
-                placeholder="https://behance.net/seu-portfolio"
+                placeholder="https://behance.net/your-portfolio"
                 required
               />
             </div>
 
             <div className="modal-form-group">
-              <label>Link do LinkedIn (opcional)</label>
+              <label>LinkedIn Link (optional)</label>
               <input
                 type="url"
                 name="linkedin"
                 value={formData.linkedin}
                 onChange={handleChange}
-                placeholder="https://linkedin.com/in/seu-perfil"
+                placeholder="https://linkedin.com/in/your-profile"
               />
             </div>
 
             <div className="modal-form-footer">
               <p className="modal-disclaimer">
-                Ao enviar, você concorda que a Prisma Analytics encaminhará seus dados para o contratante.
+                By submitting, you agree that Prisma Analytics will forward your information to the hiring party.
               </p>
               <button 
                 type="submit" 
                 className="modal-submit-button"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Enviando...' : `Enviar via ${contactMethod === 'whatsapp' ? 'WhatsApp' : 'E-mail'}`}
+                {isSubmitting ? 'Sending...' : `Send via ${contactMethod === 'whatsapp' ? 'WhatsApp' : 'Email'}`}
               </button>
             </div>
           </form>
@@ -461,9 +461,9 @@ export function Dashboard() {
 
   useEffect(() => {
     const hour = new Date().getHours();
-    if (hour < 12) setGreeting('Bom dia');
-    else if (hour < 18) setGreeting('Boa tarde');
-    else setGreeting('Boa noite');
+    if (hour < 12) setGreeting('Good morning');
+    else if (hour < 18) setGreeting('Good afternoon');
+    else setGreeting('Good evening');
   }, []);
 
   useEffect(() => {
@@ -591,7 +591,7 @@ export function Dashboard() {
       title: opp.title,
       contract_type: opp.contract_type,
       modality: opp.modality,
-      location: opp.location || 'Remoto',
+      location: opp.location || 'Remote',
       application_url: opp.application_url,
       is_active: opp.is_active,
       created_at: opp.created_at
@@ -605,7 +605,7 @@ export function Dashboard() {
       title: opp.title,
       contract_type: 'Freelancer',
       modality: opp.modality,
-      location: opp.location || 'Remoto',
+      location: opp.location || 'Remote',
       application_url: opp.whatsapp || `mailto:${opp.email}`,
       is_active: opp.is_active,
       created_at: opp.created_at,
@@ -669,7 +669,7 @@ export function Dashboard() {
   };
 
   const getSourceLabel = (source: string) => {
-    if (source === 'user_posted') return 'Postada por usuário';
+    if (source === 'user_posted') return 'Posted by user';
     return source.charAt(0).toUpperCase() + source.slice(1);
   };
 
@@ -677,7 +677,7 @@ export function Dashboard() {
     { 
       icon: TrendingUp, 
       value: dashboardStats.opportunities.toString(), 
-      label: 'Oportunidades',
+      label: 'Opportunities',
       change: `+${dashboardStats.newThisWeek}`,
       trend: 'up',
       color: '#ec4899',
@@ -686,7 +686,7 @@ export function Dashboard() {
     { 
       icon: Star, 
       value: dashboardStats.newThisWeek.toString(), 
-      label: 'Novas esta semana',
+      label: 'New this week',
       change: `+${dashboardStats.newThisWeek}`,
       trend: 'up',
       color: '#f472b6',
@@ -695,7 +695,7 @@ export function Dashboard() {
     { 
       icon: MessageSquare, 
       value: '0', 
-      label: 'Mensagens',
+      label: 'Messages',
       change: '+0',
       trend: 'up',
       color: '#db2777',
@@ -704,7 +704,7 @@ export function Dashboard() {
     { 
       icon: Target, 
       value: dashboardStats.matchRate, 
-      label: 'Taxa de match',
+      label: 'Match rate',
       change: '+0%',
       trend: 'up',
       color: '#be185d',
@@ -713,10 +713,10 @@ export function Dashboard() {
   ];
 
   const quickActions = [
-    { icon: BarChart3, label: 'Análises', path: '/analytics', color: '#ec4899' },
-    { icon: Send, label: 'Enviar Mensagem', path: '/messages', color: '#f472b6' },
+    { icon: BarChart3, label: 'Analytics', path: '/analytics', color: '#ec4899' },
+    { icon: Send, label: 'Send Message', path: '/messages', color: '#f472b6' },
     { icon: GraduationCap, label: 'Tutorial', path: '/tutorial', color: '#db2777' },
-    { icon: Crown, label: 'Planos', path: '/plans', color: '#be185d' },
+    { icon: Crown, label: 'Plans', path: '/plans', color: '#be185d' },
   ];
 
   const filteredOpportunities = getFilteredOpportunities();
@@ -734,17 +734,17 @@ export function Dashboard() {
               <div>
                 <div className="dashboard-welcome-greeting">
                   <Sparkles size={16} />
-                  <span>{greeting}, {user?.name?.split(' ')[0] || 'Usuário'}</span>
+                  <span>{greeting}, {user?.name?.split(' ')[0] || 'User'}</span>
                 </div>
                 <p className="dashboard-welcome-text">
-                  Conecte-se com as melhores oportunidades para designers.
+                  Connect with the best opportunities for designers.
                 </p>
               </div>
             </div>
             <div className="dashboard-welcome-right">
               <div className="dashboard-date">
                 <Calendar size={14} />
-                {new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })}
+                {new Date().toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long' })}
               </div>
             </div>
           </div>
@@ -796,15 +796,15 @@ export function Dashboard() {
             <Card className="dashboard-opportunities-card" glow>
               <div className="dashboard-section-header">
                 <div className="dashboard-section-header-left">
-                  <h2 className="dashboard-section-title">Oportunidades</h2>
-                  <span className="dashboard-section-badge pulse">{filteredOpportunities.length} disponíveis</span>
+                  <h2 className="dashboard-section-title">Opportunities</h2>
+                  <span className="dashboard-section-badge pulse">{filteredOpportunities.length} available</span>
                 </div>
                 <div className="dashboard-section-header-right">
                   <div className="dashboard-search-wrapper">
                     <Search size={16} className="dashboard-search-icon" />
                     <input
                       type="text"
-                      placeholder="Buscar oportunidades..."
+                      placeholder="Search opportunities..."
                       className="dashboard-search-input"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
@@ -817,16 +817,16 @@ export function Dashboard() {
                 {loading ? (
                   <div className="dashboard-loading-state">
                     <Loader2 size={48} className="spinning" />
-                    <p>Carregando oportunidades...</p>
+                    <p>Loading opportunities...</p>
                   </div>
                 ) : filteredOpportunities.length === 0 ? (
                   <div className="dashboard-empty-state">
                     <div className="dashboard-empty-state-icon">
                       <Briefcase size={48} />
                     </div>
-                    <h3>Nenhuma oportunidade disponível</h3>
-                    <p>Estamos buscando as melhores vagas para você. 
-                    <br />Clique em "Raspar Vagas" para começar.</p>
+                    <h3>No opportunities available</h3>
+                    <p>We're searching for the best positions for you. 
+                    <br />Click "Scrape Jobs" to get started.</p>
                     <div className="dashboard-empty-state-actions">
                       <Button 
                         variant="primary" 
@@ -835,11 +835,11 @@ export function Dashboard() {
                         onClick={() => handleScrape()}
                         disabled={scraping}
                       >
-                        {scraping ? 'Raspando...' : 'Raspar Vagas'}
+                        {scraping ? 'Scraping...' : 'Scrape Jobs'}
                       </Button>
                       <Link to="/tutorial">
                         <Button variant="outline" size="md" icon={<GraduationCap size={16} />}>
-                          Ver tutorial
+                          View tutorial
                         </Button>
                       </Link>
                     </div>
@@ -869,7 +869,7 @@ export function Dashboard() {
                               </span>
                               <span className="dashboard-opportunity-location">
                                 <MapPin size={14} />
-                                {opp.location || 'Remoto'}
+                                {opp.location || 'Remote'}
                               </span>
                               <span className="dashboard-opportunity-contract">
                                 <Briefcase size={14} />
@@ -884,13 +884,13 @@ export function Dashboard() {
                               {isUserPosted && opp.available_registration && (
                                 <span className="dashboard-opportunity-vacancies">
                                   <Users size={14} />
-                                  {opp.available_registration} vagas
+                                  {opp.available_registration} openings
                                 </span>
                               )}
                               {isUserPosted && opp.remaining_vacancies !== undefined && opp.remaining_vacancies !== null && (
                                 <span className="dashboard-opportunity-remaining">
                                   <Users size={14} />
-                                  Restam: {opp.remaining_vacancies}
+                                  Remaining: {opp.remaining_vacancies}
                                 </span>
                               )}
                             </div>
@@ -910,7 +910,7 @@ export function Dashboard() {
                                   setIsContactModalOpen(true);
                                 }}
                               >
-                                Contatar
+                                Contact
                                 <ArrowUpRight size={14} />
                               </button>
                             ) : (
@@ -921,7 +921,7 @@ export function Dashboard() {
                                 className="dashboard-apply-button"
                                 onClick={(e) => e.stopPropagation()}
                               >
-                                Ver Vaga
+                                View Job
                                 <ArrowUpRight size={14} />
                               </a>
                             )}
@@ -938,13 +938,13 @@ export function Dashboard() {
               <div className="dashboard-filter-header">
                 <div className="dashboard-filter-title">
                   <Sliders size={16} />
-                  Filtros
+                  Filters
                 </div>
-                <span className="dashboard-filter-clear" onClick={clearFilters}>Limpar</span>
+                <span className="dashboard-filter-clear" onClick={clearFilters}>Clear</span>
               </div>
 
               <div className="dashboard-filter-section">
-                <span className="dashboard-filter-label">Tipo de contrato</span>
+                <span className="dashboard-filter-label">Contract type</span>
                 <div className="dashboard-filter-options">
                   <div 
                     className={`dashboard-filter-option ${selectedContractType === 'clt' ? 'selected' : ''}`}
@@ -962,7 +962,7 @@ export function Dashboard() {
               </div>
 
               <div className="dashboard-filter-section">
-                <span className="dashboard-filter-label">Modalidades</span>
+                <span className="dashboard-filter-label">Modalities</span>
                 <div className="dashboard-filter-options">
                   {filterOptions.modalidades.map((opt) => (
                     <div 
@@ -977,7 +977,7 @@ export function Dashboard() {
               </div>
 
               <div className="dashboard-advanced-divider">
-                <span>Filtros Avançados</span>
+                <span>Advanced Filters</span>
                 <Sparkle size={14} className="dashboard-advanced-sparkle" />
               </div>
 
@@ -988,18 +988,18 @@ export function Dashboard() {
                       <Crown size={22} />
                     </div>
                     <div className="dashboard-lock-banner-text">
-                      <h3>Desbloqueie filtros avançados</h3>
-                      <p>Acesse tipo de serviço, tipo de cliente e níveis de urgência</p>
+                      <h3>Unlock advanced filters</h3>
+                      <p>Access service type, client type, and urgency levels</p>
                     </div>
                     <Link to="/plans" className="dashboard-lock-banner-button">
                       <Button variant="primary" size="sm" icon={<Crown size={14} />}>
-                        Assinar Plano Pro
+                        Subscribe to Pro Plan
                       </Button>
                     </Link>
                   </div>
 
                   <div className="dashboard-filter-section locked">
-                    <span className="dashboard-filter-label">Tipo de serviço</span>
+                    <span className="dashboard-filter-label">Service type</span>
                     <div className="dashboard-filter-options">
                       {filterOptions.tipoServico.map((opt) => (
                         <div key={opt} className="dashboard-filter-option disabled">
@@ -1010,7 +1010,7 @@ export function Dashboard() {
                   </div>
 
                   <div className="dashboard-filter-section locked">
-                    <span className="dashboard-filter-label">Tipo de cliente</span>
+                    <span className="dashboard-filter-label">Client type</span>
                     <div className="dashboard-filter-options">
                       {filterOptions.tipoCliente.map((opt) => (
                         <div key={opt} className="dashboard-filter-option disabled">
@@ -1021,7 +1021,7 @@ export function Dashboard() {
                   </div>
 
                   <div className="dashboard-filter-section locked">
-                    <span className="dashboard-filter-label">Níveis de urgência</span>
+                    <span className="dashboard-filter-label">Urgency levels</span>
                     <div className="dashboard-filter-options">
                       {filterOptions.urgencia.map((opt) => (
                         <div key={opt} className={`dashboard-filter-option disabled urgency-${opt.toLowerCase()}`}>
@@ -1035,7 +1035,7 @@ export function Dashboard() {
 
               <div className="dashboard-filter-apply">
                 <Button fullWidth size="sm" icon={<ListFilter size={16} />}>
-                  Aplicar filtros
+                  Apply filters
                 </Button>
               </div>
             </Card>
