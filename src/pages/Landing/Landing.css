@@ -90,14 +90,13 @@
   line-height: 1.2;
   color: #ffffff;
   max-width: 100%;
-  white-space: normal;
   text-align: center;
   width: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 0 8px;
+  gap: 0 6px;
 }
 
 .hero-title-highlight {
@@ -106,14 +105,12 @@
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  display: inline-block;
-  white-space: nowrap;
+  display: inline;
 }
 
 .hero-title-normal {
-  display: inline-block;
+  display: inline;
   color: #ffffff;
-  white-space: nowrap;
 }
 
 .hero-subtitle-typewriter {
@@ -1265,7 +1262,6 @@
   .hero-title {
     font-size: 36px;
     max-width: 100%;
-    white-space: normal;
   }
   .hero-subtitle-typewriter {
     font-size: 18px;
