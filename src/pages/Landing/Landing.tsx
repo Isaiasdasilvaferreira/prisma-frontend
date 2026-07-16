@@ -187,10 +187,10 @@ export function Landing() {
           <div className="hero-content hero-content-centered">
             <h1 className="hero-title animate-fade-in-up delay-100">
               <span className="hero-title-highlight">Tired</span>
-              <span className="hero-title-normal">of spending hours on other</span>
-              <span className="hero-title-highlight">sites</span>
-              <span className="hero-title-highlight">searching</span>
-              <span className="hero-title-highlight">for work</span>
+              <span className="hero-title-normal"> of spending hours on other</span>
+              <span className="hero-title-highlight"> sites</span>
+              <span className="hero-title-highlight"> searching</span>
+              <span className="hero-title-highlight"> for work</span>
               <span className="hero-title-normal">?</span>
             </h1>
 
