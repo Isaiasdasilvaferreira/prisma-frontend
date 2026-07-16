@@ -41,17 +41,17 @@ export function OpportunityPreviewPanel({
 
   const typeLabel =
     opportunity.type === "vaga"
-      ? "Vaga de Emprego"
+      ? "Job Opening"
       : opportunity.type === "projeto"
-        ? "Projeto"
+        ? "Project"
         : "Freelancer";
 
   const modalityLabel =
     opportunity.modality === "presencial"
-      ? "Presencial"
+      ? "On-site"
       : opportunity.modality === "hibrido"
-        ? "Híbrido"
-        : "Remoto";
+        ? "Hybrid"
+        : "Remote";
         
   const toList = (text: string) =>
     text
@@ -71,10 +71,10 @@ export function OpportunityPreviewPanel({
 
         <div className="preview-header-info">
           <span className="preview-company">
-            {opportunity.company || "Nome da empresa"}
+            {opportunity.company || "Company name"}
           </span>
 
-          <h2>{opportunity.title || "Título da oportunidade"}</h2>
+          <h2>{opportunity.title || "Opportunity title"}</h2>
 
           <div className="preview-badges">
             <span>{modalityLabel}</span>
@@ -83,8 +83,8 @@ export function OpportunityPreviewPanel({
             {opportunity.salary && <span>{opportunity.salary}</span>}
 
             <span>
-              {opportunity.vacancies} Inscriç
-              {opportunity.vacancies !== "1" ? "ões" : "ão"}
+              {opportunity.vacancies} Registration
+              {opportunity.vacancies !== "1" ? "s" : ""}
             </span>
           </div>
         </div>
@@ -95,7 +95,7 @@ export function OpportunityPreviewPanel({
           <section>
             <h3>
               <CheckCircle2 size={18} />
-              Responsabilidades
+              Responsibilities
             </h3>
 
             {responsibilitiesList.length > 0 ? (
@@ -106,7 +106,7 @@ export function OpportunityPreviewPanel({
               </ul>
             ) : (
               <p className="preview-empty-hint">
-                As responsabilidades aparecerão aqui conforme forem preenchidas.
+                Responsibilities will appear here as they are filled in.
               </p>
             )}
           </section>
@@ -114,38 +114,38 @@ export function OpportunityPreviewPanel({
           <section>
             <h3>
               <CheckCircle2 size={18} />
-              Responsabilidades
+              Responsibilities
             </h3>
 
             <ul>
-              <li>Desenvolver soluções criativas.</li>
-              <li>Colaborar com a equipe do projeto.</li>
-              <li>Cumprir prazos estabelecidos.</li>
+              <li>Develop creative solutions.</li>
+              <li>Collaborate with the project team.</li>
+              <li>Meet established deadlines.</li>
             </ul>
           </section>
 
           <section>
             <h3>
               <CheckCircle2 size={18} />
-              Requisitos
+              Requirements
             </h3>
 
             <ul>
-              <li>Experiência com ferramentas de design.</li>
-              <li>Boa comunicação.</li>
-              <li>Portfólio atualizado.</li>
+              <li>Experience with design tools.</li>
+              <li>Good communication skills.</li>
+              <li>Updated portfolio.</li>
             </ul>
           </section>
         </main>
 
         <aside className="preview-sidebar">
           <div className="preview-card">
-            <h4>Informações</h4>
+            <h4>Information</h4>
 
             <div className="preview-info">
               <Briefcase size={18} />
               <div>
-                <span>Tipo</span>
+                <span>Type</span>
                 <strong>{typeLabel}</strong>
               </div>
             </div>
@@ -153,7 +153,7 @@ export function OpportunityPreviewPanel({
             <div className="preview-info">
               <MapPin size={18} />
               <div>
-                <span>Localização</span>
+                <span>Location</span>
                 <strong>{opportunity.location || modalityLabel}</strong>
               </div>
             </div>
@@ -161,31 +161,31 @@ export function OpportunityPreviewPanel({
             <div className="preview-info">
               <DollarSign size={18} />
               <div>
-                <span>Faixa salarial</span>
-                <strong>{opportunity.salary || "A combinar"}</strong>
+                <span>Salary range</span>
+                <strong>{opportunity.salary || "To be determined"}</strong>
               </div>
             </div>
 
             <div className="preview-info">
               <Users size={18} />
               <div>
-                <span>Quantidade</span>
+                <span>Quantity</span>
                 <strong>
-                  {opportunity.vacancies} Inscriç
-                  {opportunity.vacancies !== "1" ? "ões" : "ão"}
+                  {opportunity.vacancies} Registration
+                  {opportunity.vacancies !== "1" ? "s" : ""}
                 </strong>
               </div>
             </div>
           </div>
 
           <div className="preview-card">
-            <h4>Contato</h4>
+            <h4>Contact</h4>
 
             <div className="preview-info">
               <Mail size={18} />
               <div>
-                <span>E-mail</span>
-                <strong>{opportunity.email || "empresa@email.com"}</strong>
+                <span>Email</span>
+                <strong>{opportunity.email || "company@email.com"}</strong>
               </div>
             </div>
 
