@@ -92,11 +92,6 @@
   max-width: 100%;
   text-align: center;
   width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 0 6px;
 }
 
 .hero-title-highlight {
@@ -105,11 +100,9 @@
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  display: inline;
 }
 
 .hero-title-normal {
-  display: inline;
   color: #ffffff;
 }
 
