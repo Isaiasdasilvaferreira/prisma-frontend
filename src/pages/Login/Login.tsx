@@ -135,7 +135,7 @@ export function Login() {
       await login(email, password);
       navigate('/dashboard');
     } catch (err: any) {
-      setError(err.message || 'Email ou senha inválidos');
+      setError(err.message || 'Invalid email or password');
     } finally {
       setLoading(false);
     }
@@ -161,8 +161,8 @@ export function Login() {
             </Link>
             
             <div className="login-header">
-              <h1 className="login-title">Bem-vindo de volta</h1>
-              <p className="login-subtitle">Entre na sua conta e continue de onde parou</p>
+              <h1 className="login-title">Welcome back</h1>
+              <p className="login-subtitle">Sign in to your account and pick up where you left off</p>
             </div>
 
             <form onSubmit={handleSubmit} className="login-form">
@@ -170,15 +170,15 @@ export function Login() {
                 <label className="login-label">Email</label>
                 <div className="login-input-wrapper">
                   <Mail size={16} className="login-input-icon" />
-                  <input type="email" placeholder="seu@email.com" value={email} onChange={(e) => setEmail(e.target.value)} className="login-input" required />
+                  <input type="email" placeholder="you@email.com" value={email} onChange={(e) => setEmail(e.target.value)} className="login-input" required />
                 </div>
               </div>
               
               <div className="login-input-group">
-                <label className="login-label">Senha</label>
+                <label className="login-label">Password</label>
                 <div className="login-input-wrapper">
                   <Lock size={16} className="login-input-icon" />
-                  <input type={showPassword ? "text" : "password"} placeholder="Sua senha" value={password} onChange={(e) => setPassword(e.target.value)} className="login-input" required />
+                  <input type={showPassword ? "text" : "password"} placeholder="Your password" value={password} onChange={(e) => setPassword(e.target.value)} className="login-input" required />
                   <button type="button" onClick={() => setShowPassword(!showPassword)} className="login-input-toggle" tabIndex={-1}>
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
@@ -196,11 +196,11 @@ export function Login() {
                 {loading ? (
                   <>
                     <span className="login-spinner" />
-                    Entrando...
+                    Signing in...
                   </>
                 ) : (
                   <>
-                    Entrar na plataforma
+                    Sign in to platform
                     <ArrowRight size={18} />
                   </>
                 )}
@@ -208,8 +208,8 @@ export function Login() {
             </form>
 
             <p className="login-register">
-              Ainda não tem conta?{' '}
-              <Link to="/register">Criar conta gratuita<Sparkles size={14} /></Link>
+              Don't have an account?{' '}
+              <Link to="/register">Create free account<Sparkles size={14} /></Link>
             </p>
           </div>
 
