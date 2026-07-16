@@ -23,7 +23,7 @@ export function Tutorial() {
           <div className="tutorial-header">
             <h1 className="tutorial-title">Tutorial</h1>
             <p className="tutorial-subtitle">
-              Aprenda a usar todos os recursos da Prisma para encontrar as melhores oportunidades.
+              Learn how to use all of Prisma's features to find the best opportunities.
             </p>
           </div>
 
@@ -32,12 +32,12 @@ export function Tutorial() {
               <div className="tutorial-card-icon video-icon">
                 <Play size={28} />
               </div>
-              <h3 className="tutorial-card-title">Vídeo Introdução</h3>
+              <h3 className="tutorial-card-title">Intro Video</h3>
               <p className="tutorial-card-text">
-                Assista a um guia rápido sobre como a Prisma funciona.
+                Watch a quick guide on how Prisma works.
               </p>
               <Button size="lg" icon={<Play size={16} />} onClick={toggleVideo}>
-                Assistir
+                Watch
               </Button>
             </div>
 
@@ -45,9 +45,9 @@ export function Tutorial() {
               <div className="tutorial-card-icon doc-icon">
                 <BookOpen size={28} />
               </div>
-              <h3 className="tutorial-card-title">Documentação</h3>
+              <h3 className="tutorial-card-title">Documentation</h3>
               <p className="tutorial-card-text">
-                Leia a documentação completa com todos os recursos da plataforma.
+                Read the complete documentation with all platform features.
               </p>
               <Button 
                 size="lg" 
@@ -55,7 +55,7 @@ export function Tutorial() {
                 variant="outline"
                 onClick={toggleDoc}
               >
-                Abrir documentação
+                Open documentation
               </Button>
             </div>
           </div>
@@ -64,11 +64,11 @@ export function Tutorial() {
             <div className="overlay">
               <div className="modal-container video-modal">
                 <div className="modal-header">
-                  <h3>Vídeo Introdução - Prisma</h3>
+                  <h3>Intro Video - Prisma</h3>
                   <button 
                     className="modal-control-btn close-btn"
                     onClick={toggleVideo}
-                    title="Fechar"
+                    title="Close"
                   >
                     <X size={24} />
                   </button>
@@ -92,30 +92,30 @@ export function Tutorial() {
             <div className="overlay">
               <div className="modal-container doc-modal">
                 <div className="modal-header">
-                  <h3>Documentação - Prisma</h3>
+                  <h3>Documentation - Prisma</h3>
                   <button 
                     className="modal-control-btn close-btn"
                     onClick={toggleDoc}
-                    title="Fechar"
+                    title="Close"
                   >
                     <X size={24} />
                   </button>
                 </div>
                 <div className="modal-body doc-body">
                   <div className="doc-content">
-                    <h1>Documentação da Prisma</h1>
+                    <h1>Prisma Documentation</h1>
                     
                     <section>
-                      <h2>O que é a Prisma?</h2>
+                      <h2>What is Prisma?</h2>
                       <p>
-                        A Prisma é uma plataforma de prospecção inteligente que realiza scraping 
-                        em tempo real em múltiplas plataformas de recrutamento para identificar 
-                        oportunidades de trabalho. O sistema coleta, normaliza e estrutura dados 
-                        de vagas provenientes de diferentes fontes, consolidando-as em um único 
-                        dashboard para facilitar a busca e análise por parte dos usuários.
+                        Prisma is an intelligent prospecting platform that performs real-time 
+                        scraping across multiple recruitment platforms to identify job opportunities. 
+                        The system collects, normalizes, and structures job posting data from 
+                        different sources, consolidating them into a single dashboard to facilitate 
+                        searching and analysis for users.
                       </p>
                       <p>
-                        Atualmente, a Prisma integra dados das seguintes plataformas:
+                        Prisma currently integrates data from the following platforms:
                       </p>
                       <ul>
                         <li><strong>Greenhouse</strong></li>
@@ -125,114 +125,111 @@ export function Tutorial() {
                     </section>
 
                     <section>
-                      <h2>Como Funciona a Prospecção</h2>
+                      <h2>How Prospecting Works</h2>
                       <p>
-                        O sistema utiliza scrapers dedicados para cada plataforma, que operam em 
-                        intervalos regulares para garantir dados sempre atualizados. O processo 
-                        de prospecção segue estas etapas:
+                        The system uses dedicated scrapers for each platform, operating at 
+                        regular intervals to ensure always up-to-date data. The prospecting 
+                        process follows these steps:
                       </p>
                       <ol>
                         <li>
-                          <strong>Coleta Estruturada:</strong> Cada scraper é otimizado para a 
-                          estrutura específica da plataforma alvo, utilizando técnicas como 
-                          parsing de HTML, consumo de APIs públicas e navegação simulada quando 
-                          necessário.
+                          <strong>Structured Collection:</strong> Each scraper is optimized for 
+                          the specific structure of the target platform, using techniques like 
+                          HTML parsing, public API consumption, and simulated navigation when 
+                          necessary.
                         </li>
                         <li>
-                          <strong>Extração de Dados:</strong> Informações como título da vaga, 
-                          descrição completa, requisitos, localização, tipo de contrato, 
-                          faixa salarial e data de publicação são extraídas de forma precisa.
+                          <strong>Data Extraction:</strong> Information such as job title, 
+                          complete description, requirements, location, contract type, 
+                          salary range, and publication date are accurately extracted.
                         </li>
                         <li>
-                          <strong>Normalização:</strong> Os dados coletados passam por um processo 
-                          de padronização onde campos como localização, nível de senioridade e 
-                          tecnologias são uniformizados para facilitar buscas e filtros.
+                          <strong>Normalization:</strong> Collected data goes through a 
+                          standardization process where fields like location, seniority level, and 
+                          technologies are unified to facilitate searches and filters.
                         </li>
                         <li>
-                          <strong>Deduplicação:</strong> Algoritmos de similaridade identificam e 
-                          removem vagas duplicadas que possam aparecer em múltiplas plataformas, 
-                          evitando redundância no dashboard.
+                          <strong>Deduplication:</strong> Similarity algorithms identify and 
+                          remove duplicate job postings that may appear across multiple platforms, 
+                          avoiding redundancy in the dashboard.
                         </li>
                         <li>
-                          <strong>Indexação:</strong> As vagas são indexadas com metadados 
-                          enriquecidos, permitindo buscas avançadas por palavras-chave, 
-                          tecnologias específicas, localização e outros critérios.
+                          <strong>Indexing:</strong> Job postings are indexed with enriched 
+                          metadata, allowing advanced searches by keywords, specific technologies, 
+                          location, and other criteria.
                         </li>
                         <li>
-                          <strong>Atualização Contínua:</strong> O sistema monitora constantemente 
-                          as plataformas para identificar novas vagas, remover vagas expiradas e 
-                          atualizar status de processos seletivos.
+                          <strong>Continuous Updates:</strong> The system constantly monitors 
+                          platforms to identify new job postings, remove expired ones, and 
+                          update selection process statuses.
                         </li>
                       </ol>
                     </section>
 
                     <section>
-                      <h2>Recursos da Plataforma</h2>
+                      <h2>Platform Features</h2>
                       <ul>
                         <li>
-                          <strong>Monitoramento em Tempo Real:</strong> Atualizações frequentes 
-                          garantindo que você nunca perca uma oportunidade.
+                          <strong>Real-time Monitoring:</strong> Frequent updates ensuring you 
+                          never miss an opportunity.
                         </li>
                         <li>
-                          <strong>Filtros Avançados:</strong> Busque por tecnologias, nível de 
-                          experiência, modelo de trabalho (remoto, híbrido, presencial), localização 
-                          e faixa salarial.
+                          <strong>Advanced Filters:</strong> Search by technologies, experience 
+                          level, work model (remote, hybrid, on-site), location, and salary range.
                         </li>
                         <li>
-                          <strong>Dashboard Personalizado:</strong> Visualize estatísticas de mercado, 
-                          tendências de contratação e oportunidades por categoria.
+                          <strong>Custom Dashboard:</strong> View market statistics, hiring 
+                          trends, and opportunities by category.
                         </li>
                         <li>
-                          <strong>Análise de Mercado:</strong> Acesse dados agregados sobre o mercado 
-                          de trabalho, incluindo distribuição de salários, tecnologias mais requisitadas 
-                          e crescimento por segmento.
+                          <strong>Market Analysis:</strong> Access aggregated data on the job 
+                          market, including salary distribution, most requested technologies, 
+                          and growth by segment.
                         </li>
                         <li>
-                          <strong>Conexões entre Páginas:</strong> A plataforma integra perfeitamente 
-                          todas as seções: Dashboard para visualização de oportunidades, Analytics para 
-                          análises detalhadas do mercado, Envio de Mensagens para contato com 
-                          contratantes, Tutorial para aprendizado e Planos para escalar seu uso.
+                          <strong>Page Connections:</strong> The platform seamlessly integrates 
+                          all sections: Dashboard for viewing opportunities, Analytics for detailed 
+                          market analysis, Message Sending for contacting employers, Tutorial for 
+                          learning, and Plans for scaling your usage.
                         </li>
                       </ul>
                     </section>
 
                     <section>
-                      <h2>Como Utilizar</h2>
+                      <h2>How to Use</h2>
                       <ol>
                         <li>
-                          <strong>Cadastro:</strong> Crie sua conta com email e senha
+                          <strong>Registration:</strong> Create your account with email and password
                         </li>
                         <li>
-                          <strong>Login:</strong> Acesse a plataforma utilizando seu email e senha 
-                          cadastrados. O sistema não utiliza login via Google ou LinkedIn.
+                          <strong>Login:</strong> Access the platform using your registered email 
+                          and password. The system does not use Google or LinkedIn login.
                         </li>
                         <li>
-                          <strong>Dashboard:</strong> Visualize todas as oportunidades disponíveis, 
-                          utilize os filtros para refinar sua busca e explore as vagas que mais se 
-                          adequam ao seu perfil.
+                          <strong>Dashboard:</strong> View all available opportunities, use filters 
+                          to refine your search, and explore job postings that best fit your profile.
                         </li>
                         <li>
-                          <strong>Analytics:</strong> Acesse análises detalhadas sobre o mercado de 
-                          trabalho, incluindo distribuição de vagas por tipo de contrato, modalidade 
-                          de trabalho e outras métricas relevantes.
+                          <strong>Analytics:</strong> Access detailed analyses of the job market, 
+                          including job distribution by contract type, work modality, and other 
+                          relevant metrics.
                         </li>
                         <li>
-                          <strong>Envio de Mensagens:</strong> Entre em contato diretamente com os 
-                          contratantes através da plataforma, utilizando o formulário de contato 
-                          disponível em cada oportunidade.
+                          <strong>Message Sending:</strong> Contact employers directly through the 
+                          platform using the contact form available on each opportunity.
                         </li>
                         <li>
-                          <strong>Planos:</strong> Escolha o plano que melhor atende às suas 
-                          necessidades para desbloquear recursos avançados e aumentar suas 
-                          chances de encontrar a oportunidade ideal.
+                          <strong>Plans:</strong> Choose the plan that best meets your needs to 
+                          unlock advanced features and increase your chances of finding the ideal 
+                          opportunity.
                         </li>
                       </ol>
                     </section>
 
                     <section>
-                      <h2>Suporte</h2>
+                      <h2>Support</h2>
                       <p>
-                        Para dúvidas, sugestões ou reportar problemas, entre em contato pelo e-mail:
+                        For questions, suggestions, or to report issues, contact us by email:
                       </p>
                       <p>
                         <strong>prismaanalytics80@gmail.com</strong>
