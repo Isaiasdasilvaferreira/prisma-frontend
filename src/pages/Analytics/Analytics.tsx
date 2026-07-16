@@ -69,71 +69,71 @@ interface CountryData {
 const CHART_COLORS = ['#ec4899', '#f472b6', '#db2777', '#be185d', '#9d174d', '#6b21a5', '#1d4ed8', '#059669', '#d97706', '#ea580c'];
 
 const countryMapping: Record<string, string> = {
-  'Brazil': 'Brasil',
-  'United States': 'EUA',
-  'United States of America': 'EUA',
-  'USA': 'EUA',
-  'Canada': 'Canadá',
-  'United Kingdom': 'Reino Unido',
-  'Germany': 'Alemanha',
-  'France': 'França',
-  'Italy': 'Itália',
-  'Spain': 'Espanha',
+  'Brazil': 'Brazil',
+  'United States': 'USA',
+  'United States of America': 'USA',
+  'USA': 'USA',
+  'Canada': 'Canada',
+  'United Kingdom': 'United Kingdom',
+  'Germany': 'Germany',
+  'France': 'France',
+  'Italy': 'Italy',
+  'Spain': 'Spain',
   'Portugal': 'Portugal',
-  'Netherlands': 'Holanda',
-  'Switzerland': 'Suíça',
-  'Australia': 'Austrália',
-  'New Zealand': 'Nova Zelândia',
-  'Japan': 'Japão',
+  'Netherlands': 'Netherlands',
+  'Switzerland': 'Switzerland',
+  'Australia': 'Australia',
+  'New Zealand': 'New Zealand',
+  'Japan': 'Japan',
   'China': 'China',
-  'India': 'Índia',
-  'Singapore': 'Singapura',
-  'Mexico': 'México',
+  'India': 'India',
+  'Singapore': 'Singapore',
+  'Mexico': 'Mexico',
   'Argentina': 'Argentina',
   'Chile': 'Chile',
-  'Colombia': 'Colômbia',
+  'Colombia': 'Colombia',
   'Peru': 'Peru',
-  'South Africa': 'África do Sul',
-  'Egypt': 'Egito',
-  'Nigeria': 'Nigéria',
-  'Kenya': 'Quênia',
+  'South Africa': 'South Africa',
+  'Egypt': 'Egypt',
+  'Nigeria': 'Nigeria',
+  'Kenya': 'Kenya',
   'Israel': 'Israel',
-  'Turkey': 'Turquia',
-  'Poland': 'Polônia',
-  'Sweden': 'Suécia',
-  'Norway': 'Noruega',
-  'Denmark': 'Dinamarca',
-  'Finland': 'Finlândia',
-  'Ireland': 'Irlanda',
-  'Belgium': 'Bélgica',
-  'Austria': 'Áustria',
-  'Greece': 'Grécia',
-  'Russia': 'Rússia',
-  'Ukraine': 'Ucrânia',
-  'Romania': 'Romênia',
-  'Hungary': 'Hungria',
-  'Czech Republic': 'República Tcheca',
-  'Slovakia': 'Eslováquia',
-  'Bulgaria': 'Bulgária',
-  'Serbia': 'Sérvia',
-  'Croatia': 'Croácia',
-  'Slovenia': 'Eslovênia',
-  'Estonia': 'Estônia',
-  'Latvia': 'Letônia',
-  'Lithuania': 'Lituânia',
-  'Iceland': 'Islândia',
-  'Luxembourg': 'Luxemburgo',
-  'Monaco': 'Mônaco',
+  'Turkey': 'Turkey',
+  'Poland': 'Poland',
+  'Sweden': 'Sweden',
+  'Norway': 'Norway',
+  'Denmark': 'Denmark',
+  'Finland': 'Finland',
+  'Ireland': 'Ireland',
+  'Belgium': 'Belgium',
+  'Austria': 'Austria',
+  'Greece': 'Greece',
+  'Russia': 'Russia',
+  'Ukraine': 'Ukraine',
+  'Romania': 'Romania',
+  'Hungary': 'Hungary',
+  'Czech Republic': 'Czech Republic',
+  'Slovakia': 'Slovakia',
+  'Bulgaria': 'Bulgaria',
+  'Serbia': 'Serbia',
+  'Croatia': 'Croatia',
+  'Slovenia': 'Slovenia',
+  'Estonia': 'Estonia',
+  'Latvia': 'Latvia',
+  'Lithuania': 'Lithuania',
+  'Iceland': 'Iceland',
+  'Luxembourg': 'Luxembourg',
+  'Monaco': 'Monaco',
   'Andorra': 'Andorra',
   'Liechtenstein': 'Liechtenstein',
   'San Marino': 'San Marino',
-  'Vatican City': 'Vaticano',
+  'Vatican City': 'Vatican City',
   'Malta': 'Malta',
-  'Cyprus': 'Chipre'
+  'Cyprus': 'Cyprus'
 };
 
 const normalizeLocation = (location: string): string => {
-  if (!location) return 'Não especificado';
+  if (!location) return 'Not specified';
   const locationLower = location.toLowerCase();
   if (locationLower.includes('brasil') || locationLower.includes('brazil')) return 'Brazil';
   if (locationLower.includes('eua') || locationLower.includes('usa') || locationLower.includes('united states')) return 'United States';
@@ -158,7 +158,7 @@ const normalizeLocation = (location: string): string => {
   if (locationLower.includes('colomb') || locationLower.includes('colombia')) return 'Colombia';
   if (locationLower.includes('peru')) return 'Peru';
   if (locationLower.includes('africa') || locationLower.includes('south africa')) return 'South Africa';
-  return 'Outros';
+  return 'Others';
 };
 
 export function Analytics() {
@@ -217,7 +217,7 @@ export function Analytics() {
     const total = opps.length;
 
     opps.forEach(opp => {
-      const location = opp.location || 'Não especificado';
+      const location = opp.location || 'Not specified';
       const normalizedCountry = normalizeLocation(location);
       const countryName = countryMapping[normalizedCountry] || normalizedCountry;
 
@@ -250,14 +250,14 @@ export function Analytics() {
   };
 
   const getUniqueLocations = () => {
-    const locations = new Set(opportunities.map(opp => opp.location || 'Remoto'));
+    const locations = new Set(opportunities.map(opp => opp.location || 'Remote'));
     return Array.from(locations).length;
   };
 
   const getServiceTypeData = () => {
     const serviceMap = new Map<string, number>();
     opportunities.forEach(opp => {
-      const service = opp.service_type || 'Não definido';
+      const service = opp.service_type || 'Not defined';
       serviceMap.set(service, (serviceMap.get(service) || 0) + 1);
     });
     const total = opportunities.length;
@@ -290,29 +290,29 @@ export function Analytics() {
     { 
       icon: Briefcase, 
       value: opportunities.length.toString(), 
-      label: 'Vagas ativas', 
-      change: stats ? `${stats.recent_count || 0} novas` : 'Carregando...',
+      label: 'Active positions', 
+      change: stats ? `${stats.recent_count || 0} new` : 'Loading...',
       color: '#3b82f6'
     },
     { 
       icon: Target, 
       value: opportunities.length > 0 ? `${Math.min(100, Math.round((opportunities.length / 10) * 100))}%` : '0%', 
-      label: 'Match médio', 
-      change: `${opportunities.length} vagas encontradas`,
+      label: 'Average match', 
+      change: `${opportunities.length} jobs found`,
       color: '#22c55e'
     },
     { 
       icon: Building2, 
       value: getUniqueCompanies().toString(), 
-      label: 'Empresas ativas', 
-      change: 'Total de empresas',
+      label: 'Active companies', 
+      change: 'Total companies',
       color: '#a855f7'
     },
     { 
       icon: Globe, 
       value: getUniqueLocations().toString(), 
-      label: 'Locais alcançados', 
-      change: 'Cidades/Países',
+      label: 'Locations reached', 
+      change: 'Cities/Countries',
       color: '#f59e0b'
     },
   ];
@@ -327,7 +327,7 @@ export function Analytics() {
         <div className="analytics-chart-tooltip">
           <p className="analytics-chart-tooltip-label">{label}</p>
           <p className="analytics-chart-tooltip-value">
-            {payload[0].value} vagas
+            {payload[0].value} jobs
             <span className="analytics-chart-tooltip-percent">
               ({payload[0].payload.percentage}%)
             </span>
@@ -374,12 +374,12 @@ export function Analytics() {
         <div className="dashboard-content analytics-content">
           <div className="analytics-header">
             <div>
-              <h1 className="analytics-title">Análises</h1>
-              <p className="analytics-subtitle">Visão geral do mercado de design e oportunidades.</p>
+              <h1 className="analytics-title">Analytics</h1>
+              <p className="analytics-subtitle">Overview of the design market and opportunities.</p>
             </div>
             <div className="analytics-header-actions">
               <span className="analytics-badge">
-                {opportunities.length} oportunidades
+                {opportunities.length} opportunities
               </span>
             </div>
           </div>
@@ -404,7 +404,7 @@ export function Analytics() {
               <div className="analytics-card-header">
                 <div className="analytics-card-title">
                   <Globe size={16} />
-                  Distribuição global
+                  Global distribution
                 </div>
                 <div className="analytics-card-actions">
                   {hoveredCountry && (
@@ -414,7 +414,7 @@ export function Analytics() {
                   )}
                   {selectedCountry && (
                     <span className="analytics-tag">
-                      País selecionado
+                      Selected country
                     </span>
                   )}
                 </div>
@@ -458,7 +458,7 @@ export function Analytics() {
                               onMouseEnter={() => {
                                 if (data && data.opportunities > 0) {
                                   setHoveredCountry(
-                                    `${countryName} (${data.opportunities} vagas - ${data.percentage}%)`
+                                    `${countryName} (${data.opportunities} jobs - ${data.percentage}%)`
                                   );
                                 }
                               }}
@@ -479,13 +479,13 @@ export function Analytics() {
               </div>
               <div className="analytics-map-footer">
                 <span className="analytics-map-note">
-                  {selectedCountry && hoveredCountry ? hoveredCountry : 'Passe o mouse sobre um país para ver detalhes'}
+                  {selectedCountry && hoveredCountry ? hoveredCountry : 'Hover over a country to see details'}
                 </span>
                 <div className="analytics-legend">
-                  <div className="analytics-legend-item"><span style={{ background: '#4a0d26' }} />Alta</div>
-                  <div className="analytics-legend-item"><span style={{ background: '#8c1a4a' }} />Média</div>
-                  <div className="analytics-legend-item"><span style={{ background: '#ce266e' }} />Baixa</div>
-                  <div className="analytics-legend-item"><span style={{ background: '#e8b4c8' }} />Sem dados</div>
+                  <div className="analytics-legend-item"><span style={{ background: '#4a0d26' }} />High</div>
+                  <div className="analytics-legend-item"><span style={{ background: '#8c1a4a' }} />Medium</div>
+                  <div className="analytics-legend-item"><span style={{ background: '#ce266e' }} />Low</div>
+                  <div className="analytics-legend-item"><span style={{ background: '#e8b4c8' }} />No data</div>
                 </div>
               </div>
             </Card>
@@ -494,28 +494,28 @@ export function Analytics() {
               <div className="analytics-card-header">
                 <div className="analytics-card-title">
                   <BarChart3 size={16} />
-                  Vagas por área
+                  Jobs by area
                 </div>
                 <span className="analytics-card-count">
-                  {serviceTypeData.length} áreas
+                  {serviceTypeData.length} areas
                 </span>
               </div>
               <div className="analytics-chart-container">
                 {loading ? (
                   <div className="analytics-chart-loading">
                     <Loader2 size={32} className="spinning" />
-                    <p>Carregando dados...</p>
+                    <p>Loading data...</p>
                   </div>
                 ) : !hasData ? (
                   <div className="analytics-chart-empty">
                     <AlertCircle size={32} />
-                    <p>Nenhuma oportunidade encontrada</p>
-                    <p className="analytics-chart-empty-sub">Raspe vagas no Dashboard para começar</p>
+                    <p>No opportunities found</p>
+                    <p className="analytics-chart-empty-sub">Scrape jobs on Dashboard to get started</p>
                   </div>
                 ) : serviceTypeData.length === 0 ? (
                   <div className="analytics-chart-empty">
                     <AlertCircle size={32} />
-                    <p>Dados de áreas não disponíveis</p>
+                    <p>Area data not available</p>
                   </div>
                 ) : (
                   <ResponsiveContainer width="100%" height="100%">
@@ -563,10 +563,10 @@ export function Analytics() {
             <div className="analytics-card-header">
               <div className="analytics-card-title">
                 <Star size={16} />
-                Empresas com mais oportunidades
+                Companies with most opportunities
               </div>
               <span className="analytics-card-count">
-                {companyData.length} empresas
+                {companyData.length} companies
               </span>
             </div>
             <div className="analytics-table-container">
@@ -574,9 +574,9 @@ export function Analytics() {
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>Empresa</th>
-                    <th>Vagas</th>
-                    <th>% do total</th>
+                    <th>Company</th>
+                    <th>Jobs</th>
+                    <th>% of total</th>
                     <th>Status</th>
                   </tr>
                 </thead>
@@ -590,7 +590,7 @@ export function Analytics() {
                   ) : companyData.length === 0 ? (
                     <tr>
                       <td colSpan={5} style={{ textAlign: 'center', color: '#94a3b8', padding: '40px 0' }}>
-                        Nenhuma empresa encontrada
+                        No companies found
                       </td>
                     </tr>
                   ) : (
@@ -617,7 +617,7 @@ export function Analytics() {
                         </td>
                         <td>
                           <span className="analytics-table-status active">
-                            Ativo
+                            Active
                           </span>
                         </td>
                       </tr>
