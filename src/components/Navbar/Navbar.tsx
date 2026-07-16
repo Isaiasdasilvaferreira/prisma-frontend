@@ -57,29 +57,29 @@ export function Navbar() {
               className="navbar-link" 
               onClick={(e) => handleScroll(e, 'quem-somos')}
             >
-              Quem somos
+              About us
             </a>
             <a 
               href="#planos" 
               className="navbar-link" 
               onClick={(e) => handleScroll(e, 'planos')}
             >
-              Planos
+              Plans
             </a>
-            <a href="https://www.linkedin.com/groups/32800069/" className="navbar-link" onClick={closeMenu}>Comunidade</a>
+            <a href="https://www.linkedin.com/groups/32800069/" className="navbar-link" onClick={closeMenu}>Community</a>
           </div>
 
           <div className="navbar-actions">
             <button className="navbar-lang">
               <Globe size={14} />
-              PT
+              EN
             </button>
             <Link to="/login" className="navbar-login-btn">
-              Entrar
+              Sign in
             </Link>
             <Link to="/register" className="navbar-btn">
               <Sparkles size={14} />
-              Cadastrar
+              Sign up
             </Link>
           </div>
 
@@ -96,21 +96,21 @@ export function Navbar() {
           className="navbar-mobile-link" 
           onClick={(e) => handleScroll(e, 'quem-somos')}
         >
-          Quem somos
+          About us
         </a>
         <a 
           href="#planos" 
           className="navbar-mobile-link" 
           onClick={(e) => handleScroll(e, 'planos')}
         >
-          Planos
+          Plans
         </a>
-        <a href="#" className="navbar-mobile-link" onClick={closeMenu}>Comunidade</a>
+        <a href="#" className="navbar-mobile-link" onClick={closeMenu}>Community</a>
         <div className="navbar-mobile-actions">
-          <Link to="/login" onClick={closeMenu} className="navbar-mobile-login">Entrar</Link>
+          <Link to="/login" onClick={closeMenu} className="navbar-mobile-login">Sign in</Link>
           <Link to="/register" onClick={closeMenu} className="navbar-btn navbar-mobile-btn">
             <Sparkles size={14} />
-            Cadastrar
+            Sign up
           </Link>
         </div>
       </div>
