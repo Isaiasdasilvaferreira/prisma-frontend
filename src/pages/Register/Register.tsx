@@ -136,7 +136,7 @@ export function Register() {
       await register(name, email, password);
       navigate('/dashboard');
     } catch (err: any) {
-      setError(err.message || 'Erro ao criar conta. Tente novamente.');
+      setError(err.message || 'Error creating account. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -164,16 +164,16 @@ export function Register() {
             </Link>
             
             <div className="register-header">
-              <h1 className="register-title">Criar conta gratuita</h1>
-              <p className="register-subtitle">Comece a encontrar oportunidades hoje mesmo</p>
+              <h1 className="register-title">Create free account</h1>
+              <p className="register-subtitle">Start finding opportunities today</p>
             </div>
 
             <form onSubmit={handleSubmit} className="register-form">
               <div className="register-input-group">
-                <label className="register-label">Nome completo</label>
+                <label className="register-label">Full name</label>
                 <div className="register-input-wrapper">
                   <User size={16} className="register-input-icon" />
-                  <input type="text" placeholder="Seu nome" value={name} onChange={(e) => setName(e.target.value)} className="register-input" required />
+                  <input type="text" placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} className="register-input" required />
                 </div>
               </div>
 
@@ -181,15 +181,15 @@ export function Register() {
                 <label className="register-label">Email</label>
                 <div className="register-input-wrapper">
                   <Mail size={16} className="register-input-icon" />
-                  <input type="email" placeholder="seu@email.com" value={email} onChange={(e) => setEmail(e.target.value)} className="register-input" required />
+                  <input type="email" placeholder="you@email.com" value={email} onChange={(e) => setEmail(e.target.value)} className="register-input" required />
                 </div>
               </div>
               
               <div className="register-input-group">
-                <label className="register-label">Senha</label>
+                <label className="register-label">Password</label>
                 <div className="register-input-wrapper">
                   <Lock size={16} className="register-input-icon" />
-                  <input type={showPassword ? "text" : "password"} placeholder="Mínimo 8 caracteres" value={password} onChange={(e) => setPassword(e.target.value)} className="register-input" required minLength={8} />
+                  <input type={showPassword ? "text" : "password"} placeholder="Minimum 8 characters" value={password} onChange={(e) => setPassword(e.target.value)} className="register-input" required minLength={8} />
                   <button type="button" onClick={() => setShowPassword(!showPassword)} className="register-input-toggle" tabIndex={-1}>
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
@@ -200,7 +200,7 @@ export function Register() {
                       <div className={`register-strength-fill register-strength-${passwordStrength}`} />
                     </div>
                     <span className={`register-strength-text register-strength-text-${passwordStrength}`}>
-                      {passwordStrength === 'strong' ? 'Senha forte' : passwordStrength === 'medium' ? 'Senha média' : 'Senha fraca'}
+                      {passwordStrength === 'strong' ? 'Strong password' : passwordStrength === 'medium' ? 'Medium password' : 'Weak password'}
                     </span>
                   </div>
                 )}
@@ -217,11 +217,11 @@ export function Register() {
                 {loading ? (
                   <>
                     <span className="register-spinner" />
-                    Criando conta...
+                    Creating account...
                   </>
                 ) : (
                   <>
-                    Criar conta gratuita
+                    Create free account
                     <ArrowRight size={18} />
                   </>
                 )}
@@ -229,8 +229,8 @@ export function Register() {
             </form>
 
             <p className="register-login">
-              Já tem conta?{' '}
-              <Link to="/login">Fazer login<ArrowRight size={14} /></Link>
+              Already have an account?{' '}
+              <Link to="/login">Sign in<ArrowRight size={14} /></Link>
             </p>
           </div>
 
